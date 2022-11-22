@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:team/login/initPage.dart';
+import 'package:team/initPage.dart';
 import 'package:team/login/signInPage.dart';
 import 'package:team/login/signUpPage.dart';
+import 'package:team/login/initPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,11 +22,9 @@ class MyApp extends StatelessWidget {
         routes: {
           //login
           '/': (context) => const InitPage(),
+          'toLogin': (context) => const loginInitPage(),
           '/toSignInPage': (context) => const SignInPage(),
           '/toSignUpPage': (context) => const SignUpPage(),
-
-          //chat
-          //'/toChatloungPage': (context) => const ,
         });
   }
 }

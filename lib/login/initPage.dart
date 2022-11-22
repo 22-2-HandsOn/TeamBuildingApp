@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class InitPage extends StatelessWidget {
-  const InitPage({Key? key}) : super(key: key);
+class loginInitPage extends StatelessWidget {
+  const loginInitPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class InitPage extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           title: const Text(
-            "",
+            "Team building",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",
@@ -29,26 +29,16 @@ class InitPage extends StatelessWidget {
               child: Image(image: AssetImage("assets/images/profile.jpeg")),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: RichText(
-                text: TextSpan(
-                    text: "Team \n",
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: RichText(
+                  text: TextSpan(
+                    text: "",
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: "GmarketSansTTF",
                         fontSize: 20),
-                    children: [
-                      TextSpan(
-                          text: "building",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "GmarketSansTTF",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20)),
-                    ]),
-                textAlign: TextAlign.center,
-              ),
-            ),
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.only(left: 60, right: 60, bottom: 30),
               child: Column(

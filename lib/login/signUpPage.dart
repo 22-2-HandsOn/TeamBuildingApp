@@ -6,13 +6,13 @@ class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpPage> createState() => SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
-  String userName = '';
+  String studentid = '';
   String userEmail = '';
   String userPassword = '';
 
@@ -62,14 +62,14 @@ class _SignUpPageState extends State<SignUpPage> {
                           return null;
                         }),
                         onSaved: ((value) {
-                          userName = value!;
+                          studentid = value!;
                         }),
                         onChanged: (value) {
-                          userName = value;
+                          studentid = value;
                         },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "User name",
+                          labelText: "studentid",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
