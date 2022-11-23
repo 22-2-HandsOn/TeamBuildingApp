@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUpPageS extends StatefulWidget {
+  const SignUpPageS({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => SignUpPageState();
+  State<SignUpPageS> createState() => SignUpPageState();
 }
 
-class SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends State<SignUpPageS> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   String studentid = '';
+  String userName = '';
   String userEmail = '';
   String userPassword = '';
 
@@ -30,7 +31,7 @@ class SignUpPageState extends State<SignUpPage> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
           title: Text(
-            "Sign Up",
+            "회원가입",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",
@@ -56,8 +57,30 @@ class SignUpPageState extends State<SignUpPage> {
                     SizedBox(height: 20),
                     TextFormField(
                         validator: ((value) {
-                          if (value!.isEmpty || value.length < 3) {
-                            return "Enter at least 3 characters";
+                          if (value!.isEmpty) {
+                            return "다시 입력하세요.";
+                          }
+                          return null;
+                        }),
+                        onSaved: ((value) {
+                          userName = value!;
+                        }),
+                        onChanged: (value) {
+                          userName = value;
+                        },
+                        decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelText: "이름",
+                          labelStyle: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16,
+                          ),
+                        )),
+                    SizedBox(height: 20),
+                    TextFormField(
+                        validator: ((value) {
+                          if (value!.isEmpty || value.length != 8) {
+                            return "다시 입력하세요.";
                           }
                           return null;
                         }),
@@ -69,7 +92,7 @@ class SignUpPageState extends State<SignUpPage> {
                         },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "studentid",
+                          labelText: "학번",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
@@ -86,13 +109,13 @@ class SignUpPageState extends State<SignUpPage> {
                         },
                         validator: ((value) {
                           if (value!.isEmpty || !value.contains('@')) {
-                            return "Enter a valid email address";
+                            return "이메일 형식에 맞게 입력하세요";
                           }
                           return null;
                         }),
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "Email address",
+                          labelText: "학교 이메일",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
@@ -102,9 +125,9 @@ class SignUpPageState extends State<SignUpPage> {
                     TextFormField(
                         obscureText: true,
                         validator: ((value) {
-                          if (value!.isEmpty || value.length < 8) {
-                            return "Password must be at least 8 characters long";
-                          }
+                          // if (value!.isEmpty || value.length < 8) {
+                          //   return "Password must be at least 8 characters long";
+                          // }
                           return null;
                         }),
                         onSaved: ((value) {
@@ -115,7 +138,7 @@ class SignUpPageState extends State<SignUpPage> {
                         },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "Password",
+                          labelText: "비밀번호",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
@@ -126,7 +149,7 @@ class SignUpPageState extends State<SignUpPage> {
                         obscureText: true,
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "Password confirmation",
+                          labelText: "비밀번호재확인",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
@@ -141,7 +164,7 @@ class SignUpPageState extends State<SignUpPage> {
                             backgroundColor: Colors.lightBlueAccent,
                             minimumSize: const Size.fromHeight(40)),
                         child: Text(
-                          "Sign in",
+                          "가입하기",
                           style: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 14,
@@ -156,12 +179,13 @@ class SignUpPageState extends State<SignUpPage> {
                                     email: userEmail, password: userPassword);
 
                             if (newUser.user != null) {
-                              Navigator.of(context).pushNamed("/");
+                              Navigator.of(context)
+                                  .pushNamed("/toProjectlistPage");
                             }
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                "Wrong email or password is already exist",
+                                "잘못된 이메일, 패스워드입니다.",
                                 style: TextStyle(
                                   fontFamily: "GmarketSansTTF",
                                   fontSize: 14,

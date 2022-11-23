@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class loginInitPage extends StatelessWidget {
-  const loginInitPage({Key? key}) : super(key: key);
+class loginInitPageP extends StatelessWidget {
+  const loginInitPageP({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class loginInitPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 child: RichText(
                   text: TextSpan(
-                    text: "",
+                    text: "교수용",
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: "GmarketSansTTF",
@@ -55,7 +55,7 @@ class loginInitPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text("Sign in with Email",
+                          const Text("로그인",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: "GmarketSansTTF",
@@ -65,7 +65,7 @@ class loginInitPage extends StatelessWidget {
                       ),
                       onPressed: () {
                         Navigator.of(context)
-                            .pushNamed("/toSignInPage"); // for test
+                            .pushNamed("/toPro_SignInPage"); // for test
                       },
                     ),
                   ),
@@ -81,7 +81,7 @@ class loginInitPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text("Create account",
+                          const Text("회원가입",
                               style: TextStyle(
                                 color: Colors.black87,
                                 fontFamily: "GmarketSansTTF",
@@ -90,7 +90,7 @@ class loginInitPage extends StatelessWidget {
                         ],
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed("/toSignUpPage");
+                        Navigator.of(context).pushNamed("/toPro_SignUpPage");
                       },
                     ),
                   ),

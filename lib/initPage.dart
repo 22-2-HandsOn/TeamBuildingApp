@@ -18,7 +18,7 @@ class InitPage extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('/toInitialPageT');
+                Navigator.of(context).pushNamed('/toStu_LoginPage');
               },
               child: Container(
                 alignment: Alignment.center,
@@ -34,7 +34,7 @@ class InitPage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('/toInitialPage');
+                Navigator.of(context).pushNamed('/toPro_LoginPage');
               },
               child: Container(
                 alignment: Alignment.center,

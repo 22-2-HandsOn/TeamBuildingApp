@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:team/initPage.dart';
-import 'package:team/login/signInPage.dart';
-import 'package:team/login/signUpPage.dart';
-import 'package:team/login/initPage.dart';
+import 'package:team/professor/login/initPageP.dart';
+import 'package:team/professor/login/signInPage.dart';
+import 'package:team/professor/login/signUpPage.dart';
+import 'package:team/Project/projectList.dart';
+import 'package:team/student/login/initPage.dart';
+import 'package:team/student/login/signInPage.dart';
+import 'package:team/student/login/signUpPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,9 +26,16 @@ class MyApp extends StatelessWidget {
         routes: {
           //login
           '/': (context) => const InitPage(),
-          'toLogin': (context) => const loginInitPage(),
-          '/toSignInPage': (context) => const SignInPage(),
-          '/toSignUpPage': (context) => const SignUpPage(),
+          '/toPro_LoginPage': (context) => const loginInitPageP(),
+          '/toPro_SignInPage': (context) => const SignInPageP(),
+          '/toPro_SignUpPage': (context) => const SignUpPageP(),
+
+          '/toStu_LoginPage': (context) => const loginInitPageS(),
+          '/toStu_SignInPage': (context) => const SignInPageS(),
+          '/toStu_SignUpPage': (context) => const SignUpPageS(),
+
+          //Project
+          '/toProjectlistPage': (context) => const ProjectListPage(),
         });
   }
 }
