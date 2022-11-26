@@ -8,6 +8,9 @@ import 'package:team/Project/projectList.dart';
 import 'package:team/student/login/initPage.dart';
 import 'package:team/student/login/signInPage.dart';
 import 'package:team/student/login/signUpPage.dart';
+import 'package:team/Project/studentInfo.dart';
+import 'package:team/Project/teamInfo.dart';
+import 'package:team/Project/studentPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           //login
-          '/': (context) => const InitPage(),
+          '/': (context) =>  InitPage(),
           '/toPro_LoginPage': (context) => const loginInitPageP(),
           '/toPro_SignInPage': (context) => const SignInPageP(),
           '/toPro_SignUpPage': (context) => const SignUpPageP(),
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
 
           //Project
           '/toProjectlistPage': (context) => const ProjectListPage(),
+          '/toStudentPage': (context) => const StudentPage(),
         });
   }
 }

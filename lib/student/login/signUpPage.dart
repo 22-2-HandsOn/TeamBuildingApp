@@ -177,6 +177,10 @@ class SignUpPageState extends State<SignUpPageS> {
                             final newUser = await _authentication
                                 .createUserWithEmailAndPassword(
                                     email: userEmail, password: userPassword);
+                            await FirebaseFirestore.instance.collection('student').doc(newUser.user!.uid).set({
+                              'userName' : userName,
+                              'studentID' : studentid,
+                            });
 
                             if (newUser.user != null) {
                               Navigator.of(context)
