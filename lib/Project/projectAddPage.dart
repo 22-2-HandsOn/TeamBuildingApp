@@ -25,25 +25,36 @@ class ProjectAddPageState extends State<ProjectAddPage> {
   int minTeamMem = 1;
   int maxTeamMem = 1;
   DateTime deadline = DateTime.now();
-  bool numErr = false;
+  bool numErr = false, fileErr = false;
 
   void _tryValidation() {
-    bool isValid = _formKey.currentState!.validate();
-    if (!isValid) return;
-
-    bool isValid2 = minTeamMem <= maxTeamMem;
-    if (!isValid2) {
+    bool isNameValid = _formKey.currentState!.validate();
+    bool isNumValid = minTeamMem <= maxTeamMem;
+    if (!isNumValid) {
       setState(() {
         numErr = true;
       });
+    } else {
+      setState(() {
+        numErr = false;
+      });
+    }
+    bool isFileValid = !(fileName == '아직 파일이 선택되지 않았습니다. ');
+    if (!isFileValid) {
+      setState(() {
+        fileErr = true;
+      });
+    } else {
+      setState(() {
+        fileErr = false;
+      });
     }
 
-    if (isValid && isValid2) _formKey.currentState!.save();
+    if (isNameValid && isNumValid && isFileValid) _formKey.currentState!.save();
   }
 
   void _setMinNum(int selected) {
     setState(() {
-      numErr = false;
       minTeamMem = selected;
     });
     print(minTeamMem);
@@ -51,8 +62,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
 
   void _setMaxNum(int selected) {
     setState(() {
-      numErr = false;
-      minTeamMem = selected;
+      maxTeamMem = selected;
     });
     print(maxTeamMem);
   }
@@ -119,12 +129,12 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                               fontSize: 16,
                             ))),
 
-                    // 인원수
+                    // 팀인원수
                     const SizedBox(height: 40),
                     Container(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        '인원수',
+                        '팀 인원수',
                         style: textStyle,
                         textAlign: TextAlign.left,
                       ),
@@ -146,7 +156,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                             Text('최대  ', style: textStyle),
                             MemCntPicker(setter: _setMaxNum)
                           ],
-                        )
+                        ),
                       ],
                     ),
                     if (numErr)
@@ -154,8 +164,10 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           '최소 인원은 최대 인원보다 작거나 같아야 합니다.',
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.red),
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFFD32F2F),
+                              height: 1.7),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -246,6 +258,18 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                             },
                           )
                         ]),
+                    if (fileErr)
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          '수강생 엑셀 파일을 선택해주세요.',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFFD32F2F),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
 
                     // 생성
                     SizedBox(height: 40),
@@ -271,7 +295,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content:
-                                  Text("잘못된 수업 정보가 존재합니다. ", style: textStyle),
+                                  Text("수업 생성을 실패했습니다. ", style: textStyle),
                               backgroundColor: Colors.lightBlueAccent,
                             ));
                           }

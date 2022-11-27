@@ -62,7 +62,7 @@ class _DatePickerState extends State<DatePicker> {
                 // In this example, time value is formatted manually. You can use intl package to
                 // format the value based on the user's locale settings.
                 child: Text(
-                  '${dateTime.year}/${dateTime.month}/${dateTime.day} ${dateTime.hour < 10 ? '0' + dateTime.hour.toString() : dateTime.hour}:${dateTime.minute < 10 ? '0' + dateTime.minute.toString() : dateTime.minute}',
+                  '${dateTime.year}/${dateTime.month < 10 ? '0' + dateTime.month.toString() : dateTime.month}/${dateTime.day < 10 ? '0' + dateTime.day.toString() : dateTime.day} ${dateTime.hour < 10 ? '0' + dateTime.hour.toString() : dateTime.hour}:${dateTime.minute < 10 ? '0' + dateTime.minute.toString() : dateTime.minute}',
                   style: textStyle,
                   textAlign: TextAlign.center,
                 ),
