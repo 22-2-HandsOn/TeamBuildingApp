@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/helper/helper_function.dart';
 
 class SignUpPageP extends StatefulWidget {
   const SignUpPageP({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class SignUpPageP extends StatefulWidget {
 class SignUpPageState extends State<SignUpPageP> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
+  String username = '';
   String userEmail = '';
   String userPassword = '';
 
@@ -52,6 +54,28 @@ class SignUpPageState extends State<SignUpPageP> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                    SizedBox(height: 20),
+                    TextFormField(
+                        validator: ((value) {
+                          if (value!.isEmpty) {
+                            return "이름을 입력하세요";
+                          }
+                          return null;
+                        }),
+                        onSaved: ((value) {
+                          username = value!;
+                        }),
+                        onChanged: (value) {
+                          username = value;
+                        },
+                        decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelText: "이름",
+                          labelStyle: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16,
+                          ),
+                        )),
                     SizedBox(height: 20),
                     TextFormField(
                         keyboardType: TextInputType.emailAddress,
@@ -133,6 +157,12 @@ class SignUpPageState extends State<SignUpPageP> {
                                     email: userEmail, password: userPassword);
 
                             if (newUser.user != null) {
+                              await HelperFunctions.saveUserLoggedInStatus(
+                                  true);
+                              await HelperFunctions.saveUserIDSF(
+                                  FirebaseAuth.instance.currentUser!.uid);
+                              await HelperFunctions.saveUserNameSF(username);
+                              await HelperFunctions.saveUserEmailSF(userEmail);
                               Navigator.of(context)
                                   .pushNamed("/toProjectlistPage");
                             }

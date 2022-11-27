@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:team/helper/helper_function.dart';
 
 class SignInPageP extends StatefulWidget {
   const SignInPageP({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class SignInPageP extends StatefulWidget {
 class _SignInPagePState extends State<SignInPageP> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
+  String username = '';
   String userEmail = '';
   String userPassword = '';
   void _tryValidation() {
@@ -119,6 +121,11 @@ class _SignInPagePState extends State<SignInPageP> {
                                   email: userEmail, password: userPassword);
 
                           if (newUser.user != null) {
+                            await HelperFunctions.saveUserLoggedInStatus(true);
+                            await HelperFunctions.saveUserIDSF(
+                                FirebaseAuth.instance.currentUser!.uid);
+                            await HelperFunctions.saveUserNameSF(username);
+                            await HelperFunctions.saveUserEmailSF(userEmail);
                             Navigator.of(context)
                                 .pushNamed("/toProjectlistPage");
                           }
