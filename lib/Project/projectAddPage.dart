@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './wedget/memNumPicker.dart';
 import './wedget/datePicker.dart';
@@ -6,6 +7,7 @@ import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+import '../functions/projects.dart';
 
 class ProjectAddPage extends StatefulWidget {
   const ProjectAddPage({Key? key}) : super(key: key);
@@ -24,10 +26,13 @@ class ProjectAddPageState extends State<ProjectAddPage> {
   String fileName = '아직 파일이 선택되지 않았습니다. ';
   int minTeamMem = 1;
   int maxTeamMem = 1;
+  int totalStuNum = 0;
   DateTime deadline = DateTime.now();
   bool numErr = false, fileErr = false;
 
-  void _tryValidation() {
+  final attendeeData = [];
+
+  bool _tryValidation() {
     bool isNameValid = _formKey.currentState!.validate();
     bool isNumValid = minTeamMem <= maxTeamMem;
     if (!isNumValid) {
@@ -50,7 +55,12 @@ class ProjectAddPageState extends State<ProjectAddPage> {
       });
     }
 
-    if (isNameValid && isNumValid && isFileValid) _formKey.currentState!.save();
+    if (isNameValid && isNumValid && isFileValid) {
+      _formKey.currentState!.save();
+      return true;
+    }
+
+    return false;
   }
 
   void _setMinNum(int selected) {
@@ -241,16 +251,21 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                         excel.tables[table]?.maxRows;
 
                                     if (nullableInt != null) {
-                                      for (int row = 0;
-                                          row < nullableInt;
-                                          row++) {
+                                      int row;
+                                      for (row = 0; row < nullableInt; row++) {
                                         // 한 학생에 대한 정보
                                         if (row == 0) continue;
                                         final rowData =
                                             excel.tables[table]?.rows[row];
-
-                                        print(rowData);
+                                        attendeeData.add({
+                                          "name": rowData?.elementAt(0)?.value,
+                                          "stu_id": rowData?.elementAt(1)?.value
+                                        });
                                       }
+
+                                      setState(() {
+                                        totalStuNum = row - 1;
+                                      });
                                     }
                                   }
                                 }
@@ -288,14 +303,45 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                           ),
                         ),
                         onPressed: () async {
-                          _tryValidation();
+                          if (!_tryValidation()) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                "수업 정보를 다시 한 번 확인해주세요. ",
+                                style: TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 14,
+                                ),
+                              ),
+                              backgroundColor: Colors.lightBlueAccent,
+                            ));
+
+                            return;
+                          }
                           try {
-                            // *TODO : 파일 파싱
+                            // 추가
+                            final projectData = {
+                              "name": name,
+                              "prof_doc_id":
+                                  FirebaseAuth.instance.currentUser?.uid,
+                              "max_team_mem": maxTeamMem,
+                              "min_team_mem": minTeamMem,
+                              "total_stu_num": totalStuNum,
+                              "deadline": deadline,
+                            };
+                            print(attendeeData);
+                            await addProject(projectData, attendeeData);
+
                             // *TODO : 생성된 project 화면으로 이동
                           } catch (e) {
+                            print(e);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text("수업 생성을 실패했습니다. ", style: textStyle),
+                              content: Text(
+                                "수업 생성을 실패했습니다. 다시 시도해주세요",
+                                style: TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 14,
+                                ),
+                              ),
                               backgroundColor: Colors.lightBlueAccent,
                             ));
                           }
