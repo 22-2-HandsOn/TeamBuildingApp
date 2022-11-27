@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class DatePicker extends StatefulWidget {
-  const DatePicker({Key? key, required this.setter}) : super(key: key);
+  const DatePicker({Key? key, required this.data, required this.setter})
+      : super(key: key);
+  final DateTime data;
   final Function(DateTime selected) setter;
 
   @override
@@ -16,6 +18,14 @@ class _DatePickerState extends State<DatePicker> {
   );
 
   DateTime dateTime = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      dateTime = widget.data;
+    });
+  }
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(

@@ -146,7 +146,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                         Row(
                           children: <Widget>[
                             Text('최소  ', style: textStyle),
-                            MemCntPicker(setter: _setMinNum),
+                            MemCntPicker(data: minTeamMem, setter: _setMinNum),
                           ],
                         ),
                         Text('        ~        ', style: textStyle),
@@ -154,7 +154,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                         Row(
                           children: <Widget>[
                             Text('최대  ', style: textStyle),
-                            MemCntPicker(setter: _setMaxNum)
+                            MemCntPicker(data: maxTeamMem, setter: _setMaxNum)
                           ],
                         ),
                       ],
@@ -187,7 +187,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    DatePicker(setter: _setDeadline),
+                    DatePicker(data: deadline, setter: _setDeadline),
 
                     // 엑셀 첨부
                     const SizedBox(height: 40),
