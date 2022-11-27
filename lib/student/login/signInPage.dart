@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/helper/DatabaseService.dart';
+import 'package:team/helper/helper_function.dart';
 
 class SignInPageS extends StatefulWidget {
   const SignInPageS({Key? key}) : super(key: key);
@@ -119,6 +122,17 @@ class _SignInPageState extends State<SignInPageS> {
                                   email: userEmail, password: userPassword);
 
                           if (newUser.user != null) {
+                            QuerySnapshot snapshot = await DatabaseService(
+                                    uid: FirebaseAuth.instance.currentUser!.uid)
+                                .gettingstuData(userEmail);
+                            await HelperFunctions.saveUserLoggedInStatus(true);
+                            await HelperFunctions.saveUserIDSF(
+                                FirebaseAuth.instance.currentUser!.uid);
+                            await HelperFunctions.saveUserNameSF(
+                                snapshot.docs[0]['username']);
+                            await HelperFunctions.saveUserEmailSF(userEmail);
+                            await HelperFunctions.saveUserstuIDSF(
+                                snapshot.docs[0]['stu_id']);
                             Navigator.of(context)
                                 .pushNamed("/toProjectlistPage");
                           }

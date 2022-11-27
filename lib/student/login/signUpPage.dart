@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/helper/DatabaseService.dart';
+import 'package:team/helper/helper_function.dart';
 
 class SignUpPageS extends StatefulWidget {
   const SignUpPageS({Key? key}) : super(key: key);
@@ -179,6 +181,17 @@ class SignUpPageState extends State<SignUpPageS> {
                                     email: userEmail, password: userPassword);
 
                             if (newUser.user != null) {
+                              await DatabaseService(uid: newUser.user!.uid)
+                                  .savingstuData(
+                                      userName, userEmail, studentid);
+
+                              // await HelperFunctions.saveUserLoggedInStatus(
+                              //     true);
+                              // await HelperFunctions.saveUserIDSF(
+                              //     FirebaseAuth.instance.currentUser!.uid);
+                              // await HelperFunctions.saveUserNameSF(userName);
+                              // await HelperFunctions.saveUserEmailSF(userEmail);
+                              // await HelperFunctions.saveUserstuIDSF(studentid);
                               Navigator.of(context)
                                   .pushNamed("/toProjectlistPage");
                             }

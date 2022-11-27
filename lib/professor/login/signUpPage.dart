@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/helper/DatabaseService.dart';
 import 'package:team/helper/helper_function.dart';
 
 class SignUpPageP extends StatefulWidget {
@@ -157,6 +158,9 @@ class SignUpPageState extends State<SignUpPageP> {
                                     email: userEmail, password: userPassword);
 
                             if (newUser.user != null) {
+                              await DatabaseService(uid: newUser.user!.uid)
+                                  .savingproData(username, userEmail);
+
                               await HelperFunctions.saveUserLoggedInStatus(
                                   true);
                               await HelperFunctions.saveUserIDSF(
