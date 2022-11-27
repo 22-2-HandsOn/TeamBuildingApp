@@ -119,8 +119,11 @@ class _SignInPagePState extends State<SignInPageP> {
                                   email: userEmail, password: userPassword);
 
                           if (newUser.user != null) {
+                            // Navigator.of(context)
+                            //     .pushNamed("/toProjectlistPage");
+                            // 테스트를 위해 projectAddPage와 연결
                             Navigator.of(context)
-                                .pushNamed("/toProjectlistPage");
+                                .pushNamed("/toProjectAddPage");
                           }
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

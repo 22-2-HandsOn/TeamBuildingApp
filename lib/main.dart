@@ -8,6 +8,7 @@ import 'package:team/Project/projectList.dart';
 import 'package:team/student/login/initPage.dart';
 import 'package:team/student/login/signInPage.dart';
 import 'package:team/student/login/signUpPage.dart';
+import 'package:team/Project/projectAddPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
 
           //Project
           '/toProjectlistPage': (context) => const ProjectListPage(),
+          '/toProjectAddPage': (context) => const ProjectAddPage()
         });
   }
 }
