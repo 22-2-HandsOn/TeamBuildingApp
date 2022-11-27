@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
 
           //Project
           '/toProjectlistPage': (context) => const ProjectListPage(),
-          '/toProjectAddPage': (context) => const ProjectAddPage()
+          '/toProjectAddPage': (context) =>
+              const ProjectAddPage() // *TODO : 이후 교수의 projectListPage에서 버튼 클릭을 통해 여기로 이동할 수 있도록 설정해야 함
         });
   }
 }
