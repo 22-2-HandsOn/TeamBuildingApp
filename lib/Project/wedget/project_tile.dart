@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:team/Project/main/teamlist.dart';
 import 'package:team/Project/projectList.dart';
 import 'package:team/helper/DatabaseService.dart';
+import 'package:team/Project/main/teamlist.dart';
 
 class projectTile extends StatefulWidget {
   final String userName;
@@ -30,9 +32,16 @@ class _projectTileState extends State<projectTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //MaterialPageRoute(builder: (context) => projectPage());
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TeamListPage(
+                    //projectId: widget.projectId,
+                    //projectName: widget.projectName,
+                    projectId: "9TLP88ulLsGzOb2ItojA",
+                    //projectId: "123",
+                    projectName: "Test",
+                    userName: widget.userName)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

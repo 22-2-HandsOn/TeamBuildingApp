@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -121,7 +122,7 @@ class _ProjectListstate extends State<ProjectListPage> {
         children: [
           GestureDetector(
             onTap: () {
-              //
+              Navigator.of(context).pushNamed('/toProjectAddPage');
             },
             child: Icon(
               Icons.add_circle,

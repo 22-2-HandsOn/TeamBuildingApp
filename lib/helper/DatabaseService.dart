@@ -13,6 +13,9 @@ class DatabaseService {
   final CollectionReference professorCollection =
       FirebaseFirestore.instance.collection("professors");
 
+  final CollectionReference teamCollection =
+      FirebaseFirestore.instance.collection("projects");
+
   // saving the userdata
   Future savingstuData(String userName, String email, String stuid) async {
     return await studentCollection.doc(uid).set({
@@ -25,7 +28,7 @@ class DatabaseService {
   }
 
   Future savingproData(String userName, String email) async {
-    return await studentCollection.doc(uid).set({
+    return await professorCollection.doc(uid).set({
       "username": userName,
       "email": email,
       "projects": [],
@@ -46,11 +49,15 @@ class DatabaseService {
     return snapshot;
   }
 
+  Future getTeamlist(String projectId) async {
+    return teamCollection.doc(projectId).collection("teamlist").snapshots();
+  }
+
   getUserName() async {
     return studentCollection.doc(uid).get();
   }
 
   getstuprojects() async {
-    return studentCollection.doc(uid).snapshots();
+    return professorCollection.doc(uid).snapshots();
   }
 }
