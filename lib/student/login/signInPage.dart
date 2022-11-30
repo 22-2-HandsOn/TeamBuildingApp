@@ -30,7 +30,7 @@ class _SignInPageState extends State<SignInPageS> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
           title: Text(
-            "로그인",
+            "학생 로그인",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",

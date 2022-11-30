@@ -31,7 +31,7 @@ class _SignInPagePState extends State<SignInPageP> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
           title: Text(
-            "로그인",
+            "교수님 로그인",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",
@@ -71,7 +71,7 @@ class _SignInPagePState extends State<SignInPageP> {
                         },
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "학교이메일",
+                          labelText: "학교 이메일",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,

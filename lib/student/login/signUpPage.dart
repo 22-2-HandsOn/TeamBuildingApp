@@ -33,7 +33,7 @@ class SignUpPageState extends State<SignUpPageS> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
           title: Text(
-            "회원가입",
+            "학생 회원가입",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",
@@ -151,7 +151,7 @@ class SignUpPageState extends State<SignUpPageS> {
                         obscureText: true,
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "비밀번호재확인",
+                          labelText: "비밀번호 재확인",
                           labelStyle: TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,

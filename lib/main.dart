@@ -27,11 +27,11 @@ class MyApp extends StatelessWidget {
         routes: {
           //login
           '/': (context) => const InitPage(),
-          '/toPro_LoginPage': (context) => const loginInitPageP(),
+          // '/toPro_LoginPage': (context) => const loginInitPageP(),
           '/toPro_SignInPage': (context) => const SignInPageP(),
           '/toPro_SignUpPage': (context) => const SignUpPageP(),
 
-          '/toStu_LoginPage': (context) => const loginInitPageS(),
+          // '/toStu_LoginPage': (context) => const loginInitPageS(),
           '/toStu_SignInPage': (context) => const SignInPageS(),
           '/toStu_SignUpPage': (context) => const SignUpPageS(),
 

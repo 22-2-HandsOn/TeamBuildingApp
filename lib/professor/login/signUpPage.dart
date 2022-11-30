@@ -32,7 +32,7 @@ class SignUpPageState extends State<SignUpPageP> {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black87),
           title: Text(
-            "회원가입",
+            "교수님 회원가입",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",

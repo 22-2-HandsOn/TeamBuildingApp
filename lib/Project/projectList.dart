@@ -3,7 +3,7 @@ import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team/Project/wedget/project_tile.dart';
+import 'package:team/Project/widget/project_tile.dart';
 
 class ProjectListPage extends StatefulWidget {
   const ProjectListPage({Key? key}) : super(key: key);

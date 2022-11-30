@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team/Project/wedget/team_tile.dart';
+import 'package:team/Project/widget/team_tile.dart';
 
 class TeamListPage extends StatefulWidget {
   final String projectId;
