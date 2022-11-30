@@ -321,7 +321,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                             // 추가
                             final projectData = {
                               "name": name,
-                              "prof_doc_id":
+                              "prof_uid":
                                   FirebaseAuth.instance.currentUser?.uid,
                               "max_team_mem": maxTeamMem,
                               "min_team_mem": minTeamMem,
