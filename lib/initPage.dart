@@ -22,30 +22,34 @@ class InitPageState extends State<InitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: const Text(
-            "Team building",
-            style: TextStyle(
-                color: Colors.black87,
-                fontFamily: "GmarketSansTTF",
-                fontWeight: FontWeight.bold,
-                fontSize: 26),
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: true,
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   title: const Text(
+        //     "Team building",
+        //     style: TextStyle(
+        //         color: Colors.black87,
+        //         fontFamily: "GmarketSansTTF",
+        //         fontWeight: FontWeight.bold,
+        //         fontSize: 26),
+        //   ),
+        //   backgroundColor: Colors.white,
+        //   centerTitle: true,
+        // ),
         backgroundColor: Colors.white,
         body: Center(
             child: Column(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(
-                  top: 20, bottom: 20, left: 20, right: 20),
-              child: Image(image: AssetImage("assets/images/profile.jpeg")),
+                  top: 140, bottom: 20, left: 20, right: 20),
+              child: Image(
+                image: AssetImage("assets/images/title.png"),
+                width: 250,
+                height: 250,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 20),
+              padding: const EdgeInsets.only(top: 35, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -103,7 +107,7 @@ class InitPageState extends State<InitPage> {
                         ],
                       ),
                       onPressed: () {
-                        if (!isUserProf)
+                        if (isUserProf)
                           Navigator.of(context).pushNamed("/toPro_SignInPage");
                         else
                           Navigator.of(context).pushNamed("/toStu_SignInPage");
@@ -131,7 +135,7 @@ class InitPageState extends State<InitPage> {
                         ],
                       ),
                       onPressed: () {
-                        if (!isUserProf)
+                        if (isUserProf)
                           Navigator.of(context).pushNamed("/toPro_SignUpPage");
                         else
                           Navigator.of(context).pushNamed("/toStu_SignUpPage");
