@@ -132,6 +132,7 @@ class _SignInPagePState extends State<SignInPageP> {
                             await HelperFunctions.saveUserNameSF(
                                 snapshot.docs[0]['username']);
                             await HelperFunctions.saveUserEmailSF(userEmail);
+                            await HelperFunctions.saveUsertypeSF(1);
                             Navigator.of(context)
                                 .pushNamed("/toProjectlistPage");
                             // 테스트를 위해 projectAddPage와 연결

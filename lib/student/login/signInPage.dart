@@ -133,6 +133,7 @@ class _SignInPageState extends State<SignInPageS> {
                             await HelperFunctions.saveUserEmailSF(userEmail);
                             await HelperFunctions.saveUserstuIDSF(
                                 snapshot.docs[0]['stu_id']);
+                            await HelperFunctions.saveUsertypeSF(0);
                             Navigator.of(context)
                                 .pushNamed("/toProjectlistPage");
                           }

@@ -8,13 +8,13 @@ class TeamListPage extends StatefulWidget {
   final String projectId;
   final String projectName;
   final String userName;
-  const TeamListPage(
+  List<String>? tags;
+  TeamListPage(
       {Key? key,
       required this.projectId,
       required this.projectName,
       required this.userName})
       : super(key: key);
-
   @override
   _TeamListstate createState() => _TeamListstate();
 }
@@ -30,7 +30,7 @@ class _TeamListstate extends State<TeamListPage> {
   gettingteamData() async {
     // getting the list of snapshots in our stream
     await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-        .getTeamlist(widget.projectId)
+        .getTeamlist(widget.projectId, widget.tags!)
         .then((snapshot) {
       setState(() {
         teams = snapshot;
@@ -40,34 +40,41 @@ class _TeamListstate extends State<TeamListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.white,
-        title: const Text(
-          "팀목록",
-          style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
+    return Builder(builder: (context) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        gettingteamData();
+      });
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.white,
+          title: const Text(
+            "팀목록",
+            style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 27),
+          ),
         ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          teamList(),
-          Container(
-            padding: EdgeInsets.all(8),
-          )
-        ],
-      ),
-    );
+        body: Stack(
+          children: <Widget>[
+            teamList(),
+            Container(
+              padding: EdgeInsets.all(8),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   teamList() {
@@ -78,6 +85,7 @@ class _TeamListstate extends State<TeamListPage> {
             ? ListView.builder(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
+                  //해당 부분에 tag 관련!
                   return Teamtile(
                       teamId: snapshot.data.docs[index]['teamid'],
                       teamName: snapshot.data.docs[index]['teamname'],

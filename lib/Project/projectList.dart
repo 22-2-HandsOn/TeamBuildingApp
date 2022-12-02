@@ -16,6 +16,7 @@ class _ProjectListstate extends State<ProjectListPage> {
   String userName = "";
   String email = "";
   Stream? projects;
+  int type = -1; // 0: stu , 1: pro
   @override
   void initState() {
     gettingUserData();
@@ -41,6 +42,11 @@ class _ProjectListstate extends State<ProjectListPage> {
         userName = val!;
       });
     });
+    await HelperFunctions.getUsertypeSFFromSF().then((val) {
+      setState(() {
+        type = val!;
+      });
+    });
     // getting the list of snapshots in our stream
     await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
         .getstuprojects()
@@ -53,28 +59,39 @@ class _ProjectListstate extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
+    return Builder(builder: (context) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        gettingUserData();
+      });
+      return Scaffold(
+        appBar: AppBar(
+            title: const Text(
+              "수업목록",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 27),
+              textAlign: TextAlign.center,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    if (type == 1) {
+                      Navigator.of(context).pushNamed('/toProjectAddPage');
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.add_circle,
+                    color: Colors.grey,
+                    size: 30,
+                  ))
+            ],
+            backgroundColor: Colors.white,
+            centerTitle: true),
         backgroundColor: Colors.white,
-        title: const Text(
-          "수업목록",
-          style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: projectlist(),
-    );
+        body: projectlist(),
+      );
+    });
   }
 
   projectlist() {
@@ -115,20 +132,15 @@ class _ProjectListstate extends State<ProjectListPage> {
   noprojectWidget() {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed('/toProjectAddPage');
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
+          Icon(
+            Icons.airline_stops_outlined,
+            color: Colors.grey[700],
+            size: 50,
           ),
           const SizedBox(
             height: 20,

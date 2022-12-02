@@ -185,13 +185,14 @@ class SignUpPageState extends State<SignUpPageS> {
                                   .savingstuData(
                                       userName, userEmail, studentid);
 
-                              // await HelperFunctions.saveUserLoggedInStatus(
-                              //     true);
-                              // await HelperFunctions.saveUserIDSF(
-                              //     FirebaseAuth.instance.currentUser!.uid);
-                              // await HelperFunctions.saveUserNameSF(userName);
-                              // await HelperFunctions.saveUserEmailSF(userEmail);
-                              // await HelperFunctions.saveUserstuIDSF(studentid);
+                              await HelperFunctions.saveUserLoggedInStatus(
+                                  true);
+                              await HelperFunctions.saveUserIDSF(
+                                  FirebaseAuth.instance.currentUser!.uid);
+                              await HelperFunctions.saveUserNameSF(userName);
+                              await HelperFunctions.saveUserEmailSF(userEmail);
+                              await HelperFunctions.saveUserstuIDSF(studentid);
+                              await HelperFunctions.saveUsertypeSF(0);
                               Navigator.of(context)
                                   .pushNamed("/toProjectlistPage");
                             }

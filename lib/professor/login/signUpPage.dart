@@ -167,6 +167,7 @@ class SignUpPageState extends State<SignUpPageP> {
                                   FirebaseAuth.instance.currentUser!.uid);
                               await HelperFunctions.saveUserNameSF(username);
                               await HelperFunctions.saveUserEmailSF(userEmail);
+                              await HelperFunctions.saveUsertypeSF(1);
                               Navigator.of(context)
                                   .pushNamed("/toProjectlistPage");
                             }
