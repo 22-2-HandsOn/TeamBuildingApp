@@ -9,6 +9,7 @@ import 'package:team/student/login/initPage.dart';
 import 'package:team/student/login/signInPage.dart';
 import 'package:team/student/login/signUpPage.dart';
 import 'package:team/Project/projectAddPage.dart';
+import 'package:team/student/studentProjectPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,11 @@ class MyApp extends StatelessWidget {
           //Project
           '/toProjectlistPage': (context) => const ProjectListPage(),
           '/toProjectAddPage': (context) =>
-              const ProjectAddPage() // *TODO : 이후 교수의 projectListPage에서 버튼 클릭을 통해 여기로 이동할 수 있도록 설정해야 함
+              const ProjectAddPage(), // *TODO : 이후 교수의 projectListPage에서 버튼 클릭을 통해 여기로 이동할 수 있도록 설정해야 함
+
+          //StudentPages
+          '/toStudentProjectPage': (context) => const StudentProjectPage(),
+
         });
   }
 }
