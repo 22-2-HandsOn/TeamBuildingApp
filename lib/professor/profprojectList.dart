@@ -137,6 +137,7 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
           const Text(
             "수업이 없습니다.",
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
           )
         ],
       ),
