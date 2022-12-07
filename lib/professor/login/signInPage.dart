@@ -133,7 +133,7 @@ class _SignInPagePState extends State<SignInPageP> {
                                 snapshot.docs[0]['username']);
                             await HelperFunctions.saveUserEmailSF(userEmail);
                             Navigator.of(context)
-                                .pushNamed("/toProjectlistPage");
+                                .pushNamed("/toProfProjectlistPage");
                             // 테스트를 위해 projectAddPage와 연결
                             // Navigator.of(context)
                             //     .pushNamed("/toProjectAddPage");

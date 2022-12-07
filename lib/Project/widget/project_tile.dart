@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team/Project/main/teamlist.dart';
-import 'package:team/Project/projectList.dart';
+import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/main/teamlist.dart';
 
@@ -36,11 +36,8 @@ class _projectTileState extends State<projectTile> {
             context,
             MaterialPageRoute(
                 builder: (context) => TeamListPage(
-                    //projectId: widget.projectId,
-                    //projectName: widget.projectName,
-                    projectId: "9TLP88ulLsGzOb2ItojA",
-                    //projectId: "123",
-                    projectName: "Test",
+                    projectId: widget.projectId,
+                    projectName: widget.projectName,
                     userName: widget.userName)));
       },
       child: Container(

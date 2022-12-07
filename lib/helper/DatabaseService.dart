@@ -57,7 +57,11 @@ class DatabaseService {
     return studentCollection.doc(uid).get();
   }
 
-  getstuprojects() async {
+  getprofprojects() async {
     return professorCollection.doc(uid).snapshots();
+  }
+
+  getstuprojects() async {
+    return studentCollection.doc(uid).snapshots();
   }
 }

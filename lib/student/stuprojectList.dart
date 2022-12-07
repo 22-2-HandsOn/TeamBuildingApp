@@ -5,14 +5,14 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:team/Project/widget/project_tile.dart';
 
-class ProjectListPage extends StatefulWidget {
-  const ProjectListPage({Key? key}) : super(key: key);
+class StuProjectListPage extends StatefulWidget {
+  const StuProjectListPage({Key? key}) : super(key: key);
 
   @override
-  _ProjectListstate createState() => _ProjectListstate();
+  _StuProjectListPagestate createState() => _StuProjectListPagestate();
 }
 
-class _ProjectListstate extends State<ProjectListPage> {
+class _StuProjectListPagestate extends State<StuProjectListPage> {
   String userName = "";
   String email = "";
   Stream? projects;
@@ -22,12 +22,12 @@ class _ProjectListstate extends State<ProjectListPage> {
     super.initState();
   }
 
-  String getId(String res) {
-    return res.substring(0, res.indexOf("_"));
+  String getId(Map<String,dynamic> res) {
+    return res['doc_id'].toString();
   }
 
-  String getName(String res) {
-    return res.substring(res.indexOf("_") + 1);
+  String getName(Map<String,dynamic> res) {
+    return res['name'].toString();
   }
 
   gettingUserData() async {
@@ -93,8 +93,9 @@ class _ProjectListstate extends State<ProjectListPage> {
                   return projectTile(
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
-                          getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']);
+                      getName(snapshot.data['projects'][reverseIndex]),
+                      userName: snapshot.data['username']
+                  );
                 },
               );
             } else {
