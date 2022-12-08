@@ -26,6 +26,10 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
     return res['doc_id'].toString();
   }
 
+  String getstu_id(Map<String,dynamic> res) {
+    return res['stu_id'].toString();
+  }
+
   String getName(Map<String,dynamic> res) {
     return res['name'].toString();
   }
@@ -94,7 +98,7 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
                       getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']
+                      userName: snapshot.data['username'],
                   );
                 },
               );

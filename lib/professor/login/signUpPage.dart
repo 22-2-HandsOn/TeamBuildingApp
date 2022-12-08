@@ -168,7 +168,7 @@ class SignUpPageState extends State<SignUpPageP> {
                               await HelperFunctions.saveUserNameSF(username);
                               await HelperFunctions.saveUserEmailSF(userEmail);
                               Navigator.of(context)
-                                  .pushNamed("/toProjectlistPage");
+                                  .pushNamed("/toProfProjectlistPage");
                             }
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

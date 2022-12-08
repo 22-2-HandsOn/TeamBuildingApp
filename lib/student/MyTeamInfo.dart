@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:team/helper/DatabaseService.dart';
+import 'package:team/helper/ProjectCRUD.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyTeamInfoPage extends StatelessWidget {
-  const MyTeamInfoPage({Key? key}) : super(key: key);
-
+  String projectId = "";
+  MyTeamInfoPage(this.projectId);
+  late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +35,25 @@ class MyTeamInfoPage extends StatelessWidget {
               icon: const Icon(Icons.edit)),
         ],
       ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(8),
-          )
-        ],
-      ),
+        body: FutureBuilder(
+            future: projectCRUD.getTeamInfo(),
+            builder: (context, snapshot){
+              if (snapshot.hasData){
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(
+                    children: [
+                      Text(snapshot.toString(), style: TextStyle(fontSize: 20)),
+                    ],
+                  ),
+                );
+              }
+              else{
+
+                return Text("정보가 없습니다");
+              }
+            }
+        )
     );
   }
 }

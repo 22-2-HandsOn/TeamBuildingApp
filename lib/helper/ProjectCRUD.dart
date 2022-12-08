@@ -1,0 +1,90 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/helper/helper_function.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ProjectCRUD{
+  String projectID;
+  ProjectCRUD(this.projectID);
+  late final attendeesCollection = FirebaseFirestore.instance.collection("projects").doc(projectID).collection("attendees");
+  late final studentCollection = FirebaseFirestore.instance.collection('students').doc(FirebaseAuth.instance.currentUser!.uid);
+  late final teamsCollection = FirebaseFirestore.instance.collection("projects").doc(projectID).collection("teams");
+
+  Future getstu_id() async{
+    final snapshot = await studentCollection.get();
+    var data =  snapshot.data() as Map<String, dynamic>;
+    return data['stu_id'].toString();
+  }
+
+  Future getAttendeeInfo() async {
+    final snapshot = await attendeesCollection.get();
+    var stu_id = await getstu_id();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return dataElement;
+      }
+    }
+  }
+
+  Future getTeamInfo() async {
+    final snapshot = await teamsCollection.get();
+    var stu_id = await getstu_id();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get('members') as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return dataElement;
+      }
+    }
+  }
+
+    Future getAttendeeID() async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get("stu_id");
+        if (dataElement == stu_id) {
+          return doc.id;
+        }
+      }
+    }
+
+    Future setIntro(String intro) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          attendeesCollection.doc(doc.id).update({'introduction': intro});
+        }
+      }
+    }
+
+  Future setWantedTeam(String intro) async {
+    var stu_id = await getstu_id();
+    final QuerySnapshot snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        attendeesCollection.doc(doc.id).update({'finding_team_info': intro});
+      }
+    }
+  }
+
+    Future getIntro() async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement["stu_id"].toString() == stu_id) {
+          if (dataElement.containsKey("introduction")) {
+            return dataElement["introduction"];
+          }
+          else {
+            setIntro("");
+            return "";
+          }
+        }
+      }
+    }
+}
