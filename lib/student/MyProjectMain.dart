@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:team/student/MyStudentInfo.dart';
-import 'package:team/student/MyTeamInfo.dart';
+import 'package:team/student/student_info/MyStudentInfo.dart';
+import 'package:team/student/team/MyTeamInfo.dart';
 import 'package:team/Project/main/teamlist.dart';
 import 'package:team/Project/main/studentlist.dart';
 

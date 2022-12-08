@@ -31,11 +31,23 @@ class ProjectCRUD{
     final snapshot = await teamsCollection.get();
     var stu_id = await getstu_id();
     for (var doc in snapshot.docs) {
-      var dataElement = doc.get('members') as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        return dataElement;
+      var dataElement = doc.get('members') as List;
+      for (int i =0;i<dataElement.length;i++){
+        if (dataElement[i].toString() == stu_id) {
+          return doc.data() as Map<String, dynamic>;
+        }
       }
     }
+  }
+
+  Future addTeam(String teamname, String introduction, String finding_member_info, List members) async{
+    final teamDoc = await teamsCollection.doc().set({
+      'name': teamname,
+      'introduction': introduction,
+      'finding_member_info': finding_member_info,
+      'members': members,
+      'isFinished': false,
+    });
   }
 
     Future getAttendeeID() async {

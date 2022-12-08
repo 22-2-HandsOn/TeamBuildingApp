@@ -3,7 +3,7 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'MyStudentInfoForm.dart';
+import 'ChangeStudentInfo.dart';
 
 class MyStudentInfoPage extends StatefulWidget {
   String projectId = "";
