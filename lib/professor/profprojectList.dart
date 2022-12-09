@@ -5,14 +5,14 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:team/Project/widget/project_tile.dart';
 
-class ProjectListPage extends StatefulWidget {
-  const ProjectListPage({Key? key}) : super(key: key);
+class ProfProjectListPage extends StatefulWidget {
+  const ProfProjectListPage({Key? key}) : super(key: key);
 
   @override
-  _ProjectListstate createState() => _ProjectListstate();
+  _ProfProjectListstate createState() => _ProfProjectListstate();
 }
 
-class _ProjectListstate extends State<ProjectListPage> {
+class _ProfProjectListstate extends State<ProfProjectListPage> {
   String userName = "";
   String email = "";
   Stream? projects;
@@ -23,12 +23,12 @@ class _ProjectListstate extends State<ProjectListPage> {
     super.initState();
   }
 
-  String getId(String res) {
-    return res.substring(0, res.indexOf("_"));
+  String getId(Map<String,dynamic> res) {
+    return res['doc_id'].toString();
   }
 
-  String getName(String res) {
-    return res.substring(res.indexOf("_") + 1);
+  String getName(Map<String,dynamic> res) {
+    return res['name'].toString();
   }
 
   gettingUserData() async {
@@ -49,7 +49,7 @@ class _ProjectListstate extends State<ProjectListPage> {
     });
     // getting the list of snapshots in our stream
     await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-        .getstuprojects()
+        .getprofprojects()
         .then((snapshot) {
       setState(() {
         projects = snapshot;
@@ -111,7 +111,8 @@ class _ProjectListstate extends State<ProjectListPage> {
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
                           getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']);
+                      userName: snapshot.data['username']
+                  );
                 },
               );
             } else {
@@ -148,6 +149,7 @@ class _ProjectListstate extends State<ProjectListPage> {
           const Text(
             "수업이 없습니다.",
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
           )
         ],
       ),

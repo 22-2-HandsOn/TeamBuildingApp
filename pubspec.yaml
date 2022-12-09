@@ -43,6 +43,7 @@ dependencies:
   image_picker: ^0.8.6
   shared_preferences: ^2.0.15
   firebase_storage: ^11.0.5
+  bottom_navy_bar: ^6.0.0
 
   # 학생 list 불러오기
   file_picker: ^5.2.2

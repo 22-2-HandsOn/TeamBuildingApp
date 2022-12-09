@@ -3,13 +3,14 @@ import 'package:team/Project/main/teamlist.dart';
 import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/main/teamlist.dart';
+import 'MyProjectMain.dart';
 
-class projectTile extends StatefulWidget {
+class StuProjectTile extends StatefulWidget {
   final String userName;
   final String projectId;
   final String projectName;
   //final String opponent;
-  const projectTile({
+  const StuProjectTile({
     Key? key,
     required this.projectId,
     required this.projectName,
@@ -18,10 +19,10 @@ class projectTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<projectTile> createState() => _projectTileState();
+  State<StuProjectTile> createState() => _StuProjectTileState();
 }
 
-class _projectTileState extends State<projectTile> {
+class _StuProjectTileState extends State<StuProjectTile> {
   String resentmessage = "";
   @override
   void initState() {
@@ -35,10 +36,7 @@ class _projectTileState extends State<projectTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => TeamListPage(
-                    projectId: widget.projectId,
-                    projectName: widget.projectName,
-                    userName: widget.userName)));
+                builder: (context) => MyProjectMain(widget.projectId, widget.projectName, widget.userName)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

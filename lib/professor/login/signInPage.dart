@@ -134,7 +134,7 @@ class _SignInPagePState extends State<SignInPageP> {
                             await HelperFunctions.saveUserEmailSF(userEmail);
                             await HelperFunctions.saveUsertypeSF(1);
                             Navigator.of(context)
-                                .pushNamed("/toProjectlistPage");
+                                .pushNamed("/toProfProjectlistPage");
                             // 테스트를 위해 projectAddPage와 연결
                             // Navigator.of(context)
                             //     .pushNamed("/toProjectAddPage");

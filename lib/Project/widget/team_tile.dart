@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:team/Project/projectList.dart';
+import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 
 class Teamtile extends StatefulWidget {

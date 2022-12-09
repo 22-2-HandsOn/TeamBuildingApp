@@ -135,7 +135,7 @@ class _SignInPageState extends State<SignInPageS> {
                                 snapshot.docs[0]['stu_id']);
                             await HelperFunctions.saveUsertypeSF(0);
                             Navigator.of(context)
-                                .pushNamed("/toProjectlistPage");
+                                .pushNamed("/toStuProjectlistPage");
                           }
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
