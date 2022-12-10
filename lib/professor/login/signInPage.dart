@@ -17,6 +17,8 @@ class _SignInPagePState extends State<SignInPageP> {
   String username = '';
   String userEmail = '';
   String userPassword = '';
+  bool isNowLoading = false;
+
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
@@ -107,51 +109,81 @@ class _SignInPagePState extends State<SignInPageP> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           backgroundColor: Colors.lightBlueAccent,
+                          disabledBackgroundColor:
+                              Colors.lightBlueAccent.shade100,
                           minimumSize: const Size.fromHeight(40)),
-                      child: Text(
-                        "로그인",
-                        style: TextStyle(
-                          fontFamily: "GmarketSansTTF",
-                          fontSize: 14,
-                        ),
-                      ),
-                      onPressed: () async {
-                        _tryValidation();
-                        try {
-                          final newUser =
-                              await _authentication.signInWithEmailAndPassword(
-                                  email: userEmail, password: userPassword);
-
-                          if (newUser.user != null) {
-                            QuerySnapshot snapshot = await DatabaseService(
-                                    uid: FirebaseAuth.instance.currentUser!.uid)
-                                .gettingproData(userEmail);
-                            await HelperFunctions.saveUserLoggedInStatus(true);
-                            await HelperFunctions.saveUserIDSF(
-                                FirebaseAuth.instance.currentUser!.uid);
-                            await HelperFunctions.saveUserNameSF(
-                                snapshot.docs[0]['username']);
-                            await HelperFunctions.saveUserEmailSF(userEmail);
-                            Navigator.of(context)
-                                .pushNamed("/toProfProjectlistPage");
-                            // 테스트를 위해 projectAddPage와 연결
-                            // Navigator.of(context)
-                            //     .pushNamed("/toProjectAddPage");
-                          }
-                        } catch (e) {
-                          print(e.toString());
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              "잘못된 이메일 혹은 비밀번호입니다.",
+                      child: !isNowLoading
+                          ? Text(
+                              "로그인",
                               style: TextStyle(
                                 fontFamily: "GmarketSansTTF",
                                 fontSize: 14,
                               ),
+                            )
+                          : Container(
+                              width: 20,
+                              height: 20,
+                              padding: const EdgeInsets.all(2.0),
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
                             ),
-                            backgroundColor: Colors.lightBlueAccent,
-                          ));
-                        }
-                      },
+                      onPressed: !isNowLoading
+                          ? () async {
+                              setState(() {
+                                isNowLoading = true;
+                              });
+                              _tryValidation();
+
+                              try {
+                                final newUser = await _authentication
+                                    .signInWithEmailAndPassword(
+                                        email: userEmail,
+                                        password: userPassword);
+
+                                if (newUser.user != null) {
+                                  QuerySnapshot snapshot =
+                                      await DatabaseService(
+                                              uid: FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                          .gettingproData(userEmail);
+                                  await HelperFunctions.saveUserLoggedInStatus(
+                                      true);
+                                  await HelperFunctions.saveUserIDSF(
+                                      FirebaseAuth.instance.currentUser!.uid);
+                                  await HelperFunctions.saveUserNameSF(
+                                      snapshot.docs[0]['username']);
+                                  await HelperFunctions.saveUserEmailSF(
+                                      userEmail);
+                                  Navigator.of(context)
+                                      .pushNamed("/toProfProjectlistPage");
+                                  setState(() {
+                                    isNowLoading = false;
+                                  });
+                                  // 테스트를 위해 projectAddPage와 연결
+                                  // Navigator.of(context)
+                                  //     .pushNamed("/toProjectAddPage");
+                                }
+                              } catch (e) {
+                                print(e.toString());
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "잘못된 이메일 혹은 비밀번호입니다.",
+                                    style: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ));
+                                setState(() {
+                                  isNowLoading = false;
+                                });
+                              }
+                            }
+                          : null,
                     )
                   ],
                 ),

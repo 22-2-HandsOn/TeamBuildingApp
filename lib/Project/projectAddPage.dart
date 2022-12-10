@@ -29,6 +29,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
   int totalStuNum = 0;
   DateTime deadline = DateTime.now();
   bool numErr = false, fileErr = false;
+  bool isNowLoading = false;
 
   final attendeeData = [];
 
@@ -297,60 +298,84 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             backgroundColor: Colors.lightBlueAccent,
+                            disabledBackgroundColor:
+                                Colors.lightBlueAccent.shade100,
                             minimumSize: const Size.fromHeight(40)),
-                        child: Text(
-                          "수업 생성",
-                          style: TextStyle(
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 14,
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (!_tryValidation()) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                "수업 정보를 다시 한 번 확인해주세요. ",
+                        child: !isNowLoading
+                            ? Text(
+                                "수업 생성",
                                 style: TextStyle(
                                   fontFamily: "GmarketSansTTF",
                                   fontSize: 14,
                                 ),
-                              ),
-                              backgroundColor: Colors.lightBlueAccent,
-                            ));
-
-                            return;
-                          }
-                          try {
-                            // // 추가
-                            // deadline = DateTime(deadline.year, deadline.month,
-                            //     deadline.day, 23, 59, 59, 999, 999);
-                            final projectData = {
-                              "name": name,
-                              "prof_uid":
-                                  FirebaseAuth.instance.currentUser?.uid,
-                              "max_team_mem": maxTeamMem,
-                              "min_team_mem": minTeamMem,
-                              "total_stu_num": totalStuNum,
-                              "deadline": deadline,
-                            };
-                            print(attendeeData);
-                            await addProject(projectData, attendeeData);
-
-                            // *TODO : 생성된 project 화면으로 이동
-                          } catch (e) {
-                            print(e);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                "수업 생성을 실패했습니다. 다시 시도해주세요",
-                                style: TextStyle(
-                                  fontFamily: "GmarketSansTTF",
-                                  fontSize: 14,
+                              )
+                            : Container(
+                                width: 20,
+                                height: 20,
+                                padding: const EdgeInsets.all(2.0),
+                                child: const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
                                 ),
                               ),
-                              backgroundColor: Colors.lightBlueAccent,
-                            ));
-                          }
-                        })
+                        onPressed: !isNowLoading
+                            ? () async {
+                                setState(() {
+                                  isNowLoading = true;
+                                });
+                                if (!_tryValidation()) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      "수업 정보를 다시 한 번 확인해주세요. ",
+                                      style: TextStyle(
+                                        fontFamily: "GmarketSansTTF",
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.lightBlueAccent,
+                                  ));
+
+                                  setState(() {
+                                    isNowLoading = false;
+                                  });
+                                  return;
+                                }
+                                try {
+                                  // // 추가
+                                  // deadline = DateTime(deadline.year, deadline.month,
+                                  //     deadline.day, 23, 59, 59, 999, 999);
+                                  final projectData = {
+                                    "name": name,
+                                    "prof_uid":
+                                        FirebaseAuth.instance.currentUser?.uid,
+                                    "max_team_mem": maxTeamMem,
+                                    "min_team_mem": minTeamMem,
+                                    "total_stu_num": totalStuNum,
+                                    "deadline": deadline,
+                                  };
+                                  print(attendeeData);
+                                  await addProject(projectData, attendeeData);
+                                  // *TODO : 생성된 project 화면으로 이동
+                                } catch (e) {
+                                  print(e);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      "수업 생성을 실패했습니다. 다시 시도해주세요",
+                                      style: TextStyle(
+                                        fontFamily: "GmarketSansTTF",
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.lightBlueAccent,
+                                  ));
+                                }
+                                setState(() {
+                                  isNowLoading = false;
+                                });
+                              }
+                            : null)
                   ],
                 ),
               ),
