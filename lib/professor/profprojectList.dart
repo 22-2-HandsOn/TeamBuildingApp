@@ -37,6 +37,10 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
     return DateTime.now().difference(res['deadline'].toDate()).inDays;
   }
 
+  bool getIsFinished(Map<String, dynamic> res) {
+    return res['isFinished'];
+  }
+
   gettingUserData() async {
     await HelperFunctions.getUserEmailFromSF().then((value) {
       setState(() {
@@ -83,7 +87,9 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: projectlist(),
+      body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 7),
+          child: projectlist()),
     );
   }
 
@@ -101,13 +107,14 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
                   int reverseIndex =
                       snapshot.data['projects'].length - index - 1;
                   return projectTile(
-                    projectId: getId(snapshot.data['projects'][reverseIndex]),
-                    projectName:
-                        getName(snapshot.data['projects'][reverseIndex]),
-                    userName: snapshot.data['username'],
-                    projectDeadline:
-                        getDeadline(snapshot.data['projects'][reverseIndex]),
-                  );
+                      projectId: getId(snapshot.data['projects'][reverseIndex]),
+                      projectName:
+                          getName(snapshot.data['projects'][reverseIndex]),
+                      userName: snapshot.data['username'],
+                      projectDeadline:
+                          getDeadline(snapshot.data['projects'][reverseIndex]),
+                      isFinished: getIsFinished(
+                          snapshot.data['projects'][reverseIndex]));
                 },
               );
             } else {

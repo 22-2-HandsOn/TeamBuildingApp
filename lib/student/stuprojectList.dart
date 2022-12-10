@@ -22,16 +22,24 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
     super.initState();
   }
 
-  String getId(Map<String,dynamic> res) {
+  String getId(Map<String, dynamic> res) {
     return res['doc_id'].toString();
   }
 
-  String getstu_id(Map<String,dynamic> res) {
+  String getstu_id(Map<String, dynamic> res) {
     return res['stu_id'].toString();
   }
 
-  String getName(Map<String,dynamic> res) {
+  String getName(Map<String, dynamic> res) {
     return res['name'].toString();
+  }
+
+  int getDeadline(Map<String, dynamic> res) {
+    return DateTime.now().difference(res['deadline'].toDate()).inDays;
+  }
+
+  bool getIsFinished(Map<String, dynamic> res) {
+    return res['isFinished'];
   }
 
   gettingUserData() async {
@@ -71,13 +79,18 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
             }),
         backgroundColor: Colors.white,
         title: const Text(
-          "수업목록",
+          "수업 목록",
           style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
       ),
       backgroundColor: Colors.white,
-      body: projectlist(),
+      body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 7),
+          child: projectlist()),
     );
   }
 
@@ -97,9 +110,12 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
                   return StuProjectTile(
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
-                      getName(snapshot.data['projects'][reverseIndex]),
+                          getName(snapshot.data['projects'][reverseIndex]),
                       userName: snapshot.data['username'],
-                  );
+                      projectDeadline:
+                          getDeadline(snapshot.data['projects'][reverseIndex]),
+                      isFinished: getIsFinished(
+                          snapshot.data['projects'][reverseIndex]));
                 },
               );
             } else {
