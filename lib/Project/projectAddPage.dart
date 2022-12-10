@@ -321,9 +321,9 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                             return;
                           }
                           try {
-                            // 추가
-                            deadline = DateTime(deadline.year, deadline.month,
-                                deadline.day, 23, 59, 59, 999, 999);
+                            // // 추가
+                            // deadline = DateTime(deadline.year, deadline.month,
+                            //     deadline.day, 23, 59, 59, 999, 999);
                             final projectData = {
                               "name": name,
                               "prof_uid":

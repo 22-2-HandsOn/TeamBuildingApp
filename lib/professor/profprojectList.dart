@@ -124,9 +124,7 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
                           child: const Text(
                             '+  새 수업 생성',
                             style: TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                                fontFamily: "GmarketSansTTF", fontSize: 16),
                           ),
                           onPressed: () {
                             Navigator.of(context)
@@ -157,24 +155,19 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed('/toProjectAddPage');
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           const Text(
-            "수업이 없습니다.",
+            "팀빌딩 중인 수업이 없습니다.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          )
+            style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 18),
+          ),
+          TextButton(
+              child: const Text(
+                '+  새 수업 생성',
+                style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/toProjectAddPage');
+              })
         ],
       ),
     );
