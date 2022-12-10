@@ -3,16 +3,16 @@ import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team/Project/widget/project_tile.dart';
+import 'package:team/student/stuProjectTile.dart';
 
-class ProjectListPage extends StatefulWidget {
-  const ProjectListPage({Key? key}) : super(key: key);
+class StuProjectListPage extends StatefulWidget {
+  const StuProjectListPage({Key? key}) : super(key: key);
 
   @override
-  _ProjectListstate createState() => _ProjectListstate();
+  _StuProjectListPagestate createState() => _StuProjectListPagestate();
 }
 
-class _ProjectListstate extends State<ProjectListPage> {
+class _StuProjectListPagestate extends State<StuProjectListPage> {
   String userName = "";
   String email = "";
   Stream? projects;
@@ -22,12 +22,16 @@ class _ProjectListstate extends State<ProjectListPage> {
     super.initState();
   }
 
-  String getId(String res) {
-    return res.substring(0, res.indexOf("_"));
+  String getId(Map<String,dynamic> res) {
+    return res['doc_id'].toString();
   }
 
-  String getName(String res) {
-    return res.substring(res.indexOf("_") + 1);
+  String getstu_id(Map<String,dynamic> res) {
+    return res['stu_id'].toString();
+  }
+
+  String getName(Map<String,dynamic> res) {
+    return res['name'].toString();
   }
 
   gettingUserData() async {
@@ -90,11 +94,12 @@ class _ProjectListstate extends State<ProjectListPage> {
                 itemBuilder: (context, index) {
                   int reverseIndex =
                       snapshot.data['projects'].length - index - 1;
-                  return projectTile(
+                  return StuProjectTile(
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
-                          getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']);
+                      getName(snapshot.data['projects'][reverseIndex]),
+                      userName: snapshot.data['username'],
+                  );
                 },
               );
             } else {
@@ -120,22 +125,10 @@ class _ProjectListstate extends State<ProjectListPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed('/toProjectAddPage');
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           const Text(
             "수업이 없습니다.",
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
           )
         ],
       ),

@@ -259,7 +259,10 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                             excel.tables[table]?.rows[row];
                                         attendeeData.add({
                                           "name": rowData?.elementAt(0)?.value,
-                                          "stu_id": rowData?.elementAt(1)?.value
+                                          "stu_id":
+                                              rowData?.elementAt(1)?.value,
+                                          "introduction": "",
+                                          "finding_team_info": "",
                                         });
                                       }
 
@@ -319,6 +322,8 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                           }
                           try {
                             // 추가
+                            deadline = DateTime(deadline.year, deadline.month,
+                                deadline.day, 23, 59, 59, 999, 999);
                             final projectData = {
                               "name": name,
                               "prof_uid":

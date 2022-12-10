@@ -193,7 +193,7 @@ class SignUpPageState extends State<SignUpPageS> {
                               // await HelperFunctions.saveUserEmailSF(userEmail);
                               // await HelperFunctions.saveUserstuIDSF(studentid);
                               Navigator.of(context)
-                                  .pushNamed("/toProjectlistPage");
+                                  .pushNamed("/toStuProjectlistPage");
                             }
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
