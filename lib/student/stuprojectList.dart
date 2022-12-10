@@ -126,7 +126,7 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
           }
         } else {
           return Center(
-            child: CircularProgressIndicator(color: Colors.red),
+            child: CircularProgressIndicator(color: Colors.lightBlueAccent),
           );
         }
       },

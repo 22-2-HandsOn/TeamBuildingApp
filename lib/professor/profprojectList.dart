@@ -65,32 +65,34 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.white,
-        title: const Text(
-          "수업 목록",
-          style: TextStyle(
-              color: Colors.black87,
-              fontFamily: "GmarketSansTTF",
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          elevation: 1,
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.white,
+          title: const Text(
+            "수업 목록",
+            style: TextStyle(
+                color: Colors.black87,
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      backgroundColor: Colors.white,
-      body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          child: projectlist()),
-    );
+        backgroundColor: Colors.white,
+        body: Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 7,
+          ),
+          child: projectlist(),
+        ));
   }
 
   projectlist() {
@@ -101,20 +103,35 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
         if (snapshot.hasData) {
           if (snapshot.data['projects'] != null) {
             if (snapshot.data['projects'].length != 0) {
+              var itemCount = snapshot.data['projects'].length;
               return ListView.builder(
-                itemCount: snapshot.data['projects'].length,
+                itemCount: snapshot.data['projects'].length + 1,
                 itemBuilder: (context, index) {
                   int reverseIndex =
                       snapshot.data['projects'].length - index - 1;
-                  return projectTile(
-                      projectId: getId(snapshot.data['projects'][reverseIndex]),
-                      projectName:
-                          getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username'],
-                      projectDeadline:
-                          getDeadline(snapshot.data['projects'][reverseIndex]),
-                      isFinished: getIsFinished(
-                          snapshot.data['projects'][reverseIndex]));
+                  return index != itemCount
+                      ? projectTile(
+                          projectId:
+                              getId(snapshot.data['projects'][reverseIndex]),
+                          projectName:
+                              getName(snapshot.data['projects'][reverseIndex]),
+                          userName: snapshot.data['username'],
+                          projectDeadline: getDeadline(
+                              snapshot.data['projects'][reverseIndex]),
+                          isFinished: getIsFinished(
+                              snapshot.data['projects'][reverseIndex]))
+                      : TextButton(
+                          child: const Text(
+                            '+  새 수업 생성',
+                            style: TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed('/toProjectAddPage');
+                          });
                 },
               );
             } else {
@@ -125,7 +142,7 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
           }
         } else {
           return Center(
-            child: CircularProgressIndicator(color: Colors.red),
+            child: CircularProgressIndicator(color: Colors.lightBlueAccent),
           );
         }
       },

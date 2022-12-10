@@ -67,7 +67,7 @@ class _StuProjectTileState extends State<StuProjectTile> {
                       style: textStyle_title,
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Chip(
                           backgroundColor: widget.projectDeadline < 0
