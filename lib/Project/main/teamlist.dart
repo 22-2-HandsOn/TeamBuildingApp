@@ -20,7 +20,6 @@ class TeamListPage extends StatefulWidget {
 }
 
 class _TeamListstate extends State<TeamListPage> {
-  int _selectedIndex = 1;
   Stream<QuerySnapshot>? teams;
   String projectid = "";
   DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
@@ -50,44 +49,6 @@ class _TeamListstate extends State<TeamListPage> {
   tagupdate() {
     final data = tagsnapshot!.data();
     tags = List<String>.from(data?['hashtags']);
-  }
-
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Home(
-                      projectname: widget.projectname,
-                      projectid: widget.projectId,
-                    )));
-        break;
-
-      case 2:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => StulistPage(
-                      projectname: widget.projectname,
-                      projectId: widget.projectId,
-                    )));
-        break;
-      case 3:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyTeamInfoPage(widget.projectId, widget.projectname)));
-        break;
-      case 4:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyStudentInfoPage(widget.projectId, widget.projectname)));
-        break;
-    }
   }
 
   @override
@@ -139,36 +100,6 @@ class _TeamListstate extends State<TeamListPage> {
               ),
             )
           ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "홈",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.text_snippet),
-              label: "팀리스트",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: "학생리스트",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.flag),
-              label: "내 팀 정보",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "내 정보",
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.red,
-          selectedLabelStyle: TextStyle(color: Colors.red),
-          unselectedLabelStyle: TextStyle(color: Colors.black),
-          unselectedItemColor: Colors.blue,
-          onTap: _onItemTapped,
         ),
       );
     });

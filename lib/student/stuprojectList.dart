@@ -3,7 +3,6 @@ import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:team/student/stuProjectTile.dart';
 import 'package:team/Project/widget/project_tile.dart';
 
 class StuProjectListPage extends StatefulWidget {

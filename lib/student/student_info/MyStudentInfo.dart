@@ -29,46 +29,46 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
 
   int _selectedIndex = 4;
 
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Home(
-                      projectname: widget.projectname,
-                      projectid: widget.projectId,
-                    )));
-        break;
-      case 1:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TeamListPage(
-                      projectId: widget.projectId,
-                      projectname: widget.projectname,
-                    )));
-        break;
-      case 2:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => StulistPage(
-                      projectname: widget.projectname,
-                      projectId: widget.projectId,
-                    )));
-        break;
-      case 3:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyTeamInfoPage(widget.projectId, widget.projectname)));
-        break;
+  // void _onItemTapped(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) => Home(
+  //                     projectname: widget.projectname,
+  //                     projectid: widget.projectId,
+  //                   )));
+  //       break;
+  //     case 1:
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) => TeamListPage(
+  //                     projectId: widget.projectId,
+  //                     projectname: widget.projectname,
+  //                   )));
+  //       break;
+  //     case 2:
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) => StulistPage(
+  //                     projectname: widget.projectname,
+  //                     projectId: widget.projectId,
+  //                   )));
+  //       break;
+  //     case 3:
+  //       Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (context) =>
+  //                   MyTeamInfoPage(widget.projectId, widget.projectname)));
+  //       break;
 
-      default:
-    }
-  }
+  //     default:
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,36 +143,6 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
             return const Center(child: CircularProgressIndicator());
           }
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "홈",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.text_snippet),
-            label: "팀리스트",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: "학생리스트",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flag),
-            label: "내 팀 정보",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "내 정보",
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red,
-        selectedLabelStyle: TextStyle(color: Colors.red),
-        unselectedLabelStyle: TextStyle(color: Colors.black),
-        unselectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
       ),
     );
   }
