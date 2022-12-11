@@ -25,8 +25,6 @@ class _Stuliststate extends State<StulistPage> {
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
   List<String> tags = ["front", "backend", "AI"];
 
-  int _selectedIndex = 2;
-
   @override
   void initState() {
     gettingstuData();
@@ -39,45 +37,6 @@ class _Stuliststate extends State<StulistPage> {
         stulist = snapshot;
       });
     });
-  }
-
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Home(
-                      projectname: widget.projectname,
-                      projectid: widget.projectId,
-                    )));
-        break;
-      case 1:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TeamListPage(
-                      projectId: widget.projectId,
-                      projectname: widget.projectname,
-                    )));
-        break;
-      case 3:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyTeamInfoPage(widget.projectId, widget.projectname)));
-        break;
-      case 4:
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyStudentInfoPage(widget.projectId, widget.projectname)));
-        break;
-
-      default:
-    }
   }
 
   @override
@@ -128,36 +87,6 @@ class _Stuliststate extends State<StulistPage> {
               ),
             ),
           ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "홈",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.text_snippet),
-              label: "팀리스트",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: "학생리스트",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.flag),
-              label: "내 팀 정보",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "내 정보",
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.red,
-          selectedLabelStyle: TextStyle(color: Colors.red),
-          unselectedLabelStyle: TextStyle(color: Colors.black),
-          unselectedItemColor: Colors.blue,
-          onTap: _onItemTapped,
         ),
       );
     });

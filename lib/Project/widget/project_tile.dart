@@ -5,6 +5,8 @@ import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/main/teamlist.dart';
 
+import '../../student/MyProjectMain.dart';
+
 class projectTile extends StatefulWidget {
   final String userName;
   final String projectId;
@@ -48,9 +50,9 @@ class _projectTileState extends State<projectTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Home(
-                      projectid: widget.projectId,
-                      projectname: widget.projectName,
+                builder: (context) => MyProjectMain(
+                      widget.projectId,
+                      widget.projectName,
                     )));
       },
       child: Container(
