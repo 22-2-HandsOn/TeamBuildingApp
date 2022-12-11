@@ -22,8 +22,9 @@ class TeamListPage extends StatefulWidget {
 class _TeamListstate extends State<TeamListPage> {
   Stream<QuerySnapshot>? teams;
   String projectid = "";
+  DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
-  List<String> tags = ["front", "backend", "AI"]; // 여기 DB에서 받아오는 거로 변경.
+  List<String> tags = [];
   @override
   void initState() {
     gettingteamData();
@@ -37,6 +38,17 @@ class _TeamListstate extends State<TeamListPage> {
         teams = snapshot;
       });
     });
+    await DatabaseService().getteamhashtags(widget.projectId).then((snapshot) {
+      setState(() {
+        tagsnapshot = snapshot;
+      });
+    });
+    tagupdate();
+  }
+
+  tagupdate() {
+    final data = tagsnapshot!.data();
+    tags = List<String>.from(data?['hashtags']);
   }
 
   @override

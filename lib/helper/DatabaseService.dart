@@ -50,17 +50,27 @@ class DatabaseService {
   }
 
   Future getTeamlist(String projectId) async {
-    return teamCollection
-        .doc(projectId)
-        .collection("teams") //흠..태그가 생길때마다 필드추가..? 이거는 너무 비효율적..
-        .snapshots();
+    return teamCollection.doc(projectId).collection("teams").snapshots();
   }
 
   Future getstulist(String projectId) async {
+    return teamCollection.doc(projectId).collection("attendees").snapshots();
+  }
+
+  getteamhashtags(String projectId) async {
     return teamCollection
         .doc(projectId)
-        .collection("attendees") //흠..태그가 생길때마다 필드추가..? 이거는 너무 비효율적..
-        .snapshots();
+        .collection("teams_hashtags")
+        .doc("Tags")
+        .get();
+  }
+
+  getstuhashtags(String projectId) async {
+    return teamCollection
+        .doc(projectId)
+        .collection("attendees_hashtags")
+        .doc("Tags")
+        .get();
   }
 
   getmaxteam(String projectId) async {
