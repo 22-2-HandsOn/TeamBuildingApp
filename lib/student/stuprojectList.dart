@@ -4,6 +4,7 @@ import 'package:team/helper/helper_function.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:team/student/stuProjectTile.dart';
+import 'package:team/Project/widget/project_tile.dart';
 
 class StuProjectListPage extends StatefulWidget {
   const StuProjectListPage({Key? key}) : super(key: key);
@@ -107,7 +108,7 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
                 itemBuilder: (context, index) {
                   int reverseIndex =
                       snapshot.data['projects'].length - index - 1;
-                  return StuProjectTile(
+                  return projectTile(
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
                           getName(snapshot.data['projects'][reverseIndex]),
