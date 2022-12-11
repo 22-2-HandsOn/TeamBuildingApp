@@ -20,6 +20,9 @@ class MyStudentInfoPage extends StatefulWidget {
 }
 
 class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
+  final textStyle = const TextStyle(
+      fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
+
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
@@ -27,54 +30,12 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
     }
   }
 
-  int _selectedIndex = 4;
-
-  // void _onItemTapped(int index) {
-  //   switch (index) {
-  //     case 0:
-  //       Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => Home(
-  //                     projectname: widget.projectname,
-  //                     projectid: widget.projectId,
-  //                   )));
-  //       break;
-  //     case 1:
-  //       Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => TeamListPage(
-  //                     projectId: widget.projectId,
-  //                     projectname: widget.projectname,
-  //                   )));
-  //       break;
-  //     case 2:
-  //       Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => StulistPage(
-  //                     projectname: widget.projectname,
-  //                     projectId: widget.projectId,
-  //                   )));
-  //       break;
-  //     case 3:
-  //       Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) =>
-  //                   MyTeamInfoPage(widget.projectId, widget.projectname)));
-  //       break;
-
-  //     default:
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -88,7 +49,10 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         title: const Text(
           "내 정보",
           style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -100,47 +64,119 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             ChangeMyStudentInfo(widget.projectId)));
               },
               color: Colors.black87,
-              icon: const Icon(Icons.edit)),
+              icon: const Icon(Icons.edit, size: 22)),
         ],
       ),
       body: FutureBuilder(
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListView(
                 children: [
-                  Text(snapshot.data['name'].toString()),
-                  const SizedBox(
-                    height: 20,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: 10, height: 1, color: Colors.grey),
+                        Text("  학번 및 이름  ", style: textStyle),
+                        Container(width: 275, height: 1, color: Colors.grey),
+                      ],
+                    ),
                   ),
-                  Text('내 소개', style: TextStyle(fontSize: 20)),
-                  Text(snapshot.data['introduction'].toString()),
-                  const SizedBox(
-                    height: 20,
+                  Text(
+                    "[" +
+                        snapshot.data['stu_id'].toString() +
+                        "] " +
+                        snapshot.data['name'].toString(),
+                    style: TextStyle(
+                        color: Colors.black87,
+                        fontFamily: "GmarketSansTTF",
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
-                  Text('원하는 팀', style: TextStyle(fontSize: 20)),
-                  Text(snapshot.data['finding_team_info'].toString()),
-                  const SizedBox(
-                    height: 20,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: 10, height: 1, color: Colors.grey),
+                        Text("  내 소개  ", style: textStyle),
+                        Container(width: 300, height: 1, color: Colors.grey),
+                      ],
+                    ),
                   ),
-                  Text('내 해쉬태그들', style: TextStyle(fontSize: 20)),
-                  const SizedBox(
-                    height: 20,
+                  Text(
+                    snapshot.data['introduction'].toString() != ""
+                        ? snapshot.data['introduction'].toString()
+                        : "아직 소개글을 작성하지 않았습니다. ",
+                    style: snapshot.data['introduction'].toString() != ""
+                        ? TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16)
+                        : TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 14,
+                            color: Colors.black87),
                   ),
-                  Text('contact', style: TextStyle(fontSize: 20)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: 10, height: 1, color: Colors.grey),
+                        Text("  원하는 팀  ", style: textStyle),
+                        Container(width: 290, height: 1, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    snapshot.data['finding_team_info'].toString() != ""
+                        ? snapshot.data['finding_team_info'].toString()
+                        : "아직 원하는 팀 정보를 작성하지 않았습니다. ",
+                    style: snapshot.data['finding_team_info'].toString() != ""
+                        ? TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16)
+                        : TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 14,
+                            color: Colors.black87),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: 10, height: 1, color: Colors.grey),
+                        Text("  연락 방법  ", style: textStyle),
+                        Container(width: 290, height: 1, color: Colors.grey),
+                      ],
+                    ),
+                  ),
                   Contact(snapshot),
-                  const SizedBox(
-                    height: 20,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: 10, height: 1, color: Colors.grey),
+                        Text("  댓글  ", style: textStyle),
+                        Container(width: 310, height: 1, color: Colors.grey),
+                      ],
+                    ),
                   ),
-                  Text('댓글', style: TextStyle(fontSize: 20)),
                 ],
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child:
+                    CircularProgressIndicator(color: Colors.lightBlueAccent));
           }
         },
       ),
@@ -154,23 +190,21 @@ class Contact extends StatelessWidget {
   Widget build(BuildContext context) {
     if (snapshot.data['contact_infos'] != null) {
       return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              'email: ${snapshot.data['contact_infos']['email'].toString()}'),
-          Text(
-              'phone: ${snapshot.data['contact_infos']['phone'].toString()}'),
-          Text(
-              'url1: ${snapshot.data['contact_infos']['url1'].toString()}'),
-          Text(
-              'url2: ${snapshot.data['contact_infos']['url2'].toString()}'),
-          Text(
-              'url3: ${snapshot.data['contact_infos']['url3'].toString()}'),
+          Text('email: ${snapshot.data['contact_infos']['email'].toString()}'),
+          Text('phone: ${snapshot.data['contact_infos']['phone'].toString()}'),
+          Text('url1: ${snapshot.data['contact_infos']['url1'].toString()}'),
+          Text('url2: ${snapshot.data['contact_infos']['url2'].toString()}'),
+          Text('url3: ${snapshot.data['contact_infos']['url3'].toString()}'),
         ],
       );
-    }
-    else {
-      return Text("No Contact Info");
+    } else {
+      return Text(
+        "아직 연락 방법 목록을 작성하지 않았습니다. ",
+        style: TextStyle(
+            fontFamily: "GmarketSansTTF", fontSize: 14, color: Colors.black87),
+      );
     }
   }
 }

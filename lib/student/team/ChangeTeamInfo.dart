@@ -194,7 +194,9 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                 ),
               );
             } else {
-              return CircularProgressIndicator();
+              return const Center(
+                  child:
+                      CircularProgressIndicator(color: Colors.lightBlueAccent));
             }
           }),
     );

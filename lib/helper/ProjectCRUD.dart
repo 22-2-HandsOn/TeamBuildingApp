@@ -204,6 +204,7 @@ class ProjectCRUD {
         }
       }
     }
+    return {"isNull": true};
   }
 
   Future addTeam(String teamname, String introduction,

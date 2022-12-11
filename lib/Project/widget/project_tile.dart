@@ -51,9 +51,7 @@ class _projectTileState extends State<projectTile> {
             context,
             MaterialPageRoute(
                 builder: (context) => MyProjectMain(
-                      widget.projectId,
-                      widget.projectName,
-                    )));
+                    widget.projectId, widget.projectName, widget.userName)));
       },
       child: Container(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
@@ -100,7 +98,7 @@ class _projectTileState extends State<projectTile> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text: "팀 구성 ",
+                                  text: "구성 완료 ",
                                   style: TextStyle(
                                     fontFamily: "GmarketSansTTF",
                                     color: Colors.black87,
