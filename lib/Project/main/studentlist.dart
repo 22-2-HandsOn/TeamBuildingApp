@@ -132,7 +132,8 @@ class _Stuliststate extends State<StulistPage> {
                   children: <Widget>[
                     attendees(),
                     Container(
-                      padding: EdgeInsets.all(3),
+                      padding: EdgeInsets.all(8),
+                      width: MediaQuery.of(context).size.width,
                     )
                   ],
                 ),
@@ -183,10 +184,22 @@ class _Stuliststate extends State<StulistPage> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   //tag관련 처리
-                  return student_tile(
-                      name: snapshot.data.docs[index]['name'],
-                      info: snapshot.data.docs[index]['introduction'],
-                      projectid: widget.projectId);
+                  final List<dynamic> taglist =
+                      snapshot.data.docs[index]['hashtags'];
+                  bool tagcheck = false;
+                  if (_tagChoices.isEmpty) tagcheck = true;
+                  _tagChoices.forEach((element) {
+                    if (taglist.contains(element)) {
+                      tagcheck = true;
+                    }
+                  });
+                  if (tagcheck) {
+                    return student_tile(
+                        name: snapshot.data.docs[index]['name'],
+                        info: snapshot.data.docs[index]['introduction'],
+                        projectid: widget.projectId);
+                  } else
+                    return Container();
                 },
                 //controller: unitcontroller,
               )

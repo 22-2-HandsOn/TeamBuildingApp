@@ -125,7 +125,7 @@ class _TeamListstate extends State<TeamListPage> {
               top: 100,
               child: Container(
                 width: 800,
-                height: 500,
+                height: 1000,
                 child: Stack(
                   children: <Widget>[
                     teamList(),
