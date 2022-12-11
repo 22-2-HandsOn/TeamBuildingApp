@@ -61,7 +61,7 @@ class ProjectCRUD{
       }
     }
 
-    Future setIntro(String intro) async {
+    Future setStudentIntro(String intro) async {
       var stu_id = await getstu_id();
       final QuerySnapshot snapshot = await attendeesCollection.get();
       for (var doc in snapshot.docs) {
@@ -71,6 +71,19 @@ class ProjectCRUD{
         }
       }
     }
+
+  Future setContactInfo(Map<String,String> contacts) async {
+    var stu_id = await getstu_id();
+    final QuerySnapshot snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        attendeesCollection.doc(doc.id).update({'contact_infos': contacts});
+      }
+    }
+  }
+
+
 
   Future setWantedTeam(String intro) async {
     var stu_id = await getstu_id();
@@ -83,20 +96,42 @@ class ProjectCRUD{
     }
   }
 
-    Future getIntro() async {
-      var stu_id = await getstu_id();
-      final QuerySnapshot snapshot = await attendeesCollection.get();
-      for (var doc in snapshot.docs) {
-        var dataElement = doc.data() as Map<String, dynamic>;
-        if (dataElement["stu_id"].toString() == stu_id) {
-          if (dataElement.containsKey("introduction")) {
-            return dataElement["introduction"];
-          }
-          else {
-            setIntro("");
-            return "";
-          }
+  Future setWantedMember(String intro) async {
+    final snapshot = await teamsCollection.get();
+    var stu_id = await getstu_id();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get('members') as List;
+      for (int i =0;i<dataElement.length;i++){
+        if (dataElement[i].toString() == stu_id) {
+          teamsCollection.doc(doc.id).update({'finding_member_info': intro});
         }
       }
     }
+  }
+
+  Future setTeamIntro(String intro) async {
+    final snapshot = await teamsCollection.get();
+    var stu_id = await getstu_id();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get('members') as List;
+      for (int i =0;i<dataElement.length;i++){
+        if (dataElement[i].toString() == stu_id) {
+          teamsCollection.doc(doc.id).update({'introduction': intro});
+        }
+      }
+    }
+  }
+
+  Future setTeamName(String intro) async {
+    final snapshot = await teamsCollection.get();
+    var stu_id = await getstu_id();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get('members') as List;
+      for (int i =0;i<dataElement.length;i++){
+        if (dataElement[i].toString() == stu_id) {
+          teamsCollection.doc(doc.id).update({'name': intro});
+        }
+      }
+    }
+  }
 }

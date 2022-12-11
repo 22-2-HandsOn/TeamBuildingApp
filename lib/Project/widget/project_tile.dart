@@ -1,29 +1,39 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team/Project/main/teamlist.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/helper/helper_function.dart';
+import 'package:team/professor/profprojectList.dart';
+import 'package:team/helper/DatabaseService.dart';
+import 'package:team/Project/main/teamlist.dart';
 
 class projectTile extends StatefulWidget {
   final String userName;
   final String projectId;
   final String projectName;
-  final String time;
+  final int projectDeadline;
+  final bool isFinished;
+
   //final String opponent;
-  const projectTile({
-    Key? key,
-    required this.projectId,
-    required this.projectName,
-    required this.userName,
-    required this.time,
-    //required this.opponent,
-  }) : super(key: key);
+  const projectTile(
+      {Key? key,
+      required this.projectId,
+      required this.projectName,
+      required this.userName,
+      required this.projectDeadline,
+      required this.isFinished
+      //required this.opponent,
+      })
+      : super(key: key);
 
   @override
   State<projectTile> createState() => _projectTileState();
 }
 
 class _projectTileState extends State<projectTile> {
+  final textStyle_title = const TextStyle(
+      fontFamily: "GmarketSansTTF",
+      fontSize: 18,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
+
   String resentmessage = "";
   @override
   void initState() {
@@ -33,32 +43,87 @@ class _projectTileState extends State<projectTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        await HelperFunctions.saveUserLoggedInStatus(true);
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Home(
+                builder: (context) => TeamListPage(
+                      projectId: widget.projectId,
                       projectname: widget.projectName,
-                      projectid: widget.projectId,
                     )));
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Card(
-          child: ListTile(
-            title: Text(
-              widget.projectName, //DB에서 가져옴
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 0.5, color: Colors.black38),
+              borderRadius: BorderRadius.circular(15),
             ),
-            subtitle: Text(
-              //같은 수업에 여러가지 팀플을 대비한 공간
-              "dealine : " + widget.time,
-              style: const TextStyle(fontSize: 13),
+            elevation: 0,
+            child: ListTile(
+              title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      widget.projectName, //DB에서 가져옴
+                      style: textStyle_title,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Chip(
+                          backgroundColor: widget.projectDeadline < 0
+                              ? Colors.lightBlueAccent.shade200
+                              : Colors.red.shade300,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelStyle: TextStyle(
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                          visualDensity:
+                              VisualDensity(horizontal: 0.0, vertical: -2),
+                          label: widget.projectDeadline < 0
+                              ? Text('D - ' +
+                                  (widget.projectDeadline * -1).toString())
+                              : widget.projectDeadline == 0
+                                  ? Text('D - DAY')
+                                  : Text('D + ' +
+                                      (widget.projectDeadline).toString()),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "팀 구성 ",
+                                  style: TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    color: Colors.black87,
+                                    fontSize: 10,
+                                  )),
+                              WidgetSpan(
+                                  child: widget.isFinished
+                                      ? Icon(Icons.check_box_outlined, size: 12)
+                                      : Icon(
+                                          Icons
+                                              .check_box_outline_blank_outlined,
+                                          size: 12)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                      ],
+                    )
+                  ]),
             ),
-          ),
-        ),
-      ),
+            // subtitle: Text(
+            //   //같은 수업에 여러가지 팀플을 대비한 공간
+            //   "",
+            //   style: const TextStyle(fontSize: 12),
+            // ),
+          )),
     );
   }
 }

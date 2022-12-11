@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
+import 'package:form_validator/form_validator.dart';
 
 class ChangeMyStudentInfo extends StatelessWidget {
   String projectID;
@@ -44,10 +45,23 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
   String projectID;
   _StudentInfoFormState(this.projectID);
   late final ProjectCRUD projectCRUD = ProjectCRUD(projectID);
+  final _contactChoices = ['이메일','웹주소','핸드폰'];
+
   @override
   Widget build(BuildContext context) {
     String introduction = "";
     String wantedteam = "";
+    String contactType1 = "";
+    String email = "";
+    String phone = "";
+    String url1 = "";
+    String url2 = "";
+    String url3 = "";
+
+    final validatoremail = ValidationBuilder().email().maxLength(50).build();
+    final validatorurl = ValidationBuilder().url().maxLength(100).build();
+    final validatorphone = ValidationBuilder().phone().minLength(11).maxLength(11).build();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: FutureBuilder(
@@ -93,16 +107,111 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                 const SizedBox(
                   height: 25,
                 ),
-                ElevatedButton(
-                    onPressed: () async{
-                      _formkey.currentState!.save();
-                      projectCRUD.setIntro(introduction);
-                      projectCRUD.setWantedTeam(wantedteam);
-                      Navigator.pop(context);
-
-                },
-                    child: const Text("등록"),
+                Text('Contacts (Optional)', style: TextStyle(fontSize: 20)),
+                const SizedBox(
+                  height: 15,
                 ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '이메일 주소',
+                    hintText: '(Optional)',
+                  ),
+                  initialValue: snapshot.data['contact_infos']['email'].toString(),
+                  onSaved: (value){
+                    setState(() {
+                      email = value as String;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '핸드폰 번호',
+                    hintText: '(Optional)',
+                  ),
+                  initialValue: snapshot.data['contact_infos']['phone'].toString(),
+                  onSaved: (value){
+                    setState(() {
+                      phone = value as String;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '웹주소 1',
+                    hintText: '(Optional)',
+
+                  ),
+                  initialValue: snapshot.data['contact_infos']['url1'].toString(),
+                  onSaved: (value){
+                    setState(() {
+                      url1 = value as String;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '웹주소 2',
+                    hintText: '(Optional)',
+                  ),
+                  initialValue: snapshot.data['contact_infos']['url2'].toString(),
+                  onSaved: (value){
+                    setState(() {
+                      url2 = value as String;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '웹주소 3',
+                    hintText: '(Optional)',
+                  ),
+                  initialValue: snapshot.data['contact_infos']['url3'].toString(),
+                  onSaved: (value){
+                    setState(() {
+                      url3 = value as String;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                ElevatedButton(
+                    child: const Text("등록"),
+                    onPressed: () async {
+                      if (_formkey.currentState!.validate()) {
+                        _formkey.currentState!.save();
+                        projectCRUD.setStudentIntro(introduction);
+                        projectCRUD.setWantedTeam(wantedteam);
+                        Navigator.pop(context);
+                        Map<String, String> contacts = {
+                          'email': email,
+                          'phone': phone,
+                          'url1': url1,
+                          'url2': url2,
+                          'url3': url3,
+                        };
+                        projectCRUD.setContactInfo(contacts);
+                        };
+                      }
+
+                    ),
               ],
             ),
           );

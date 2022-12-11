@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
@@ -14,12 +13,12 @@ class ProfProjectListPage extends StatefulWidget {
 }
 
 class _ProfProjectListstate extends State<ProfProjectListPage> {
+  final textStyle = const TextStyle(
+      fontFamily: "GmarketSansTTF", fontSize: 18, color: Colors.black54);
+
   String userName = "";
   String email = "";
   Stream? projects;
-  int type = -1; // 0: stu , 1: pro
-  int _selectedIndex = 0;
-
   @override
   void initState() {
     gettingUserData();
@@ -34,8 +33,12 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
     return res['name'].toString();
   }
 
-  String gettime(Map<String, dynamic> res) {
-    return res['deadline'].toString();
+  int getDeadline(Map<String, dynamic> res) {
+    return DateTime.now().difference(res['deadline'].toDate()).inDays;
+  }
+
+  bool getIsFinished(Map<String, dynamic> res) {
+    return res['isFinished'];
   }
 
   gettingUserData() async {
@@ -47,11 +50,6 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
     await HelperFunctions.getUserNameFromSF().then((val) {
       setState(() {
         userName = val!;
-      });
-    });
-    await HelperFunctions.getUsertypeSFFromSF().then((val) {
-      setState(() {
-        type = val!;
       });
     });
     // getting the list of snapshots in our stream
@@ -66,39 +64,35 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        gettingUserData();
-      });
-      return Scaffold(
+    return Scaffold(
         appBar: AppBar(
-            title: const Text(
-              "수업목록",
-              style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 27),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    if (type == 1) {
-                      Navigator.of(context).pushNamed('/toProjectAddPage');
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.add_circle,
-                    color: Colors.grey,
-                    size: 30,
-                  ))
-            ],
-            backgroundColor: Colors.white,
-            centerTitle: true),
+          elevation: 1,
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.white,
+          title: const Text(
+            "수업 목록",
+            style: TextStyle(
+                color: Colors.black87,
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
         backgroundColor: Colors.white,
-        body: projectlist(),
-      );
-    });
+        body: Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 7,
+          ),
+          child: projectlist(),
+        ));
   }
 
   projectlist() {
@@ -109,17 +103,33 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
         if (snapshot.hasData) {
           if (snapshot.data['projects'] != null) {
             if (snapshot.data['projects'].length != 0) {
+              var itemCount = snapshot.data['projects'].length;
               return ListView.builder(
-                itemCount: snapshot.data['projects'].length,
+                itemCount: snapshot.data['projects'].length + 1,
                 itemBuilder: (context, index) {
                   int reverseIndex =
                       snapshot.data['projects'].length - index - 1;
-                  return projectTile(
-                      projectId: getId(snapshot.data['projects'][reverseIndex]),
-                      projectName:
-                          getName(snapshot.data['projects'][reverseIndex]),
-                      time: gettime(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']);
+                  return index != itemCount
+                      ? projectTile(
+                          projectId:
+                              getId(snapshot.data['projects'][reverseIndex]),
+                          projectName:
+                              getName(snapshot.data['projects'][reverseIndex]),
+                          userName: snapshot.data['username'],
+                          projectDeadline: getDeadline(
+                              snapshot.data['projects'][reverseIndex]),
+                          isFinished: getIsFinished(
+                              snapshot.data['projects'][reverseIndex]))
+                      : TextButton(
+                          child: const Text(
+                            '+  새 수업 생성',
+                            style: TextStyle(
+                                fontFamily: "GmarketSansTTF", fontSize: 16),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed('/toProjectAddPage');
+                          });
                 },
               );
             } else {
@@ -130,7 +140,7 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
           }
         } else {
           return Center(
-            child: CircularProgressIndicator(color: Colors.red),
+            child: CircularProgressIndicator(color: Colors.lightBlueAccent),
           );
         }
       },
@@ -140,24 +150,24 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
   noprojectWidget() {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.airline_stops_outlined,
-            color: Colors.grey[700],
-            size: 50,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           const Text(
-            "수업이 없습니다.",
+            "팀빌딩 중인 수업이 없습니다.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          )
+            style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 18),
+          ),
+          TextButton(
+              child: const Text(
+                '+  새 수업 생성',
+                style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/toProjectAddPage');
+              })
         ],
       ),
     );

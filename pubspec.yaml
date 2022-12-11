@@ -44,6 +44,9 @@ dependencies:
   shared_preferences: ^2.0.15
   firebase_storage: ^11.0.5
   bottom_navy_bar: ^6.0.0
+  url_launcher: ^6.1.7
+  flutter_email_sender: ^5.2.0
+  form_validator: ^1.0.4
 
   # 학생 list 불러오기
   file_picker: ^5.2.2

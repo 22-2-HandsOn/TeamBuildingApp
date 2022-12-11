@@ -4,6 +4,7 @@ import 'package:team/helper/ProjectCRUD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'ChangeStudentInfo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyStudentInfoPage extends StatefulWidget {
   String projectId = "";
@@ -16,7 +17,11 @@ class MyStudentInfoPage extends StatefulWidget {
 
 class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
-
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +55,10 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot){
           if (snapshot.hasData){
+            final Uri url1 = Uri.parse(snapshot.data['contact_infos']['url1'].toString());
+            final Uri url2 = Uri.parse(snapshot.data['contact_infos']['url2'].toString());
+            final Uri url3 = Uri.parse(snapshot.data['contact_infos']['url3'].toString());
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListView(
@@ -69,7 +78,28 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                   const SizedBox(
                     height: 20,
                   ),
+                  Text('내 해쉬태그들', style: TextStyle(fontSize: 20)),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Text('contact', style: TextStyle(fontSize: 20)),
+                  Text('email: ${snapshot.data['contact_infos']['email'].toString()}'),
+                  Text('phone: ${snapshot.data['contact_infos']['phone'].toString()}'),
+                  InkWell(
+                      child: new Text(snapshot.data['contact_infos']['url1'].toString(),
+                          style: TextStyle(color: Colors.blueAccent)),
+                      onTap: () => launchUrl(url1)
+                  ),
+                  InkWell(
+                      child: new Text(snapshot.data['contact_infos']['url2'].toString(),
+                          style: TextStyle(color: Colors.blueAccent)),
+                      onTap: () => launchUrl(url2)
+                  ),
+                  InkWell(
+                      child: new Text(snapshot.data['contact_infos']['url3'].toString(),
+                          style: TextStyle(color: Colors.blueAccent)),
+                      onTap: () => launchUrl(url3)
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -79,11 +109,11 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
             );
           }
           else{
-
-            return Text("정보가 없습니다");
+            return const Center(child:CircularProgressIndicator());
           }
         }
       )
     );
   }
 }
+

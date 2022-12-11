@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           '/toProfProjectlistPage': (context) => const ProfProjectListPage(),
           '/toStuProjectlistPage': (context) => const StuProjectListPage(),
           '/toProjectAddPage': (context) =>
-              const ProjectAddPage() // *TODO : 이후 교수의 projectListPage에서 버튼 클릭을 통해 여기로 이동할 수 있도록 설정해야 함
+              const ProjectAddPage(), // *TODO : 이후 교수의 projectListPage에서 버튼 클릭을 통해 여기로 이동할 수 있도록 설정해야 함
         });
   }
 }
