@@ -5,15 +5,73 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'AddNewTeam.dart';
 import 'ChangeTeamInfo.dart';
+import 'package:team/Project/main/studentlist.dart';
+import 'package:team/Project/main/teamlist.dart';
+import 'package:team/Project/main/home.dart';
+import 'package:team/student/student_info/MyStudentInfo.dart';
 
-class MyTeamInfoPage extends StatelessWidget {
+class MyTeamInfoPage extends StatefulWidget {
+  String projectId = "";
+  String projectname = "";
+  MyTeamInfoPage(this.projectId, this.projectname);
+
+  @override
+  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState();
+}
+
+class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
   String projectId = "";
 
-  MyTeamInfoPage(this.projectId);
   late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
+  int _selectedIndex = 3;
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Home(
+                      projectname: widget.projectname,
+                      projectid: widget.projectId,
+                    )));
+        break;
+      case 1:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TeamListPage(
+                      projectId: widget.projectId,
+                      projectname: widget.projectname,
+                    )));
+        break;
+      case 2:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => StulistPage(
+                      projectname: widget.projectname,
+                      projectId: widget.projectId,
+                    )));
+        break;
+      case 4:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MyStudentInfoPage(widget.projectId, widget.projectname)));
+        break;
+
+      default:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

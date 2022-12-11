@@ -27,7 +27,8 @@ class _studenttileState extends State<student_tile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyStudentInfoPage(widget.projectid)));
+                builder: (context) =>
+                    MyStudentInfoPage(widget.projectid, widget.name)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 5),

@@ -7,15 +7,16 @@ class Teamtile extends StatefulWidget {
   final String teamName;
   final String teaminfo;
   final String projectid;
+  final String projectname;
   //final String opponent;
-  const Teamtile(
-      {Key? key,
-      required this.teamName,
-      required this.teaminfo,
-      required this.projectid
-      //required this.opponent,
-      })
-      : super(key: key);
+  const Teamtile({
+    Key? key,
+    required this.teamName,
+    required this.teaminfo,
+    required this.projectid,
+    required this.projectname,
+    //required this.opponent,
+  }) : super(key: key);
 
   @override
   State<Teamtile> createState() => _TeamtileState();
@@ -29,7 +30,8 @@ class _TeamtileState extends State<Teamtile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyTeamInfoPage(widget.projectid)));
+                builder: (context) =>
+                    MyTeamInfoPage(widget.projectid, widget.projectname)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
