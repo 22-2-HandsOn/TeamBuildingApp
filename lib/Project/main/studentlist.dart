@@ -44,8 +44,7 @@ class _Stuliststate extends State<StulistPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Home(
@@ -54,8 +53,7 @@ class _Stuliststate extends State<StulistPage> {
                     )));
         break;
       case 1:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => TeamListPage(
@@ -64,16 +62,14 @@ class _Stuliststate extends State<StulistPage> {
                     )));
         break;
       case 3:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     MyTeamInfoPage(widget.projectId, widget.projectname)));
         break;
       case 4:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>

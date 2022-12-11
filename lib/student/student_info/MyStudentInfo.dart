@@ -32,8 +32,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Home(
@@ -42,8 +41,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     )));
         break;
       case 1:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => TeamListPage(
@@ -52,8 +50,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     )));
         break;
       case 2:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => StulistPage(
@@ -62,8 +59,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     )));
         break;
       case 3:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>

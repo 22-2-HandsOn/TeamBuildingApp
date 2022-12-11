@@ -43,8 +43,7 @@ class _TeamListstate extends State<TeamListPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Home(
@@ -54,8 +53,7 @@ class _TeamListstate extends State<TeamListPage> {
         break;
 
       case 2:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => StulistPage(
@@ -64,16 +62,14 @@ class _TeamListstate extends State<TeamListPage> {
                     )));
         break;
       case 3:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     MyTeamInfoPage(widget.projectId, widget.projectname)));
         break;
       case 4:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>

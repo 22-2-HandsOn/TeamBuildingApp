@@ -30,8 +30,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Home(
@@ -40,8 +39,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                     )));
         break;
       case 1:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => TeamListPage(
@@ -50,8 +48,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                     )));
         break;
       case 2:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => StulistPage(
@@ -60,8 +57,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                     )));
         break;
       case 4:
-        Navigator.pop(context);
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
@@ -75,183 +71,178 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            title: const Text(
-              "내 팀 정보",
-              style: TextStyle(
-                  color: Colors.black87,
-                  fontFamily: "GmarketSansTTF",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black87,
-                ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "내 팀 정보",
+            style: TextStyle(
+                color: Colors.black87,
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                }),
-            backgroundColor: Colors.white,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChangeTeamInfo(projectId)));
-                  },
-                  color: Colors.black87,
-                  icon: const Icon(Icons.edit, size: 22)),
-            ]),
-        body: FutureBuilder(
-            future: projectCRUD.getTeamInfo(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ListView(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  width: 10, height: 1, color: Colors.grey),
-                              Text("  팀 이름  ", style: textStyle),
-                              Container(
-                                  width: 300, height: 1, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          snapshot.data['name'].toString(),
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  width: 10, height: 1, color: Colors.grey),
-                              Text("  팀 소개  ", style: textStyle),
-                              Container(
-                                  width: 300, height: 1, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          snapshot.data['introduction'].toString(),
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 16),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  width: 10, height: 1, color: Colors.grey),
-                              Text("  원하는 팀원  ", style: textStyle),
-                              Container(
-                                  width: 280, height: 1, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          snapshot.data['finding_member_info'].toString(),
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 16),
-                        ),
-                        // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  width: 10, height: 1, color: Colors.grey),
-                              Text("  댓글  ", style: textStyle),
-                              Container(
-                                  width: 310, height: 1, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ));
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeTeamInfo(projectId)));
+                },
+                color: Colors.black87,
+                icon: const Icon(Icons.edit, size: 22)),
+          ]),
+      body: FutureBuilder(
+          future: projectCRUD.getTeamInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(
                     children: [
-                      const Text(
-                        "소속된 팀이 없습니다.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: "GmarketSansTTF", fontSize: 18),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(width: 10, height: 1, color: Colors.grey),
+                            Text("  팀 이름  ", style: textStyle),
+                            Container(
+                                width: 300, height: 1, color: Colors.grey),
+                          ],
+                        ),
                       ),
-                      TextButton(
-                          child: const Text(
-                            '+  새 팀 생성',
-                            style: TextStyle(
-                                fontFamily: "GmarketSansTTF", fontSize: 16),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AddNewTeam(projectId)));
-                          })
+                      Text(
+                        snapshot.data['name'].toString(),
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(width: 10, height: 1, color: Colors.grey),
+                            Text("  팀 소개  ", style: textStyle),
+                            Container(
+                                width: 300, height: 1, color: Colors.grey),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        snapshot.data['introduction'].toString(),
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(width: 10, height: 1, color: Colors.grey),
+                            Text("  원하는 팀원  ", style: textStyle),
+                            Container(
+                                width: 280, height: 1, color: Colors.grey),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        snapshot.data['finding_member_info'].toString(),
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16),
+                      ),
+                      // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(width: 10, height: 1, color: Colors.grey),
+                            Text("  댓글  ", style: textStyle),
+                            Container(
+                                width: 310, height: 1, color: Colors.grey),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                );
-              }
-            }),
-        bottomNavigationBar: BottomNavigationBar(
-    items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-    label: "홈",
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.text_snippet),
-    label: "팀리스트",
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.people),
-    label: "학생리스트",
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.flag),
-    label: "내 팀 정보",
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(Icons.person),
-    label: "내 정보",
-    ),
-    ],
-    currentIndex: _selectedIndex,
-    selectedItemColor: Colors.red,
-    selectedLabelStyle: TextStyle(color: Colors.red),
-    unselectedLabelStyle: TextStyle(color: Colors.black),
-    unselectedItemColor: Colors.blue,
-    onTap: _onItemTapped,
-    ),
+                  ));
+            } else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "소속된 팀이 없습니다.",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontFamily: "GmarketSansTTF", fontSize: 18),
+                    ),
+                    TextButton(
+                        child: const Text(
+                          '+  새 팀 생성',
+                          style: TextStyle(
+                              fontFamily: "GmarketSansTTF", fontSize: 16),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddNewTeam(projectId)));
+                        })
+                  ],
+                ),
+              );
+            }
+          }),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "홈",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.text_snippet),
+            label: "팀리스트",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: "학생리스트",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.flag),
+            label: "내 팀 정보",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "내 정보",
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.red,
+        selectedLabelStyle: TextStyle(color: Colors.red),
+        unselectedLabelStyle: TextStyle(color: Colors.black),
+        unselectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
