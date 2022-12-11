@@ -8,6 +8,7 @@ class HelperFunctions {
   static String useridKey = "USERIDKEY";
   static String userstuidKey = "USERSTUIDKEY";
   static String usertypeKey = "USERTYPEKEY"; // -1 : none, 0 : 학생, 1: 교수
+  static String projectKey = "PROJECTKEY";
   // saving the data to SF
 
   static Future<bool> saveUserLoggedInStatus(bool isUserLoggedIn) async {
@@ -40,6 +41,11 @@ class HelperFunctions {
     return await sf.setInt(usertypeKey, type);
   }
 
+  static Future<bool> saveProjectSF(String proid) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    return await sf.setString(projectKey, proid);
+  }
+
   // getting the data from SF
   static Future<bool?> getUserLoggedInStatus() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
@@ -69,5 +75,10 @@ class HelperFunctions {
   static Future<int?> getUsertypeSFFromSF() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getInt(usertypeKey);
+  }
+
+  static Future<String?> getProjectidFromSF() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    return sf.getString(projectKey);
   }
 }

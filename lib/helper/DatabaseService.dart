@@ -49,11 +49,17 @@ class DatabaseService {
     return snapshot;
   }
 
-  Future getTeamlist(String projectId, List<String> tag) async {
+  Future getTeamlist(String projectId) async {
     return teamCollection
         .doc(projectId)
-        .collection("teamlist")
-        .orderBy("Tag_name") //흠..태그가 생길때마다 필드추가..? 이거는 너무 비효율적..
+        .collection("teams") //흠..태그가 생길때마다 필드추가..? 이거는 너무 비효율적..
+        .snapshots();
+  }
+
+  Future getstulist(String projectId) async {
+    return teamCollection
+        .doc(projectId)
+        .collection("attendees") //흠..태그가 생길때마다 필드추가..? 이거는 너무 비효율적..
         .snapshots();
   }
 

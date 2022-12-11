@@ -9,7 +9,7 @@ class MyProjectMain extends StatefulWidget {
   String projectId = "";
   String projectName = "";
   String userName = "";
-  MyProjectMain(this.projectId,this.projectName,this.userName);
+  MyProjectMain(this.projectId, this.projectName, this.userName);
 
   @override
   State<MyProjectMain> createState() => _MyProjectMainState();
@@ -24,6 +24,7 @@ class _MyProjectMainState extends State<MyProjectMain> {
     _pageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +36,9 @@ class _MyProjectMainState extends State<MyProjectMain> {
           },
           children: <Widget>[
             TeamListPage(
-                projectId: widget.projectId,
-                projectName: widget.projectName,
-                userName: widget.userName),
+              projectname: widget.projectName,
+              projectId: widget.projectId,
+            ),
             Container(),
             MyTeamInfoPage(widget.projectId),
             MyStudentInfoPage(widget.projectId),
@@ -68,7 +69,9 @@ class _MyProjectMainState extends State<MyProjectMain> {
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.flag),
-            title: Text('내 팀 정보',),
+            title: Text(
+              '내 팀 정보',
+            ),
             activeColor: Colors.lightBlueAccent,
             textAlign: TextAlign.center,
           ),

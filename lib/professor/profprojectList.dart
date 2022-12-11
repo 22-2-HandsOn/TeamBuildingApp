@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team/Project/projectAddPage.dart';
 import 'package:team/helper/helper_function.dart';
@@ -17,18 +18,24 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
   String email = "";
   Stream? projects;
   int type = -1; // 0: stu , 1: pro
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     gettingUserData();
     super.initState();
   }
 
-  String getId(Map<String,dynamic> res) {
+  String getId(Map<String, dynamic> res) {
     return res['doc_id'].toString();
   }
 
-  String getName(Map<String,dynamic> res) {
+  String getName(Map<String, dynamic> res) {
     return res['name'].toString();
+  }
+
+  String gettime(Map<String, dynamic> res) {
+    return res['deadline'].toString();
   }
 
   gettingUserData() async {
@@ -111,8 +118,8 @@ class _ProfProjectListstate extends State<ProfProjectListPage> {
                       projectId: getId(snapshot.data['projects'][reverseIndex]),
                       projectName:
                           getName(snapshot.data['projects'][reverseIndex]),
-                      userName: snapshot.data['username']
-                  );
+                      time: gettime(snapshot.data['projects'][reverseIndex]),
+                      userName: snapshot.data['username']);
                 },
               );
             } else {

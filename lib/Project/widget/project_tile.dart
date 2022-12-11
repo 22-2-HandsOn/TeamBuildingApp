@@ -1,19 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:team/Project/main/teamlist.dart';
-import 'package:team/professor/profprojectList.dart';
-import 'package:team/helper/DatabaseService.dart';
-import 'package:team/Project/main/teamlist.dart';
+import 'package:team/Project/main/home.dart';
+import 'package:team/helper/helper_function.dart';
 
 class projectTile extends StatefulWidget {
   final String userName;
   final String projectId;
   final String projectName;
+  final String time;
   //final String opponent;
   const projectTile({
     Key? key,
     required this.projectId,
     required this.projectName,
     required this.userName,
+    required this.time,
     //required this.opponent,
   }) : super(key: key);
 
@@ -31,14 +33,15 @@ class _projectTileState extends State<projectTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await HelperFunctions.saveUserLoggedInStatus(true);
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => TeamListPage(
-                    projectId: widget.projectId,
-                    projectName: widget.projectName,
-                    userName: widget.userName)));
+                builder: (context) => Home(
+                      projectname: widget.projectName,
+                      projectid: widget.projectId,
+                    )));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -50,7 +53,7 @@ class _projectTileState extends State<projectTile> {
             ),
             subtitle: Text(
               //같은 수업에 여러가지 팀플을 대비한 공간
-              "",
+              "dealine : " + widget.time,
               style: const TextStyle(fontSize: 13),
             ),
           ),
