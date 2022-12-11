@@ -264,6 +264,8 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                               rowData?.elementAt(1)?.value,
                                           "introduction": "",
                                           "finding_team_info": "",
+                                          "contacts": {"email":"","phone":"",
+                                          "url1":"","url2":"","url3":""}
                                         });
                                       }
 

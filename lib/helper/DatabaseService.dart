@@ -63,6 +63,10 @@ class DatabaseService {
         .snapshots();
   }
 
+  getmaxteam(String projectId) async {
+    return teamCollection.doc(projectId).get();
+  }
+
   getUserName() async {
     return studentCollection.doc(uid).get();
   }
