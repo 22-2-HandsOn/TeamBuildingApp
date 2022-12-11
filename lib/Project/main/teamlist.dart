@@ -4,6 +4,8 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/widget/team_tile.dart';
 import 'package:team/Project/main/studentlist.dart';
 import 'package:team/Project/main/home.dart';
+import 'package:team/student/student_info/MyStudentInfo.dart';
+import 'package:team/student/team/MyTeamInfo.dart';
 
 class TeamListPage extends StatefulWidget {
   final String projectId;
@@ -41,6 +43,7 @@ class _TeamListstate extends State<TeamListPage> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
+        Navigator.pop(context);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -49,7 +52,9 @@ class _TeamListstate extends State<TeamListPage> {
                       projectid: widget.projectId,
                     )));
         break;
+
       case 2:
+        Navigator.pop(context);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -58,7 +63,21 @@ class _TeamListstate extends State<TeamListPage> {
                       projectId: widget.projectId,
                     )));
         break;
-      default:
+      case 3:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyTeamInfoPage(widget.projectId)));
+        break;
+      case 4:
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MyStudentInfoPage(widget.projectId, widget.projectname)));
+        break;
     }
   }
 
@@ -123,19 +142,30 @@ class _TeamListstate extends State<TeamListPage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Home',
+              label: "홈",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.text_snippet),
-              label: 'TeamList',
+              label: "팀리스트",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.people),
-              label: 'Student',
+              label: "학생리스트",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.flag),
+              label: "내 팀 정보",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "내 정보",
             ),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.red,
+          selectedLabelStyle: TextStyle(color: Colors.red),
+          unselectedLabelStyle: TextStyle(color: Colors.black),
+          unselectedItemColor: Colors.blue,
           onTap: _onItemTapped,
         ),
       );
