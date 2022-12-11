@@ -78,7 +78,7 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelText: "팀 이름 ",
+                          labelText: " 팀 이름 ",
                           labelStyle: const TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
@@ -103,7 +103,7 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "팀 소개",
+                        labelText: " 팀 소개",
                         labelStyle: const TextStyle(
                           fontFamily: "GmarketSansTTF",
                           fontSize: 16,
@@ -117,7 +117,7 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "원하는 팀원",
+                        labelText: " 원하는 팀원",
                         labelStyle: const TextStyle(
                           fontFamily: "GmarketSansTTF",
                           fontSize: 16,

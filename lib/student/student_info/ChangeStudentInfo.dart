@@ -9,8 +9,9 @@ class ChangeMyStudentInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -24,7 +25,10 @@ class ChangeMyStudentInfo extends StatelessWidget {
         title: const Text(
           "내 정보 수정",
           style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: StudentInfoForm(projectID),
@@ -64,7 +68,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
         ValidationBuilder().phone().minLength(11).maxLength(11).build();
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: FutureBuilder(
           future: projectCRUD.getAttendeeInfo(),
           builder: (context, snapshot) {
@@ -73,13 +77,18 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                 key: _formkey,
                 child: ListView(
                   children: [
-                    Text('내 소개 수정', style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 20),
                     TextFormField(
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      minLines: 2,
-                      maxLines: 6,
+                          border: OutlineInputBorder(),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelText: " 내 소개 ",
+                          labelStyle: const TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16,
+                          )),
+                      minLines: 6,
+                      maxLines: null,
                       initialValue: snapshot.data['introduction'].toString(),
                       onSaved: (value) {
                         setState(() {
@@ -88,15 +97,20 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                       },
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
-                    Text('원하는 팀 수정', style: TextStyle(fontSize: 20)),
                     TextFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: " 원하는 팀 ",
+                        labelStyle: const TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 16,
+                        ),
                       ),
-                      minLines: 2,
-                      maxLines: 6,
+                      minLines: 6,
+                      maxLines: null,
                       initialValue:
                           snapshot.data['finding_team_info'].toString(),
                       onSaved: (value) {
@@ -105,14 +119,70 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                         });
                       },
                     ),
-                    //add contact
-                    const SizedBox(
-                      height: 25,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text(
+                            "  연락 방법  ",
+                            style: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 11,
+                                color: Colors.black54),
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(width: 280, height: 1, color: Colors.grey),
+                        ],
+                      ),
                     ),
-                    Text('Contacts (Optional)', style: TextStyle(fontSize: 20)),
-                    const SizedBox(
-                      height: 15,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              hintText: "연락 종류",
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(15, 20, 20, 0),
+                              hintStyle: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Text("   :   "),
+                        Flexible(
+                          flex: 3,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              hintText: "연락 종류",
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(15, 20, 20, 0),
+                              hintStyle: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+
                     // TextFormField(
                     //   decoration: InputDecoration(
                     //     border: OutlineInputBorder(),
@@ -199,7 +269,15 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                       height: 25,
                     ),
                     ElevatedButton(
-                        child: const Text("등록"),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            backgroundColor: Colors.lightBlueAccent,
+                            disabledBackgroundColor:
+                                Colors.lightBlueAccent.shade100,
+                            minimumSize: const Size.fromHeight(40)),
+                        child: const Text("수정"),
                         onPressed: () async {
                           if (_formkey.currentState!.validate()) {
                             _formkey.currentState!.save();
