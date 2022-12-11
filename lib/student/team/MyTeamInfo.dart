@@ -8,41 +8,53 @@ import 'ChangeTeamInfo.dart';
 
 class MyTeamInfoPage extends StatelessWidget {
   String projectId = "";
+  bool hasTeam = false;
+
   MyTeamInfoPage(this.projectId);
   late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        centerTitle: true,
-        title: const Text(
-          "내 팀 정보",
-          style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
-        ),
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
+        appBar: AppBar(
+            elevation: 1,
+            centerTitle: true,
+            title: const Text(
+              "내 팀 정보",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontFamily: "GmarketSansTTF",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeTeamInfo(projectId)));
-              },
-              color: Colors.black87,
-              icon: const Icon(Icons.edit)),
-        ],
-      ),
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            backgroundColor: Colors.white,
+            actions: hasTeam
+                ? [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangeTeamInfo(projectId)));
+                        },
+                        color: Colors.black87,
+                        icon: const Icon(Icons.edit, size: 22)),
+                  ]
+                : null),
         body: FutureBuilder(
             future: projectCRUD.getTeamInfo(),
-            builder: (context, snapshot){
-              if (snapshot.hasData){
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                hasTeam = true;
+                print(hasTeam);
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView(
@@ -54,11 +66,10 @@ class MyTeamInfoPage extends StatelessWidget {
                       ),
                       Text('팀 소개', style: TextStyle(fontSize: 20)),
                       Text(snapshot.data['introduction'].toString()),
-
                       const SizedBox(
                         height: 20,
-                      ),Text('원하는 팀원', style: TextStyle(fontSize: 20)),
-
+                      ),
+                      Text('원하는 팀원', style: TextStyle(fontSize: 20)),
                       Text(snapshot.data['finding_member_info'].toString()),
                       const SizedBox(
                         height: 20,
@@ -71,38 +82,35 @@ class MyTeamInfoPage extends StatelessWidget {
                     ],
                   ),
                 );
-              }
-              else{
+              } else {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewTeam(projectId)));
-                        },
-                        child: Icon(
-                          Icons.add_circle,
-                          color: Colors.grey[700],
-                          size: 75,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       const Text(
-                        "팀이 없습니다",
-                        //마감일은 "까지 입니다."
+                        "소속된 팀이 없습니다.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      )
+                        style: TextStyle(
+                            fontFamily: "GmarketSansTTF", fontSize: 18),
+                      ),
+                      TextButton(
+                          child: const Text(
+                            '+  새 팀 생성',
+                            style: TextStyle(
+                                fontFamily: "GmarketSansTTF", fontSize: 16),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddNewTeam(projectId)));
+                          })
                     ],
                   ),
                 );
               }
-            }
-        )
-    );
+            }));
   }
 }
