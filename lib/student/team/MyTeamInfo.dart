@@ -63,7 +63,7 @@ class MyTeamInfoPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text('contact', style: TextStyle(fontSize: 20)),
+                      Text('내 팀 해쉬태그', style: TextStyle(fontSize: 20)),
                       const SizedBox(
                         height: 20,
                       ),

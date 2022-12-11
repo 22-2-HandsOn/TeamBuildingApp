@@ -21,7 +21,7 @@ class ChangeTeamInfo extends StatelessWidget {
             }),
         backgroundColor: Colors.white,
         title: const Text(
-          "내 정보 수정",
+          "팀 정보 수정",
           style: TextStyle(
               color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
         ),
@@ -111,6 +111,9 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                     ElevatedButton(
                       onPressed: () async{
                         _formkey.currentState!.save();
+                        projectCRUD.setTeamName(name);
+                        projectCRUD.setTeamIntro(introduction);
+                        projectCRUD.setWantedMember(finding_member_info);
                         Navigator.pop(context);
 
                       },
