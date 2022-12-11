@@ -107,12 +107,6 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final Uri url1 =
-                Uri.parse(snapshot.data['contact_infos']['url1'].toString());
-            final Uri url2 =
-                Uri.parse(snapshot.data['contact_infos']['url2'].toString());
-            final Uri url3 =
-                Uri.parse(snapshot.data['contact_infos']['url3'].toString());
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -138,24 +132,15 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                   ),
                   Text('contact', style: TextStyle(fontSize: 20)),
                   Text(
-                      'email: ${snapshot.data['contact_infos']['email'].toString()}'),
+                      'email: ${snapshot.data['contact_infos']??['email'].toString()}'),
                   Text(
-                      'phone: ${snapshot.data['contact_infos']['phone'].toString()}'),
-                  InkWell(
-                      child: new Text(
-                          snapshot.data['contact_infos']['url1'].toString(),
-                          style: TextStyle(color: Colors.blueAccent)),
-                      onTap: () => launchUrl(url1)),
-                  InkWell(
-                      child: new Text(
-                          snapshot.data['contact_infos']['url2'].toString(),
-                          style: TextStyle(color: Colors.blueAccent)),
-                      onTap: () => launchUrl(url2)),
-                  InkWell(
-                      child: new Text(
-                          snapshot.data['contact_infos']['url3'].toString(),
-                          style: TextStyle(color: Colors.blueAccent)),
-                      onTap: () => launchUrl(url3)),
+                      'phone: ${snapshot.data['contact_infos']??['phone'].toString()}'),
+                  Text(
+                      'url1: ${snapshot.data['contact_infos']??['url1']?.toString()}'),
+                  Text(
+                      'url2: ${snapshot.data['contact_infos']??['url2']?.toString()}'),
+                  Text(
+                      'url3: ${snapshot.data['contact_infos']??['url3']?.toString()}'),
                   const SizedBox(
                     height: 20,
                   ),
