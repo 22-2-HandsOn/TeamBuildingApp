@@ -183,9 +183,11 @@ class _TeamListstate extends State<TeamListPage> {
                   if (tagcheck) {
                     return Teamtile(
                       teamName: snapshot.data.docs[index]['name'],
-                      teaminfo: snapshot.data.docs[index]['introduction'],
+                      teaminfo: snapshot.data.docs[index]
+                          ['finding_member_info'],
                       projectid: widget.projectId,
                       projectname: widget.projectname,
+                      isfinished: snapshot.data.docs[index]['isfinished'],
                     );
                   } else {
                     return Container();
@@ -193,7 +195,7 @@ class _TeamListstate extends State<TeamListPage> {
                 },
                 //controller: unitcontroller,
               )
-            : Container();
+            : noteamWidget();
       },
     );
   }
@@ -229,7 +231,8 @@ class _TeamListstate extends State<TeamListPage> {
     List<Widget> choices = [];
     tags.forEach((element) {
       choices.add(Container(
-        padding: const EdgeInsets.all(2.0),
+        height: 40,
+        padding: const EdgeInsets.all(1.0),
         child: ChoiceChip(
           selectedColor: Colors.lightBlueAccent,
           label: Text(element),

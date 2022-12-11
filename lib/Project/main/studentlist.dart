@@ -194,12 +194,12 @@ class _Stuliststate extends State<StulistPage> {
                 },
                 //controller: unitcontroller,
               )
-            : Container();
+            : nostudWidget();
       },
     );
   }
 
-  noteamWidget() {
+  nostudWidget() {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -230,7 +230,8 @@ class _Stuliststate extends State<StulistPage> {
     List<Widget> choices = [];
     tags.forEach((element) {
       choices.add(Container(
-        padding: const EdgeInsets.all(2.0),
+        height: 40,
+        padding: const EdgeInsets.all(1.0),
         child: ChoiceChip(
           selectedColor: Colors.lightBlueAccent,
           label: Text(element),
