@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
+import './MyTeamInfo.dart';
 
 class AddNewTeam extends StatelessWidget {
   String projectID;
@@ -56,6 +57,13 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
     });
   }
 
+  // _navigateAndDisplaySelection(BuildContext context) async {
+  //   final result = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => MyTeamInfoPage(projectID)),
+  //   );
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -76,7 +84,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
         key: _formkey,
         child: ListView(
           children: [
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             TextFormField(
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -144,7 +152,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                   disabledBackgroundColor: Colors.lightBlueAccent.shade100,
                   minimumSize: const Size.fromHeight(40)),
               child: Text(
-                "등록",
+                "팀 생성",
                 style: TextStyle(
                   fontFamily: "GmarketSansTTF",
                   fontSize: 14,
@@ -154,7 +162,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                 _formkey.currentState!.save();
 
                 try {
-                  projectCRUD.addTeam(
+                  await projectCRUD.addTeam(
                       teamName, introduction, finding_member_info, members);
 
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -167,7 +175,9 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                     ),
                     backgroundColor: Colors.lightBlueAccent,
                   ));
+
                   Navigator.pop(context);
+                  // _navigateAndDisplaySelection(context);
                 } catch (e) {
                   print(e);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -7,16 +7,19 @@ import 'AddNewTeam.dart';
 import 'ChangeTeamInfo.dart';
 
 class MyTeamInfoPage extends StatelessWidget {
+  final textStyle = const TextStyle(
+      fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
+
   String projectId = "";
-  bool hasTeam = false;
 
   MyTeamInfoPage(this.projectId);
   late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-            elevation: 1,
+            elevation: 0,
             centerTitle: true,
             title: const Text(
               "내 팀 정보",
@@ -35,53 +38,102 @@ class MyTeamInfoPage extends StatelessWidget {
                   Navigator.pop(context);
                 }),
             backgroundColor: Colors.white,
-            actions: hasTeam
-                ? [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeTeamInfo(projectId)));
-                        },
-                        color: Colors.black87,
-                        icon: const Icon(Icons.edit, size: 22)),
-                  ]
-                : null),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChangeTeamInfo(projectId)));
+                  },
+                  color: Colors.black87,
+                  icon: const Icon(Icons.edit, size: 22)),
+            ]),
         body: FutureBuilder(
             future: projectCRUD.getTeamInfo(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                hasTeam = true;
-                print(hasTeam);
                 return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView(
-                    children: [
-                      Text('팀 명', style: TextStyle(fontSize: 20)),
-                      Text(snapshot.data['name'].toString()),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('팀 소개', style: TextStyle(fontSize: 20)),
-                      Text(snapshot.data['introduction'].toString()),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('원하는 팀원', style: TextStyle(fontSize: 20)),
-                      Text(snapshot.data['finding_member_info'].toString()),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('내 팀 해쉬태그', style: TextStyle(fontSize: 20)),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('댓글', style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
-                );
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  팀 이름  ", style: textStyle),
+                              Container(
+                                  width: 300, height: 1, color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          snapshot.data['name'].toString(),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  팀 소개  ", style: textStyle),
+                              Container(
+                                  width: 300, height: 1, color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          snapshot.data['introduction'].toString(),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 16),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  원하는 팀원  ", style: textStyle),
+                              Container(
+                                  width: 280, height: 1, color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          snapshot.data['finding_member_info'].toString(),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 16),
+                        ),
+                        // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  댓글  ", style: textStyle),
+                              Container(
+                                  width: 310, height: 1, color: Colors.grey),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ));
               } else {
                 return Center(
                   child: Column(
