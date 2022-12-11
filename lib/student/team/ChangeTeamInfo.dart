@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
+import './MyTeamInfo.dart';
 
 class ChangeTeamInfo extends StatelessWidget {
   String projectID;
@@ -8,8 +9,9 @@ class ChangeTeamInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -23,7 +25,10 @@ class ChangeTeamInfo extends StatelessWidget {
         title: const Text(
           "팀 정보 수정",
           style: TextStyle(
-              color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 27),
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: TeamInfoForm(projectID),
@@ -44,91 +49,154 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
   String projectID;
   _TeamInfoFormState(this.projectID);
   late final ProjectCRUD projectCRUD = ProjectCRUD(projectID);
+
+  // _navigateAndDisplaySelection(BuildContext context) async {
+  //   final result = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => MyTeamInfoPage(projectID)),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     String name = "";
     String introduction = "";
     String finding_member_info = "";
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: FutureBuilder(
           future: projectCRUD.getTeamInfo(),
-          builder: (context, snapshot){
-            if (snapshot.hasData){
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return Form(
                 key: _formkey,
                 child: ListView(
                   children: [
-                    Text('팀 명', style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 20),
                     TextFormField(
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
+                          border: OutlineInputBorder(),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelText: "팀 이름 ",
+                          labelStyle: const TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16,
+                          )),
                       initialValue: snapshot.data['name'].toString(),
-                      onSaved: (value){
+                      onSaved: (value) {
                         setState(() {
                           name = value as String;
                         });
                       },
                     ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Text('팀 소개 수정', style: TextStyle(fontSize: 20)),
+                    const SizedBox(height: 20),
                     TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      minLines: 2,
-                      maxLines: 6,
+                      minLines: 6,
+                      maxLines: null,
                       initialValue: snapshot.data['introduction'].toString(),
-                      onSaved: (value){
+                      onSaved: (value) {
                         setState(() {
                           introduction = value as String;
                         });
                       },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: "팀 소개",
+                        labelStyle: const TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
-                    Text('원하는 팀원', style: TextStyle(fontSize: 20)),
                     TextFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: "원하는 팀원",
+                        labelStyle: const TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 16,
+                        ),
                       ),
-                      minLines: 2,
-                      maxLines: 6,
-                      initialValue: snapshot.data['finding_member_info'].toString(),
-                      onSaved: (value){
+                      minLines: 6,
+                      maxLines: null,
+                      initialValue:
+                          snapshot.data['finding_member_info'].toString(),
+                      onSaved: (value) {
                         setState(() {
                           finding_member_info = value as String;
                         });
                       },
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 40,
                     ),
                     ElevatedButton(
-                      onPressed: () async{
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          backgroundColor: Colors.lightBlueAccent,
+                          disabledBackgroundColor:
+                              Colors.lightBlueAccent.shade100,
+                          minimumSize: const Size.fromHeight(40)),
+                      onPressed: () async {
                         _formkey.currentState!.save();
-                        projectCRUD.setTeamName(name);
-                        projectCRUD.setTeamIntro(introduction);
-                        projectCRUD.setWantedMember(finding_member_info);
-                        Navigator.pop(context);
 
+                        try {
+                          await projectCRUD.setTeamName(name);
+                          await projectCRUD.setTeamIntro(introduction);
+                          await projectCRUD
+                              .setWantedMember(finding_member_info);
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              "팀 정보 수정이 완료되었습니다.",
+                              style: TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 14,
+                              ),
+                            ),
+                            backgroundColor: Colors.lightBlueAccent,
+                          ));
+
+                          Navigator.pop(context);
+                          // _navigateAndDisplaySelection(context);
+                        } catch (e) {
+                          print(e);
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              "팀 정보 수정에 실패하였습니다.",
+                              style: TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 14,
+                              ),
+                            ),
+                            backgroundColor: Colors.lightBlueAccent,
+                          ));
+                        }
                       },
-                      child: const Text("등록"),
+                      child: const Text(
+                        "팀 정보 수정",
+                        style: TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               );
-            }
-            else{
+            } else {
               return CircularProgressIndicator();
             }
-          }
-      ),
+          }),
     );
   }
 }
-
