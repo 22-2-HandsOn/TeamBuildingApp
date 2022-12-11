@@ -109,34 +109,27 @@ class _TeamListstate extends State<TeamListPage> {
                 fontSize: 27),
           ),
         ),
-        body: Stack(
+        body: Column(
           children: [
-            Positioned(
-              top: 10,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                child: Wrap(
-                  children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
-                ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              child: Wrap(
+                children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
               ),
             ),
-            Positioned(
-              top: 100,
-              child: Container(
-                width: 800,
-                height: 1000,
-                child: Stack(
-                  children: <Widget>[
-                    teamList(),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      width: MediaQuery.of(context).size.width,
-                    )
-                  ],
-                ),
+            Expanded(
+              child: Stack(
+                children: <Widget>[
+                  teamList(),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    width: MediaQuery.of(context).size.width,
+                  )
+                ],
               ),
-            ),
+            )
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -177,7 +170,7 @@ class _TeamListstate extends State<TeamListPage> {
     return StreamBuilder(
       stream: teams,
       builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
+        return snapshot.hasData && !snapshot.hasError
             ? ListView.builder(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
@@ -198,8 +191,9 @@ class _TeamListstate extends State<TeamListPage> {
                       projectid: widget.projectId,
                       projectname: widget.projectname,
                     );
-                  } else
+                  } else {
                     return Container();
+                  }
                 },
                 //controller: unitcontroller,
               )

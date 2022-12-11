@@ -4,22 +4,27 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
 import 'package:team/student/student_info/MyStudentInfo.dart';
 
-class student_tile extends StatefulWidget {
+class Student_tile extends StatefulWidget {
   final String name;
   final String info;
   final String projectid;
+  final String projectname;
   //final String opponent;
-  const student_tile(
-      {Key? key, required this.name, required this.info, required this.projectid
+  const Student_tile(
+      {Key? key,
+      required this.projectname,
+      required this.name,
+      required this.info,
+      required this.projectid
       //required this.opponent,
       })
       : super(key: key);
 
   @override
-  State<student_tile> createState() => _studenttileState();
+  State<Student_tile> createState() => _StudenttileState();
 }
 
-class _studenttileState extends State<student_tile> {
+class _StudenttileState extends State<Student_tile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

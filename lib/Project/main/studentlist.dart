@@ -23,7 +23,7 @@ class _Stuliststate extends State<StulistPage> {
   Stream<QuerySnapshot>? stulist;
   String projectid = "";
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
-  List<String> tags = ["frontend ", "backend", "AI"];
+  List<String> tags = ["front", "backend", "AI"];
 
   int _selectedIndex = 2;
 
@@ -111,32 +111,24 @@ class _Stuliststate extends State<StulistPage> {
                 fontSize: 27),
           ),
         ),
-        body: Stack(
+        body: Column(
           children: [
-            Positioned(
-              top: 10,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                child: Wrap(
-                  children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
-                ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              child: Wrap(
+                children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
               ),
             ),
-            Positioned(
-              top: 100,
-              child: Container(
-                width: 800,
-                height: 1000,
-                child: Stack(
-                  children: <Widget>[
-                    attendees(),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      width: MediaQuery.of(context).size.width,
-                    )
-                  ],
-                ),
+            Expanded(
+              child: Stack(
+                children: <Widget>[
+                  attendees(),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                  )
+                ],
               ),
             ),
           ],
@@ -179,8 +171,9 @@ class _Stuliststate extends State<StulistPage> {
     return StreamBuilder(
       stream: stulist,
       builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
+        return snapshot.hasData && !snapshot.hasError
             ? ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   //tag관련 처리
@@ -194,12 +187,14 @@ class _Stuliststate extends State<StulistPage> {
                     }
                   });
                   if (tagcheck) {
-                    return student_tile(
+                    return Student_tile(
                         name: snapshot.data.docs[index]['name'],
                         info: snapshot.data.docs[index]['introduction'],
-                        projectid: widget.projectId);
-                  } else
+                        projectid: widget.projectId,
+                        projectname: widget.projectname);
+                  } else {
                     return Container();
+                  }
                 },
                 //controller: unitcontroller,
               )
