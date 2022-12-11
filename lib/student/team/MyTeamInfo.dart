@@ -22,7 +22,7 @@ class MyTeamInfoPage extends StatefulWidget {
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   String projectId = "";
   late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   void _onItemTapped(int index) {
     switch (index) {
       case 0:

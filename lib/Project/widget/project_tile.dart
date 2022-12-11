@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:team/Project/main/home.dart';
 import 'package:team/Project/main/teamlist.dart';
 import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
@@ -47,8 +48,8 @@ class _projectTileState extends State<projectTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => TeamListPage(
-                      projectId: widget.projectId,
+                builder: (context) => Home(
+                      projectid: widget.projectId,
                       projectname: widget.projectName,
                     )));
       },
