@@ -40,7 +40,7 @@ class _MyProjectMainState extends State<MyProjectMain> {
               projectId: widget.projectId,
             ),
             Container(),
-            MyTeamInfoPage(widget.projectId),
+            MyTeamInfoPage(widget.projectId, widget.projectName),
             MyStudentInfoPage(widget.projectId, widget.projectName),
           ],
         ),

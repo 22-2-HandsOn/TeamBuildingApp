@@ -66,7 +66,8 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyTeamInfoPage(widget.projectId)));
+                builder: (context) =>
+                    MyTeamInfoPage(widget.projectId, widget.projectname)));
         break;
 
       default:

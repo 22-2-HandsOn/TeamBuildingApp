@@ -68,7 +68,8 @@ class _TeamListstate extends State<TeamListPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyTeamInfoPage(widget.projectId)));
+                builder: (context) =>
+                    MyTeamInfoPage(widget.projectId, widget.projectname)));
         break;
       case 4:
         Navigator.pop(context);
@@ -192,9 +193,11 @@ class _TeamListstate extends State<TeamListPage> {
                   });
                   if (tagcheck) {
                     return Teamtile(
-                        teamName: snapshot.data.docs[index]['name'],
-                        teaminfo: snapshot.data.docs[index]['introduction'],
-                        projectid: widget.projectId);
+                      teamName: snapshot.data.docs[index]['name'],
+                      teaminfo: snapshot.data.docs[index]['introduction'],
+                      projectid: widget.projectId,
+                      projectname: widget.projectname,
+                    );
                   } else
                     return Container();
                 },

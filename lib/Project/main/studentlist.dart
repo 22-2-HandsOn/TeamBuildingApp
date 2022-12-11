@@ -68,7 +68,8 @@ class _Stuliststate extends State<StulistPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyTeamInfoPage(widget.projectId)));
+                builder: (context) =>
+                    MyTeamInfoPage(widget.projectId, widget.projectname)));
         break;
       case 4:
         Navigator.pop(context);

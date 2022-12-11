@@ -44,7 +44,8 @@ class _Homestate extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MyTeamInfoPage(widget.projectid)));
+                builder: (context) =>
+                    MyTeamInfoPage(widget.projectid, widget.projectname)));
         break;
       case 4:
         Navigator.pop(context);
