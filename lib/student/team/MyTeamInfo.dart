@@ -16,14 +16,14 @@ class MyTeamInfoPage extends StatefulWidget {
   MyTeamInfoPage(this.projectId, this.projectname);
 
   @override
-  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState();
+  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState(projectId);
 }
 
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
-
   String projectId = "";
+  _MyTeamInfoPageState(this.projectId);
 
   late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
   int _selectedIndex = 3;
@@ -221,6 +221,37 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                   ),
                 );
               }
-            }));
+            }),
+        bottomNavigationBar: BottomNavigationBar(
+    items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+    label: "홈",
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.text_snippet),
+    label: "팀리스트",
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.people),
+    label: "학생리스트",
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.flag),
+    label: "내 팀 정보",
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(Icons.person),
+    label: "내 정보",
+    ),
+    ],
+    currentIndex: _selectedIndex,
+    selectedItemColor: Colors.red,
+    selectedLabelStyle: TextStyle(color: Colors.red),
+    unselectedLabelStyle: TextStyle(color: Colors.black),
+    unselectedItemColor: Colors.blue,
+    onTap: _onItemTapped,
+    ),
+    );
   }
 }

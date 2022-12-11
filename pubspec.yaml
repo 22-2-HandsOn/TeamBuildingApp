@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^6.1.7
   flutter_email_sender: ^5.2.0
   form_validator: ^1.0.4
+  firebase_messaging: ^14.1.4
 
   # 학생 list 불러오기
   file_picker: ^5.2.2
