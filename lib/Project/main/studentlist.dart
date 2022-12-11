@@ -10,6 +10,7 @@ import 'package:team/student/team/MyTeamInfo.dart';
 class StulistPage extends StatefulWidget {
   final String projectId;
   final String projectname;
+
   StulistPage({
     Key? key,
     required this.projectId,
@@ -23,8 +24,8 @@ class _Stuliststate extends State<StulistPage> {
   Stream<QuerySnapshot>? stulist;
   String projectid = "";
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
-  List<String> tags = ["front", "backend", "AI"];
-
+  List<String> tags = [];
+  DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
   int _selectedIndex = 2;
 
   @override
@@ -39,6 +40,17 @@ class _Stuliststate extends State<StulistPage> {
         stulist = snapshot;
       });
     });
+    await DatabaseService().getstuhashtags(widget.projectId).then((snapshot) {
+      setState(() {
+        tagsnapshot = snapshot;
+      });
+    });
+    tagupdate();
+  }
+
+  tagupdate() {
+    final data = tagsnapshot!.data();
+    tags = List<String>.from(data?['hashtags']);
   }
 
   void _onItemTapped(int index) {
