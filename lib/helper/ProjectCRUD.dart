@@ -240,12 +240,13 @@ class ProjectCRUD {
     }
   }
 
-  Future setContactInfo(Map<String, String> contacts) async {
+  Future setContactInfo(List<dynamic> contacts) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
+        print(contacts);
         attendeesCollection.doc(doc.id).update({'contact_infos': contacts});
       }
     }

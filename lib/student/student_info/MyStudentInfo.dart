@@ -9,6 +9,7 @@ import 'package:team/Project/main/studentlist.dart';
 import 'package:team/Project/main/teamlist.dart';
 import 'package:team/Project/main/home.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
+import 'package:form_validator/form_validator.dart';
 
 class MyStudentInfoPage extends StatefulWidget {
   String projectId = "";
@@ -189,16 +190,107 @@ class Contact extends StatelessWidget {
   Contact(this.snapshot);
   Widget build(BuildContext context) {
     if (snapshot.data['contact_infos'] != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('email: ${snapshot.data['contact_infos']['email'].toString()}'),
-          Text('phone: ${snapshot.data['contact_infos']['phone'].toString()}'),
-          Text('url1: ${snapshot.data['contact_infos']['url1'].toString()}'),
-          Text('url2: ${snapshot.data['contact_infos']['url2'].toString()}'),
-          Text('url3: ${snapshot.data['contact_infos']['url3'].toString()}'),
-        ],
-      );
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: snapshot.data['contact_infos'].length,
+          itemBuilder: (ctx, ind) {
+            String title =
+                snapshot.data['contact_infos'][ind]['title'].toString();
+            String content =
+                snapshot.data['contact_infos'][ind]['content'].toString();
+            String prefix = "";
+            bool notLinkable = false;
+
+            if (RegExp(
+                    r"^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/\S*)?")
+                .hasMatch(content)) {
+              print(content);
+              if (!RegExp(r"^(((http(s))\:\/\/))").hasMatch(content)) {
+                print("https 달아주기");
+                content = "https://" + content;
+              }
+              print("링크");
+            } else if (RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                .hasMatch(content)) {
+              print(content);
+              print("메일");
+              prefix = 'mailto:';
+            } else if (RegExp(r"^\d{3}-?\d{3,4}-?\d{4}$").hasMatch(content)) {
+              print(content);
+              print("전화");
+              prefix = 'tel:';
+            } else {
+              notLinkable = true;
+            }
+
+            return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Chip(
+                      avatar: notLinkable
+                          ? CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(Icons.circle_outlined,
+                                  color: Colors.black87, size: 15))
+                          : prefix == ""
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: Icon(Icons.link,
+                                      color: Colors.black87, size: 15))
+                              : prefix == "mailto:"
+                                  ? CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Icon(Icons.mail,
+                                          color: Colors.black87, size: 15))
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Icon(Icons.phone,
+                                          color: Colors.black87, size: 15)),
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        side: BorderSide(
+                          width: 1,
+                          color: Colors.black26,
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 14,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold),
+                      visualDensity:
+                          VisualDensity(horizontal: -1, vertical: -3.5),
+                      label: Container(
+                          width: 35,
+                          alignment: Alignment(0.0, 0.0),
+                          child: Text(title))),
+                  Text("      "),
+                  InkWell(
+                      child: Text(
+                        '${snapshot.data['contact_infos'][ind]['content'].toString()}',
+                        style: notLinkable
+                            ? TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16)
+                            : TextStyle(
+                                color: Colors.lightBlueAccent.shade700,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                              ),
+                      ),
+                      onTap: () async {
+                        if (content != "") {
+                          Uri uri = Uri.parse(prefix + content);
+                          launchUrl(uri);
+                        }
+                      })
+                ]);
+          });
     } else {
       return Text(
         "아직 연락 방법 목록을 작성하지 않았습니다. ",

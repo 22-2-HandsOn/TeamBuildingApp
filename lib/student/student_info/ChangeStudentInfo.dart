@@ -49,23 +49,33 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
   String projectID;
   _StudentInfoFormState(this.projectID);
   late final ProjectCRUD projectCRUD = ProjectCRUD(projectID);
-  final _contactChoices = ['이메일', '웹주소', '핸드폰'];
+  // final _contactChoices = ['이메일', '웹주소', '핸드폰'];
+
+  List<dynamic> contacts = [];
+  void _setContacts(List<String> title, List<String> content) {
+    int length = title.length;
+    setState(() {
+      contacts = [];
+
+      for (int i = 0; i < length; i++) {
+        if (title[i] == '' || content[i] == '') {
+          continue;
+        }
+        var temp = {"title": title[i], "content": content[i]};
+        contacts.add(temp);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     String introduction = "";
     String wantedteam = "";
-    String contactType1 = "";
-    String email = "";
-    String phone = "";
-    String url1 = "";
-    String url2 = "";
-    String url3 = "";
 
-    final validatoremail = ValidationBuilder().email().maxLength(50).build();
-    final validatorurl = ValidationBuilder().url().maxLength(100).build();
-    final validatorphone =
-        ValidationBuilder().phone().minLength(11).maxLength(11).build();
+    // final validatoremail = ValidationBuilder().email().maxLength(50).build();
+    // final validatorurl = ValidationBuilder().url().maxLength(100).build();
+    // final validatorphone =
+    //     ValidationBuilder().phone().minLength(11).maxLength(11).build();
 
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -76,6 +86,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
               return Form(
                 key: _formkey,
                 child: ListView(
+                  shrinkWrap: true,
                   children: [
                     SizedBox(height: 20),
                     TextFormField(
@@ -120,7 +131,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                       },
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      padding: const EdgeInsets.only(top: 15, bottom: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -137,52 +148,14 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Flexible(
-                          flex: 1,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              hintText: "연락 종류",
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(15, 20, 20, 0),
-                              hintStyle: const TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Text("   :   "),
-                        Flexible(
-                          flex: 3,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              hintText: "연락 종류",
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(15, 20, 20, 0),
-                              hintStyle: const TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                    Contacts(
+                        contact_infos: snapshot.data["contact_infos"] != null
+                            ? snapshot.data["contact_infos"]
+                            : [],
+                        setter: _setContacts),
                     const SizedBox(
                       height: 40,
                     ),
-
                     // TextFormField(
                     //   decoration: InputDecoration(
                     //     border: OutlineInputBorder(),
@@ -283,15 +256,8 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                             _formkey.currentState!.save();
                             projectCRUD.setStudentIntro(introduction);
                             projectCRUD.setWantedTeam(wantedteam);
-                            Navigator.pop(context);
-                            Map<String, String> contacts = {
-                              'email': email,
-                              'phone': phone,
-                              'url1': url1,
-                              'url2': url2,
-                              'url3': url3,
-                            };
                             projectCRUD.setContactInfo(contacts);
+                            Navigator.pop(context);
                           }
                           ;
                         }),
@@ -304,5 +270,134 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                     CircularProgressIndicator(color: Colors.lightBlueAccent));
           }),
     );
+  }
+}
+
+class Contacts extends StatefulWidget {
+  final List<dynamic> contact_infos;
+  final Function(List<String> title, List<String> content) setter;
+  const Contacts({Key? key, required this.contact_infos, required this.setter})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _contactInputState();
+}
+
+class _contactInputState extends State<Contacts> {
+  List<String> title = [];
+  List<String> content = [];
+
+  @override
+  void initState() {
+    setState(() {
+      widget.contact_infos.forEach((value) {
+        title.add(value["title"]!);
+        content.add(value["content"]!);
+      });
+
+      Future.delayed(Duration.zero, () {
+        widget.setter(title, content);
+      });
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(title);
+
+    // TODO: implement build
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: title.length + 1,
+        itemBuilder: (ctx, ind) {
+          if (ind != title.length) {
+            return Row(children: <Widget>[
+              Flexible(
+                flex: 2,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: "종류",
+                    isDense: true,
+                    contentPadding: EdgeInsets.fromLTRB(15, 20, 20, 0),
+                    hintStyle: const TextStyle(
+                      fontFamily: "GmarketSansTTF",
+                      fontSize: 12,
+                    ),
+                  ),
+                  initialValue: title[ind],
+                  onChanged: (value) {
+                    setState(() {
+                      title[ind] = value.trim();
+                      widget.setter(title, content);
+                    });
+                  },
+                ),
+              ),
+              const Text(
+                "   :   ",
+                style: TextStyle(
+                    fontFamily: "GmarketSansTTF",
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold),
+              ),
+              Flexible(
+                flex: 6,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: "내용",
+                    isDense: true,
+                    contentPadding: EdgeInsets.fromLTRB(15, 20, 20, 0),
+                    hintStyle: const TextStyle(
+                      fontFamily: "GmarketSansTTF",
+                      fontSize: 12,
+                    ),
+                  ),
+                  initialValue: content[ind],
+                  onChanged: (value) {
+                    setState(() {
+                      content[ind] = value.trim();
+                      print(value);
+                      widget.setter(title, content);
+                    });
+                  },
+                ),
+              ),
+              Flexible(
+                  flex: 1,
+                  child: IconButton(
+                    icon: Icon(Icons.remove, color: Colors.black38, size: 18),
+                    onPressed: () {
+                      setState(() {
+                        title.removeAt(ind);
+                        content.removeAt(ind);
+                        widget.setter(title, content);
+                      });
+                    },
+                  )),
+            ]);
+          } else {
+            return TextButton(
+              child: const Text(
+                '+ 새 연락 방법 추가',
+                style: TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  fontSize: 16,
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  title.add("");
+                  content.add("");
+                });
+              },
+            );
+          }
+        });
   }
 }
