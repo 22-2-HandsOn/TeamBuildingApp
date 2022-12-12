@@ -283,8 +283,6 @@ class ProjectCRUD {
   Future updateTeamReply(
       String comment_data, String reply_data, String content) async {
     var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String, dynamic>;
-    var attendeeId = await getAttendeeID();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
       var mapp = doc.data() as Map<String, dynamic>;
@@ -309,7 +307,7 @@ class ProjectCRUD {
                       .doc(doc.id)
                       .collection('comments')
                       .doc(doc2.id)
-                      .collection('replys')
+                      .collection('reply')
                       .doc(doc3.id)
                       .update({'content': content});
                 }
@@ -349,7 +347,7 @@ class ProjectCRUD {
                       .doc(doc.id)
                       .collection('comments')
                       .doc(doc2.id)
-                      .collection('replys')
+                      .collection('reply')
                       .doc(doc3.id)
                       .delete();
                 }

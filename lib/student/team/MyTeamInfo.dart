@@ -196,7 +196,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                   CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                        snapshot.data[index]['name']),
+                                                        snapshot
+                                                            .data[index]['name']),
                                                     Text(snapshot.data[index]
                                                     ['content']),
                                                     SizedBox(
@@ -210,9 +211,11 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                           context: context,
                                                           builder: (context) {
                                                             return AlertDialog(
-                                                                title: Text('대댓글 달기'),
+                                                                title: Text(
+                                                                    '대댓글 달기'),
                                                                 content: TextField(
-                                                                  onChanged: (value) {
+                                                                  onChanged: (
+                                                                      value) {
                                                                     newComment =
                                                                         value;
                                                                   },
@@ -226,32 +229,38 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                 actions: [
                                                                   IconButton(
                                                                       onPressed: () {
-                                                                        projectCRUD.addTeamReply(
+                                                                        projectCRUD
+                                                                            .addTeamReply(
                                                                             newComment,
                                                                             snapshot
                                                                                 .data[
                                                                             index]
                                                                                 .toString());
-                                                                        Navigator.pop(
+                                                                        Navigator
+                                                                            .pop(
                                                                             context);
                                                                         setState(
                                                                                 () {});
                                                                       },
                                                                       icon: Icon(
-                                                                          Icons.done))
+                                                                          Icons
+                                                                              .done))
                                                                 ]);
                                                           });
                                                     },
-                                                    icon: Icon(Icons.comment_bank)),
+                                                    icon: Icon(
+                                                        Icons.comment_bank)),
                                                 IconButton(
                                                     onPressed: () {
                                                       showDialog(
                                                           context: context,
                                                           builder: (context) {
                                                             return AlertDialog(
-                                                                title: Text('댓글 수정'),
+                                                                title: Text(
+                                                                    '댓글 수정'),
                                                                 content: TextField(
-                                                                  onChanged: (value) {
+                                                                  onChanged: (
+                                                                      value) {
                                                                     changedText =
                                                                         value;
                                                                   },
@@ -268,19 +277,22 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                         if (changedText
                                                                             .length >
                                                                             0) {
-                                                                          projectCRUD.updateTeamComment(
+                                                                          projectCRUD
+                                                                              .updateTeamComment(
                                                                               changedText,
                                                                               snapshot
                                                                                   .data[index]
                                                                                   .toString());
-                                                                          Navigator.pop(
-                                                                              context);
                                                                           setState(
                                                                                   () {});
+                                                                          Navigator
+                                                                              .pop(
+                                                                              context);
                                                                         }
                                                                       },
                                                                       icon: Icon(
-                                                                          Icons.done))
+                                                                          Icons
+                                                                              .done))
                                                                 ]);
                                                           });
                                                     },
@@ -300,16 +312,18 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                               height: 50,
                                               child: FutureBuilder(
                                                   future:
-                                                  projectCRUD.getAttendeeReply(
+                                                  projectCRUD.getTeamReply(
                                                       snapshot.data[index]
                                                           .toString()),
-                                                  builder: (context, snapshot2) {
+                                                  builder: (context,
+                                                      snapshot2) {
                                                     if (snapshot2.hasData) {
                                                       return ListView.builder(
                                                           itemCount:
                                                           snapshot2.data.length,
                                                           itemBuilder:
-                                                              (context, index2) {
+                                                              (context,
+                                                              index2) {
                                                             TextEditingController
                                                             _textFieldController3 =
                                                             TextEditingController(
@@ -326,16 +340,20 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                       CrossAxisAlignment
                                                                           .start,
                                                                       children: [
-                                                                        Text("    " +
-                                                                            snapshot2.data[
-                                                                            index2]
-                                                                            [
-                                                                            'name']),
-                                                                        Text("    " +
-                                                                            snapshot2.data[
-                                                                            index2]
-                                                                            [
-                                                                            'content']),
+                                                                        Text(
+                                                                            "    " +
+                                                                                snapshot2
+                                                                                    .data[
+                                                                                index2]
+                                                                                [
+                                                                                'name']),
+                                                                        Text(
+                                                                            "    " +
+                                                                                snapshot2
+                                                                                    .data[
+                                                                                index2]
+                                                                                [
+                                                                                'content']),
                                                                         SizedBox(
                                                                           height: 10,
                                                                         )
@@ -348,35 +366,56 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                               context:
                                                                               context,
                                                                               builder:
-                                                                                  (context) {
+                                                                                  (
+                                                                                  context) {
                                                                                 return AlertDialog(
-                                                                                    title: Text('대댓글 수정'),
+                                                                                    title: Text(
+                                                                                        '대댓글 수정'),
                                                                                     content: TextField(
-                                                                                      onChanged: (value) {
-                                                                                        changedText = value;
+                                                                                      onChanged: (
+                                                                                          value) {
+                                                                                        changedText =
+                                                                                            value;
                                                                                       },
                                                                                       controller: _textFieldController3,
-                                                                                      decoration: InputDecoration(hintText: "대댓글 수정"),
+                                                                                      decoration: InputDecoration(
+                                                                                          hintText: "대댓글 수정"),
                                                                                     ),
                                                                                     actions: [
                                                                                       IconButton(
                                                                                           onPressed: () {
-                                                                                            if (changedText.length > 0) {
-                                                                                              projectCRUD.updateTeamReply(snapshot.data[index].toString(), snapshot2.data[index2].toString(), changedText);
-                                                                                              Navigator.pop(context);
+                                                                                            if (changedText
+                                                                                                .length >
+                                                                                                0) {
+                                                                                              projectCRUD
+                                                                                                  .updateTeamReply(
+                                                                                                  snapshot
+                                                                                                      .data[index]
+                                                                                                      .toString(),
+                                                                                                  snapshot2
+                                                                                                      .data[index2]
+                                                                                                      .toString(),
+                                                                                                  changedText);
+                                                                                              Navigator
+                                                                                                  .pop(
+                                                                                                  context);
                                                                                               setState(() {});
                                                                                             }
                                                                                           },
-                                                                                          icon: Icon(Icons.done))
+                                                                                          icon: Icon(
+                                                                                              Icons
+                                                                                                  .done))
                                                                                     ]);
                                                                               });
                                                                         },
-                                                                        icon: Icon(Icons
-                                                                            .edit)),
+                                                                        icon: Icon(
+                                                                            Icons
+                                                                                .edit)),
                                                                     IconButton(
                                                                         onPressed:
                                                                             () {
-                                                                          projectCRUD.deleteTeamReply(
+                                                                          projectCRUD
+                                                                              .deleteTeamReply(
                                                                               snapshot
                                                                                   .data[
                                                                               index]
@@ -387,8 +426,9 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                           setState(
                                                                                   () {});
                                                                         },
-                                                                        icon: Icon(Icons
-                                                                            .delete))
+                                                                        icon: Icon(
+                                                                            Icons
+                                                                                .delete))
                                                                   ],
                                                                 ),
                                                               ],
@@ -442,36 +482,37 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                     ),
                   ));
             }
-
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "소속된 팀이 없습니다.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: "GmarketSansTTF",
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                      child: const Text(
-                        '+  새 팀 생성',
-                        style: TextStyle(
-                            fontFamily: "GmarketSansTTF", fontSize: 16),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AddNewTeam(widget.projectId)));
-                      })
-                ],
-              ),
-            );
+            else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "소속된 팀이 없습니다.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextButton(
+                        child: const Text(
+                          '+  새 팀 생성',
+                          style: TextStyle(
+                              fontFamily: "GmarketSansTTF", fontSize: 16),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddNewTeam(widget.projectId)));
+                        })
+                  ],
+                ),
+              );
+            }
           }
       ),
     );
