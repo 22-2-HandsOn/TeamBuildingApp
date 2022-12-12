@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/widget/team_tile.dart';
 import '../../student/team/AddNewTeam.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class TeamListPage extends StatefulWidget {
   final String projectId;
@@ -19,9 +20,13 @@ class TeamListPage extends StatefulWidget {
 class _TeamListstate extends State<TeamListPage> {
   Stream<QuerySnapshot>? teams;
   String projectid = "";
+  String stuId = "";
   DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
   List<String> tags = [];
+
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
+
   @override
   void initState() {
     gettingteamData();
@@ -41,6 +46,11 @@ class _TeamListstate extends State<TeamListPage> {
       });
 
       tagupdate();
+    });
+    projectCRUD.getstu_id().then((id) {
+      setState(() {
+        stuId = id;
+      });
     });
   }
 
@@ -132,19 +142,22 @@ class _TeamListstate extends State<TeamListPage> {
 
                       if (tagcheck) {
                         return Teamtile(
-                          teamName: snapshot.data.docs[index]['name'],
-                          teaminfo: snapshot.data.docs[index]
-                              ['finding_member_info'],
-                          projectid: widget.projectId,
-                          projectname: widget.projectname,
-                          isfinished:
-                              snapshot.data.docs[index]['isFinished'] != null
-                                  ? snapshot.data.docs[index]['isFinished']
-                                  : false,
-                          memNum: snapshot.data.docs[index]['members'] != null
-                              ? snapshot.data.docs[index]['members'].length
-                              : 0,
-                        );
+                            teamName: snapshot.data.docs[index]['name'],
+                            teaminfo: snapshot.data.docs[index]
+                                ['finding_member_info'],
+                            projectid: widget.projectId,
+                            projectname: widget.projectname,
+                            isfinished:
+                                snapshot.data.docs[index]['isFinished'] != null
+                                    ? snapshot.data.docs[index]['isFinished']
+                                    : false,
+                            memNum: snapshot.data.docs[index]['members'] != null
+                                ? snapshot.data.docs[index]['members'].length
+                                : 0,
+                            isMyTeam:
+                                snapshot.data.docs[index]['members'] != null &&
+                                    snapshot.data.docs[index]['members']
+                                        .contains(stuId));
                       } else {
                         return Container();
                       }

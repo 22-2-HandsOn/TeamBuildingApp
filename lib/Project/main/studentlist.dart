@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/Project/widget/student_tile.dart';
 import 'package:team/helper/DatabaseService.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/Project/main/teamlist.dart';
-import 'package:team/student/student_info/MyStudentInfo.dart';
-import 'package:team/student/team/MyTeamInfo.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class StulistPage extends StatefulWidget {
   final String projectId;
@@ -23,9 +20,13 @@ class StulistPage extends StatefulWidget {
 class _Stuliststate extends State<StulistPage> {
   Stream<QuerySnapshot>? stulist;
   String projectid = "";
+  String stuId = "";
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
   List<String> tags = [];
   DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
+
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
+
   @override
   void initState() {
     gettingstuData();
@@ -42,8 +43,14 @@ class _Stuliststate extends State<StulistPage> {
       setState(() {
         tagsnapshot = snapshot;
       });
+
+      tagupdate();
     });
-    tagupdate();
+    projectCRUD.getstu_id().then((id) {
+      setState(() {
+        stuId = id;
+      });
+    });
   }
 
   tagupdate() {
@@ -137,7 +144,8 @@ class _Stuliststate extends State<StulistPage> {
                           id: snapshot.data.docs[index]['stu_id'].toString(),
                           projectid: widget.projectId,
                           projectname: widget.projectname,
-                          // isMine: false,
+                          isMine: stuId ==
+                              snapshot.data.docs[index]['stu_id'].toString(),
                         );
                       } else {
                         return Container();

@@ -38,6 +38,8 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
     }
   }
 
+  bool isNowLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +74,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
               child: ListView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -84,19 +86,77 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                       ],
                     ),
                   ),
-                  Text(
-                    "[" +
-                        widget.stuSecretId +
-                        "] " +
-                        snapshot.data['name'].toString(),
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontFamily: "GmarketSansTTF",
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "[" +
+                              widget.stuSecretId +
+                              "] " +
+                              snapshot.data['name'].toString(),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text("      "),
+                        SizedBox(
+                            width: 55,
+                            height: 26,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                  elevation: 0,
+                                  disabledBackgroundColor:
+                                      Colors.lightBlueAccent.shade100),
+                              child: !isNowLoading
+                                  ? Text(
+                                      "초대",
+                                      style: TextStyle(
+                                          fontFamily: "GmarketSansTTF",
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Container(
+                                      width: 10,
+                                      height: 10,
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                              onPressed: !isNowLoading
+                                  ? () async {
+                                      try {
+                                        // *TODO : 함수 호출 (초대)
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                            "초대를 실패하였습니다. ",
+                                            style: TextStyle(
+                                              fontFamily: "GmarketSansTTF",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              Colors.lightBlueAccent,
+                                        ));
+                                      }
+                                      setState(() {
+                                        isNowLoading = false;
+                                      });
+                                    }
+                                  : null,
+                            ))
+                      ]),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    padding: const EdgeInsets.only(top: 10, bottom: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
