@@ -54,11 +54,11 @@ class _projectTileState extends State<projectTile> {
                     widget.projectId, widget.projectName, widget.userName)));
       },
       child: Container(
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
           child: Card(
             shape: RoundedRectangleBorder(
-              side: BorderSide(width: 0.5, color: Colors.black38),
-              borderRadius: BorderRadius.circular(15),
+              side: BorderSide(width: 1, color: Colors.black26),
+              borderRadius: BorderRadius.circular(20),
             ),
             elevation: 0,
             child: ListTile(
@@ -73,37 +73,44 @@ class _projectTileState extends State<projectTile> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Chip(
-                          backgroundColor: widget.projectDeadline < 0
-                              ? Colors.lightBlueAccent.shade200
-                              : Colors.red.shade300,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelStyle: TextStyle(
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                          visualDensity:
-                              VisualDensity(horizontal: 0.0, vertical: -2),
-                          label: widget.projectDeadline < 0
-                              ? Text('D - ' +
-                                  (widget.projectDeadline * -1).toString())
-                              : widget.projectDeadline == 0
-                                  ? Text('D - DAY')
-                                  : Text('D + ' +
-                                      (widget.projectDeadline).toString()),
-                        ),
+                            // avatar: CircleAvatar(
+                            //     backgroundColor: Colors.transparent,
+                            //     child: Icon(Icons.date_range_outlined,
+                            //         color: Colors.white, size: 15)),
+                            backgroundColor: widget.projectDeadline < 0
+                                ? Colors.lightBlueAccent.shade200
+                                : Colors.red.shade300,
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(15),
+                            // ),
+                            labelStyle: TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 13,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            visualDensity:
+                                VisualDensity(horizontal: 0, vertical: -3.5),
+                            label: Container(
+                              width: 38,
+                              alignment: Alignment(0.0, 0.0),
+                              child: widget.projectDeadline < 0
+                                  ? Text('D - ' +
+                                      (widget.projectDeadline * -1).toString())
+                                  : widget.projectDeadline == 0
+                                      ? Text('D - DAY')
+                                      : Text('D + ' +
+                                          (widget.projectDeadline).toString()),
+                            )),
                         RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
                                   text: "구성 완료 ",
                                   style: TextStyle(
-                                    fontFamily: "GmarketSansTTF",
-                                    color: Colors.black87,
-                                    fontSize: 10,
-                                  )),
+                                      fontFamily: "GmarketSansTTF",
+                                      color: Colors.black87,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold)),
                               WidgetSpan(
                                   child: widget.isFinished
                                       ? Icon(Icons.check_box_outlined, size: 12)

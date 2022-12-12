@@ -88,8 +88,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 Container(
                                     width: 10, height: 1, color: Colors.grey),
                                 Text("  팀 이름  ", style: textStyle),
-                                Container(
-                                    width: 300, height: 1, color: Colors.grey),
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                        height: 1, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -109,8 +111,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 Container(
                                     width: 10, height: 1, color: Colors.grey),
                                 Text("  팀 소개  ", style: textStyle),
-                                Container(
-                                    width: 300, height: 1, color: Colors.grey),
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                        height: 1, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -129,8 +133,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 Container(
                                     width: 10, height: 1, color: Colors.grey),
                                 Text("  원하는 팀원  ", style: textStyle),
-                                Container(
-                                    width: 280, height: 1, color: Colors.grey),
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                        height: 1, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -150,8 +156,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 Container(
                                     width: 10, height: 1, color: Colors.grey),
                                 Text("  댓글  ", style: textStyle),
-                                Container(
-                                    width: 310, height: 1, color: Colors.grey),
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                        height: 1, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -229,7 +237,9 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                           "소속된 팀이 없습니다.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontFamily: "GmarketSansTTF", fontSize: 18),
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
                         TextButton(
                             child: const Text(
