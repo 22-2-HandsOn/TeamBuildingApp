@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/Project/main/teamlist.dart';
-import 'package:team/professor/profprojectList.dart';
-import 'package:team/helper/DatabaseService.dart';
-import 'package:team/Project/main/teamlist.dart';
-
-import '../../student/MyProjectMain.dart';
+import 'package:team/professor/MyprojectMain.dart';
 
 class projectTile extends StatefulWidget {
   final String userName;
