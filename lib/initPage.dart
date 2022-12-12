@@ -38,14 +38,15 @@ class InitPageState extends State<InitPage> {
         backgroundColor: Colors.white,
         body: Center(
             child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(
-                  top: 140, bottom: 20, left: 20, right: 20),
+                  top: 0, bottom: 20, left: 20, right: 20),
               child: Image(
                 image: AssetImage("assets/images/title.png"),
-                width: 250,
-                height: 250,
+                width: 230,
+                height: 230,
               ),
             ),
             Padding(

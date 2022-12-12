@@ -24,9 +24,8 @@ class _Stuliststate extends State<StulistPage> {
   Stream<QuerySnapshot>? stulist;
   String projectid = "";
   List<String> _tagChoices = []; // 해당 변수로 출력관리.
-  List<String> tags = ["front", "backend", "AI"];
+  List<String> tags = [];
   DocumentSnapshot<Map<String, dynamic>>? tagsnapshot;
-  int _selectedIndex = 2;
   @override
   void initState() {
     gettingstuData();
@@ -34,12 +33,12 @@ class _Stuliststate extends State<StulistPage> {
   }
 
   gettingstuData() async {
-    await DatabaseService().getstulist(widget.projectId).then((snapshot) {
+    DatabaseService().getstulist(widget.projectId).then((snapshot) {
       setState(() {
         stulist = snapshot;
       });
     });
-    await DatabaseService().getstuhashtags(widget.projectId).then((snapshot) {
+    DatabaseService().getstuhashtags(widget.projectId).then((snapshot) {
       setState(() {
         tagsnapshot = snapshot;
       });
@@ -49,7 +48,8 @@ class _Stuliststate extends State<StulistPage> {
 
   tagupdate() {
     final data = tagsnapshot!.data();
-    tags = List<String>.from(data?['hashtags']);
+    tags =
+        data?['hashtags'] == null ? [] : List<String>.from(data?['hashtags']);
   }
 
   @override
@@ -59,8 +59,9 @@ class _Stuliststate extends State<StulistPage> {
         gettingstuData();
       });
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 1,
+          elevation: 0,
           centerTitle: true,
           leading: IconButton(
               icon: Icon(
@@ -72,20 +73,24 @@ class _Stuliststate extends State<StulistPage> {
               }),
           backgroundColor: Colors.white,
           title: const Text(
-            "학생목록",
+            "학생 목록",
             style: TextStyle(
                 color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: 27),
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
           ),
         ),
         body: Column(
           children: [
             Container(
-              height: 50,
-              padding: EdgeInsets.all(10),
+              // height: 50,
               width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(left: 14, right: 14),
               child: Wrap(
+                direction: Axis.horizontal, // 정렬 방향
+                alignment: WrapAlignment.start,
+                spacing: 6, // 상하(좌우) 공간
                 children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
               ),
             ),
@@ -110,33 +115,38 @@ class _Stuliststate extends State<StulistPage> {
       stream: stulist,
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData && !snapshot.hasError
-            ? ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  //tag관련 처리
-                  final List<dynamic> taglist =
-                      snapshot.data.docs[index]['hashtags'];
-                  bool tagcheck = false;
-                  if (_tagChoices.isEmpty) tagcheck = true;
-                  _tagChoices.forEach((element) {
-                    if (taglist.contains(element)) {
-                      tagcheck = true;
-                    }
-                  });
-                  if (tagcheck) {
-                    return Student_tile(
-                        name: snapshot.data.docs[index]['name'],
-                        info: snapshot.data.docs[index]['introduction'],
-                        projectid: widget.projectId,
-                        projectname: widget.projectname);
-                  } else {
-                    return Container();
-                  }
-                },
-                //controller: unitcontroller,
-              )
-            : nostudWidget();
+            ? snapshot.data.docs.length != 0
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      //tag관련 처리
+                      final List<dynamic> taglist =
+                          snapshot.data.docs[index]['hashtags'];
+                      bool tagcheck = false;
+                      if (_tagChoices.isEmpty) tagcheck = true;
+                      _tagChoices.forEach((element) {
+                        if (taglist.contains(element)) {
+                          tagcheck = true;
+                        }
+                      });
+                      if (tagcheck) {
+                        return Student_tile(
+                            name: snapshot.data.docs[index]['name'],
+                            info: snapshot.data.docs[index]['introduction'],
+                            id: snapshot.data.docs[index]['stu_id'].toString(),
+                            projectid: widget.projectId,
+                            projectname: widget.projectname);
+                      } else {
+                        return Container();
+                      }
+                    },
+                    //controller: unitcontroller,
+                  )
+                : nostudWidget()
+            : const Center(
+                child:
+                    CircularProgressIndicator(color: Colors.lightBlueAccent));
       },
     );
   }
@@ -149,20 +159,26 @@ class _Stuliststate extends State<StulistPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              //
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
-          ),
           const Text(
             "학생이 없습니다.",
             textAlign: TextAlign.center,
-          )
+            style: TextStyle(
+                fontFamily: "GmarketSansTTF",
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+          // *TODO : 교수의 학생 CRUD
+          // TextButton(
+          //     child: const Text(
+          //       '+  새 팀 생성',
+          //       style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
+          //     ),
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (context) => AddNewTeam(projectid)));
+          //     })
         ],
       ),
     );
@@ -171,12 +187,22 @@ class _Stuliststate extends State<StulistPage> {
   _buildChoiceList() {
     List<Widget> choices = [];
     tags.forEach((element) {
-      choices.add(Container(
-        height: 40,
-        padding: const EdgeInsets.all(1.0),
-        child: ChoiceChip(
+      choices.add(
+        ChoiceChip(
           selectedColor: Colors.lightBlueAccent,
+          disabledColor: Colors.grey,
           label: Text(element),
+          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          labelStyle: _tagChoices.contains(element)
+              ? TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold)
+              : TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  color: Colors.black87,
+                  fontSize: 12),
           selected: _tagChoices.contains(element),
           onSelected: (selected) {
             setState(() {
@@ -186,7 +212,7 @@ class _Stuliststate extends State<StulistPage> {
             });
           },
         ),
-      ));
+      );
     });
     return choices;
   }
