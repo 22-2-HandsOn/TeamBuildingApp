@@ -21,6 +21,7 @@ class MyStudentInfoPage extends StatefulWidget {
 }
 
 class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
+  String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
@@ -170,6 +171,59 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         Container(width: 310, height: 1, color: Colors.grey),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 150,
+                    child: FutureBuilder(
+                        future: projectCRUD.getAttendeeComment(),
+                        builder: (context,snapshot){
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  print(snapshot.data.toString());
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      Text(snapshot.data[index]['name']),
+                                      Text(snapshot.data[index]['content']),
+                                      SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  );
+                                }
+                            );
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        }
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '새 댓글',
+                          ),
+                          onChanged: (value){
+                            setState(() {
+                              newComment = value as String;
+                            });
+                          },
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: (){
+                            if (newComment.length>0) {
+                              projectCRUD.addAttendeeComment(newComment, false);
+                            }
+                            },
+                          icon: Icon(Icons.send))
+                    ],
                   ),
                 ],
               ),
