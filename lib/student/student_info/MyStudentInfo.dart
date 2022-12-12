@@ -21,10 +21,13 @@ class MyStudentInfoPage extends StatefulWidget {
 }
 
 class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
+  String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
+  var _controller = TextEditingController();
+  String changedText = "";
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
       throw 'Could not launch $url';
@@ -65,7 +68,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             ChangeMyStudentInfo(widget.projectId)));
               },
               color: Colors.black87,
-              icon: const Icon(Icons.edit, size: 22)),
+              icon: const Icon(Icons.edit_note, size: 22)),
         ],
       ),
       body: FutureBuilder(
@@ -187,6 +190,103 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 150,
+                    child: FutureBuilder(
+                        future: projectCRUD.getAttendeeComment(),
+                        builder: (context,snapshot){
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  TextEditingController _textFieldController = TextEditingController(text:snapshot.data[index]['content']);
+                                  return Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: [
+                                          Text(snapshot.data[index]['name']),
+                                          Text(snapshot.data[index]['content']),
+                                          SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      ),
+                                      IconButton(
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context){
+                                                  return AlertDialog(
+                                                    title: Text('댓글 수정'),
+                                                    content: TextField(
+                                                      onChanged: (value) {changedText = value;},
+                                                      controller: _textFieldController,
+                                                      decoration: InputDecoration(hintText: "댓글 수정"),
+                                                    ),
+                                                      actions:[
+                                                        IconButton(
+                                                            onPressed: (){
+                                                              projectCRUD.updateAttendeeComment(changedText, snapshot.data[index].toString());
+                                                              Navigator.pop(context);
+                                                              setState(() {});
+                                                            },
+                                                            icon: Icon(Icons.done)
+                                                        )
+                                                      ]
+                                                  );
+                                                }
+                                            );
+
+                                          },
+                                          icon: Icon(Icons.edit)
+                                      ),
+                                      IconButton(
+                                          onPressed: (){
+                                            projectCRUD.deleteAttendeeComment(snapshot.data[index].toString());
+                                            setState(() {});
+                                          },
+                                          icon: Icon(Icons.delete)
+                                      )
+                                    ],
+                                  );
+                                }
+                            );
+                          }
+                          return Center(child: Text("No Comment"));;
+                        }
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '새 댓글',
+                          ),
+                          onChanged: (value){
+                            setState(() {
+                              newComment = value as String;
+                            });
+                          },
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: (){
+                            if (newComment.length>0) {
+                              projectCRUD.addAttendeeComment(newComment, false);
+                            }
+                            newComment = "";
+                            _controller.clear();
+                            setState(() {});
+                            },
+                          icon: Icon(Icons.send))
+                    ],
                   ),
                 ],
               ),

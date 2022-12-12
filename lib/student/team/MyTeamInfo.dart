@@ -16,18 +16,15 @@ class MyTeamInfoPage extends StatefulWidget {
   MyTeamInfoPage(this.projectId, this.projectname);
 
   @override
-  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState(projectId);
+  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState();
 }
 
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
+  String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
-
-  String projectId = "";
-  _MyTeamInfoPageState(this.projectId);
-
-  late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
-
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
+  var _controller = TextEditingController();
   bool isNull = true;
 
   @override
@@ -62,10 +59,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ChangeTeamInfo(projectId)));
+                                      ChangeTeamInfo(widget.projectId)));
                         },
                         color: Colors.black87,
-                        icon: const Icon(Icons.edit, size: 22)),
+                        icon: const Icon(Icons.edit_note, size: 22)),
                   ]
                 : []),
         body: FutureBuilder(
@@ -166,6 +163,62 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            height: 150,
+                            child: FutureBuilder(
+                                future: projectCRUD.getTeamComment(),
+                                builder: (context,snapshot){
+                                  if (snapshot.hasData) {
+                                    return ListView.builder(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(snapshot.data[index]['name']),
+                                              Text(snapshot.data[index]['content']),
+                                              SizedBox(
+                                                height: 10,
+                                              )
+                                            ],
+                                          );
+                                        }
+                                    );
+                                  }
+                                  else{
+                                    return Center(child: Text("No Comment"));
+                                  }
+                                }
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: TextField(
+                                  controller: _controller,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: '새 댓글',
+                                  ),
+                                  onChanged: (value){
+                                    setState(() {
+                                      newComment = value as String;
+                                    });
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    if (newComment.length>0) {
+                                      projectCRUD.addTeamComment(newComment, false);
+                                    }
+                                    newComment = "";
+                                    _controller.clear();
+                                  },
+                                  icon: Icon(Icons.send))
+                            ],
+                          ),
                         ],
                       ));
                 } else {
@@ -199,7 +252,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          AddNewTeam(projectId)));
+                                          AddNewTeam(widget.projectId)));
                             })
                       ],
                     ),
