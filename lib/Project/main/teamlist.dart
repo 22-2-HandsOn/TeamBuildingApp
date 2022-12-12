@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/Project/widget/team_tile.dart';
-import 'package:team/Project/main/studentlist.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/student/student_info/MyStudentInfo.dart';
-import 'package:team/student/team/MyTeamInfo.dart';
+import '../../student/team/AddNewTeam.dart';
 
 class TeamListPage extends StatefulWidget {
   final String projectId;
@@ -31,24 +28,26 @@ class _TeamListstate extends State<TeamListPage> {
     super.initState();
   }
 
-  gettingteamData() async {
+  gettingteamData() {
     // getting the list of snapshots in our stream
-    await DatabaseService().getTeamlist(widget.projectId).then((snapshot) {
+    DatabaseService().getTeamlist(widget.projectId).then((snapshot) {
       setState(() {
         teams = snapshot;
       });
     });
-    await DatabaseService().getteamhashtags(widget.projectId).then((snapshot) {
+    DatabaseService().getteamhashtags(widget.projectId).then((snapshot) {
       setState(() {
         tagsnapshot = snapshot;
       });
+
+      tagupdate();
     });
-    tagupdate();
   }
 
   tagupdate() {
     final data = tagsnapshot!.data();
-    tags = List<String>.from(data?['hashtags']);
+    tags =
+        List<String>.from(data?['hashtags'] == null ? [] : data?['hashtags']);
   }
 
   @override
@@ -58,8 +57,9 @@ class _TeamListstate extends State<TeamListPage> {
         gettingteamData();
       });
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 1,
+          elevation: 0,
           centerTitle: true,
           leading: IconButton(
               icon: Icon(
@@ -71,20 +71,24 @@ class _TeamListstate extends State<TeamListPage> {
               }),
           backgroundColor: Colors.white,
           title: const Text(
-            "팀목록",
+            "팀 목록",
             style: TextStyle(
                 color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: 27),
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
           ),
         ),
         body: Column(
           children: [
             Container(
-              height: 50,
-              padding: EdgeInsets.all(10),
+              // height: 50,
               width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(left: 14, right: 14),
               child: Wrap(
+                direction: Axis.horizontal, // 정렬 방향
+                alignment: WrapAlignment.start,
+                spacing: 6, // 상하(좌우) 공간
                 children: _buildChoiceList(), //타입 1: food, 2: place, 3: pref
               ),
             ),
@@ -109,62 +113,80 @@ class _TeamListstate extends State<TeamListPage> {
     return StreamBuilder(
       stream: teams,
       builder: (context, AsyncSnapshot snapshot) {
+        // print("???");
+        // print(snapshot.data.docs.length);
         return snapshot.hasData && !snapshot.hasError
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  //**해당 부분에 tag 관련!**
-                  final List<dynamic> taglist =
-                      snapshot.data.docs[index]['hashtags'];
-                  bool tagcheck = false;
-                  if (_tagChoices.isEmpty) tagcheck = true;
-                  _tagChoices.forEach((element) {
-                    if (taglist.contains(element)) {
-                      tagcheck = true;
-                    }
-                  });
-                  if (tagcheck) {
-                    return Teamtile(
-                      teamName: snapshot.data.docs[index]['name'],
-                      teaminfo: snapshot.data.docs[index]
-                          ['finding_member_info'],
-                      projectid: widget.projectId,
-                      projectname: widget.projectname,
-                      isfinished: snapshot.data.docs[index]['isfinished'],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                //controller: unitcontroller,
-              )
-            : noteamWidget();
+            ? snapshot.data.docs.length != 0
+                ? ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      //**해당 부분에 tag 관련!**
+                      final List<dynamic> taglist =
+                          snapshot.data.docs[index]['hashtags'];
+                      bool tagcheck = false;
+                      if (_tagChoices.isEmpty) tagcheck = true;
+                      _tagChoices.forEach((element) {
+                        if (taglist.contains(element)) {
+                          tagcheck = true;
+                        }
+                      });
+                      if (tagcheck) {
+                        return Teamtile(
+                          teamName: snapshot.data.docs[index]['name'],
+                          teaminfo: snapshot.data.docs[index]
+                              ['finding_member_info'],
+                          projectid: widget.projectId,
+                          projectname: widget.projectname,
+                          isfinished:
+                              snapshot.data.docs[index]['isFinished'] != null
+                                  ? snapshot.data.docs[index]['isFinished']
+                                  : false,
+                          memNum: snapshot.data.docs[index]['members'] != null
+                              ? snapshot.data.docs[index]['members'].length
+                              : 0,
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 0,
+                          width: 0,
+                        );
+                      }
+                    },
+                    //controller: unitcontroller,
+                  )
+                : noteamWidget()
+            : const Center(
+                child:
+                    CircularProgressIndicator(color: Colors.lightBlueAccent));
       },
     );
   }
 
   noteamWidget() {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              //
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
-          ),
           const Text(
             "팀이 없습니다.",
             textAlign: TextAlign.center,
-          )
+            style: TextStyle(
+                fontFamily: "GmarketSansTTF",
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+          TextButton(
+              child: const Text(
+                '+  새 팀 생성',
+                style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddNewTeam(widget.projectId)));
+              })
         ],
       ),
     );
@@ -173,12 +195,22 @@ class _TeamListstate extends State<TeamListPage> {
   _buildChoiceList() {
     List<Widget> choices = [];
     tags.forEach((element) {
-      choices.add(Container(
-        height: 40,
-        padding: const EdgeInsets.all(1.0),
-        child: ChoiceChip(
+      choices.add(
+        ChoiceChip(
           selectedColor: Colors.lightBlueAccent,
+          disabledColor: Colors.grey,
           label: Text(element),
+          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          labelStyle: _tagChoices.contains(element)
+              ? TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold)
+              : TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  color: Colors.black87,
+                  fontSize: 12),
           selected: _tagChoices.contains(element),
           onSelected: (selected) {
             setState(() {
@@ -188,7 +220,7 @@ class _TeamListstate extends State<TeamListPage> {
             });
           },
         ),
-      ));
+      );
     });
     return choices;
   }

@@ -83,7 +83,9 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                       children: [
                         Container(width: 10, height: 1, color: Colors.grey),
                         Text("  학번 및 이름  ", style: textStyle),
-                        Container(width: 275, height: 1, color: Colors.grey),
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -105,15 +107,19 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                       children: [
                         Container(width: 10, height: 1, color: Colors.grey),
                         Text("  내 소개  ", style: textStyle),
-                        Container(width: 300, height: 1, color: Colors.grey),
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
                   ),
                   Text(
-                    snapshot.data['introduction'].toString() != ""
+                    snapshot.data['introduction'].toString() != "" ||
+                            snapshot.data['introduction'].toString() != "null"
                         ? snapshot.data['introduction'].toString()
                         : "아직 소개글을 작성하지 않았습니다. ",
-                    style: snapshot.data['introduction'].toString() != ""
+                    style: snapshot.data['introduction'].toString() != "" ||
+                            snapshot.data['introduction'].toString() != "null"
                         ? TextStyle(
                             color: Colors.black87,
                             fontFamily: "GmarketSansTTF",
@@ -130,23 +136,30 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                       children: [
                         Container(width: 10, height: 1, color: Colors.grey),
                         Text("  원하는 팀  ", style: textStyle),
-                        Container(width: 290, height: 1, color: Colors.grey),
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
                   ),
                   Text(
-                    snapshot.data['finding_team_info'].toString() != ""
+                    snapshot.data['finding_team_info'].toString() != "" ||
+                            snapshot.data['finding_team_info'].toString() !=
+                                "null"
                         ? snapshot.data['finding_team_info'].toString()
                         : "아직 원하는 팀 정보를 작성하지 않았습니다. ",
-                    style: snapshot.data['finding_team_info'].toString() != ""
-                        ? TextStyle(
-                            color: Colors.black87,
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 16)
-                        : TextStyle(
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 14,
-                            color: Colors.black87),
+                    style:
+                        snapshot.data['finding_team_info'].toString() != "" ||
+                                snapshot.data['finding_team_info'].toString() !=
+                                    "null"
+                            ? TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16)
+                            : TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 14,
+                                color: Colors.black87),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -155,7 +168,9 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                       children: [
                         Container(width: 10, height: 1, color: Colors.grey),
                         Text("  연락 방법  ", style: textStyle),
-                        Container(width: 290, height: 1, color: Colors.grey),
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -167,7 +182,9 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                       children: [
                         Container(width: 10, height: 1, color: Colors.grey),
                         Text("  댓글  ", style: textStyle),
-                        Container(width: 310, height: 1, color: Colors.grey),
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(height: 1, color: Colors.grey)),
                       ],
                     ),
                   ),

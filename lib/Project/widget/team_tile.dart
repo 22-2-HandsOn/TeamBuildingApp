@@ -9,6 +9,7 @@ class Teamtile extends StatefulWidget {
   final String projectid;
   final String projectname;
   final bool isfinished;
+  final int memNum;
   //final String opponent;
   const Teamtile({
     Key? key,
@@ -17,6 +18,7 @@ class Teamtile extends StatefulWidget {
     required this.projectid,
     required this.projectname,
     required this.isfinished,
+    required this.memNum,
     //required this.opponent,
   }) : super(key: key);
 
@@ -41,11 +43,11 @@ class _TeamtileState extends State<Teamtile> {
                     MyTeamInfoPage(widget.projectid, widget.projectname)));
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
         child: Card(
           shape: RoundedRectangleBorder(
-            side: BorderSide(width: 0.5, color: Colors.black38),
-            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(width: 1, color: Colors.black26),
+            borderRadius: BorderRadius.circular(20),
           ),
           elevation: 0,
           child: ListTile(
@@ -53,44 +55,59 @@ class _TeamtileState extends State<Teamtile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    widget.teamName, //DB에서 가져옴
+                    widget.teamName, //DB에서 가져옴r
                     style: textStyle_title,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      // Chip(
-                      //   backgroundColor: widget.isfinished
-                      //       ? Colors.lightBlueAccent.shade200
-                      //       : Colors.red.shade300,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(0),
-                      //   ),
-                      //   labelStyle: TextStyle(
-                      //       fontFamily: "GmarketSansTTF",
-                      //       fontSize: 12,
-                      //       color: Colors.white,
-                      //       fontWeight: FontWeight.bold),
-                      //   visualDensity:
-                      //       VisualDensity(horizontal: 0.0, vertical: -2),
-                      //   label: Text("명"),
-                      // ),
+                      SizedBox(height: 2),
+                      Chip(
+                        avatar: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(Icons.people,
+                                color: Colors.black87, size: 15)),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(
+                            width: 1,
+                            color: Colors.black26,
+                          ),
+                        ),
+                        labelStyle: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 14,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold),
+                        visualDensity:
+                            VisualDensity(horizontal: 0, vertical: -3.5),
+                        label: Container(
+                            width: 20,
+                            alignment: Alignment(0.0, 0.0),
+                            child: Text(widget.memNum.toString() + "명")),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: "팀 구성 ",
+                                text: "구성 완료 ",
                                 style: TextStyle(
-                                  fontFamily: "GmarketSansTTF",
-                                  color: Colors.black87,
-                                  fontSize: 10,
-                                )),
+                                    fontFamily: "GmarketSansTTF",
+                                    color: Colors.black87,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold)),
                             WidgetSpan(
                                 child: widget.isfinished
-                                    ? Icon(Icons.check_box_outlined, size: 12)
+                                    ? Icon(Icons.check_box_outlined,
+                                        size: 12, color: Colors.black87)
                                     : Icon(
                                         Icons.check_box_outline_blank_outlined,
-                                        size: 12)),
+                                        size: 12,
+                                        color: Colors.black87)),
                           ],
                         ),
                       ),
