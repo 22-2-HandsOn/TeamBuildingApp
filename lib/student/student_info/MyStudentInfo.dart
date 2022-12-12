@@ -204,63 +204,221 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                       TextEditingController(
                                           text: snapshot.data[index]
                                               ['content']);
-                                  return Row(
+                                  TextEditingController _textFieldController2 =
+                                      TextEditingController();
+                                  return Column(
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Row(
                                         children: [
-                                          Text(snapshot.data[index]['name']),
-                                          Text(snapshot.data[index]['content']),
-                                          SizedBox(
-                                            height: 10,
-                                          )
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  snapshot.data[index]['name']),
+                                              Text(snapshot.data[index]
+                                                  ['content']),
+                                              SizedBox(
+                                                height: 10,
+                                              )
+                                            ],
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                          title: Text('대댓글 달기'),
+                                                          content: TextField(
+                                                            onChanged: (value) {
+                                                              newComment =
+                                                                  value;
+                                                            },
+                                                            controller:
+                                                                _textFieldController2,
+                                                            decoration:
+                                                                InputDecoration(
+                                                                    hintText:
+                                                                        "대댓글 달기"),
+                                                          ),
+                                                          actions: [
+                                                            IconButton(
+                                                                onPressed: () {
+                                                                  projectCRUD.addAttendeeReply(
+                                                                      newComment,
+                                                                      snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .toString());
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  setState(
+                                                                      () {});
+                                                                },
+                                                                icon: Icon(
+                                                                    Icons.done))
+                                                          ]);
+                                                    });
+                                              },
+                                              icon: Icon(Icons.comment_bank)),
+                                          IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                          title: Text('댓글 수정'),
+                                                          content: TextField(
+                                                            onChanged: (value) {
+                                                              changedText =
+                                                                  value;
+                                                            },
+                                                            controller:
+                                                                _textFieldController,
+                                                            decoration:
+                                                                InputDecoration(
+                                                                    hintText:
+                                                                        "댓글 수정"),
+                                                          ),
+                                                          actions: [
+                                                            IconButton(
+                                                                onPressed: () {
+                                                                  if (changedText
+                                                                          .length >
+                                                                      0) {
+                                                                    projectCRUD.updateAttendeeComment(
+                                                                        changedText,
+                                                                        snapshot
+                                                                            .data[index]
+                                                                            .toString());
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                },
+                                                                icon: Icon(
+                                                                    Icons.done))
+                                                          ]);
+                                                    });
+                                              },
+                                              icon: Icon(Icons.edit)),
+                                          IconButton(
+                                              onPressed: () {
+                                                projectCRUD
+                                                    .deleteAttendeeComment(
+                                                        snapshot.data[index]
+                                                            .toString());
+                                                setState(() {});
+                                              },
+                                              icon: Icon(Icons.delete))
                                         ],
                                       ),
-                                      IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                      title: Text('댓글 수정'),
-                                                      content: TextField(
-                                                        onChanged: (value) {
-                                                          changedText = value;
-                                                        },
-                                                        controller:
-                                                            _textFieldController,
-                                                        decoration:
-                                                            InputDecoration(
-                                                                hintText:
-                                                                    "댓글 수정"),
-                                                      ),
-                                                      actions: [
-                                                        IconButton(
-                                                            onPressed: () {
-                                                              projectCRUD.updateAttendeeComment(
-                                                                  changedText,
-                                                                  snapshot.data[
-                                                                          index]
-                                                                      .toString());
-                                                              Navigator.pop(
-                                                                  context);
-                                                              setState(() {});
-                                                            },
-                                                            icon: Icon(
-                                                                Icons.done))
-                                                      ]);
-                                                });
-                                          },
-                                          icon: Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {
-                                            projectCRUD.deleteAttendeeComment(
-                                                snapshot.data[index]
-                                                    .toString());
-                                            setState(() {});
-                                          },
-                                          icon: Icon(Icons.delete))
+                                      SizedBox(
+                                        height: 100,
+                                        child: FutureBuilder(
+                                            future:
+                                                projectCRUD.getAttendeeReply(
+                                                    snapshot.data[index]
+                                                        .toString()),
+                                            builder: (context, snapshot2) {
+                                              if (snapshot2.hasData) {
+                                                return ListView.builder(
+                                                    itemCount:
+                                                        snapshot2.data.length,
+                                                    itemBuilder:
+                                                        (context, index2) {
+                                                      TextEditingController
+                                                          _textFieldController3 =
+                                                          TextEditingController(
+                                                              text: snapshot2
+                                                                          .data[
+                                                                      index2]
+                                                                  ['content']);
+                                                      return Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text("    " +
+                                                                      snapshot2.data[
+                                                                              index2]
+                                                                          [
+                                                                          'name']),
+                                                                  Text("    " +
+                                                                      snapshot2.data[
+                                                                              index2]
+                                                                          [
+                                                                          'content']),
+                                                                  SizedBox(
+                                                                    height: 10,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return AlertDialog(
+                                                                              title: Text('대댓글 수정'),
+                                                                              content: TextField(
+                                                                                onChanged: (value) {
+                                                                                  changedText = value;
+                                                                                },
+                                                                                controller: _textFieldController3,
+                                                                                decoration: InputDecoration(hintText: "대댓글 수정"),
+                                                                              ),
+                                                                              actions: [
+                                                                                IconButton(
+                                                                                    onPressed: () {
+                                                                                      if (changedText.length > 0) {
+                                                                                        projectCRUD.updateAttendeeReply(snapshot.data[index].toString(), snapshot2.data[index2].toString(), changedText);
+                                                                                        Navigator.pop(context);
+                                                                                        setState(() {});
+                                                                                      }
+                                                                                    },
+                                                                                    icon: Icon(Icons.done))
+                                                                              ]);
+                                                                        });
+                                                                  },
+                                                                  icon: Icon(Icons
+                                                                      .edit)),
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    projectCRUD.deleteAttendeeReply(
+                                                                        snapshot
+                                                                            .data[
+                                                                                index]
+                                                                            .toString(),
+                                                                        snapshot2
+                                                                            .data[index2]
+                                                                            .toString());
+                                                                    setState(
+                                                                        () {});
+                                                                  },
+                                                                  icon: Icon(Icons
+                                                                      .delete))
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              }
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            }),
+                                      ),
                                     ],
                                   );
                                 });
