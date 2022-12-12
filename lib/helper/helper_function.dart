@@ -36,9 +36,9 @@ class HelperFunctions {
     return await sf.setString(userstuidKey, stuID);
   }
 
-  static Future<bool> saveUsertypeSF(int type) async {
+  static Future<bool> saveUsertypeSF(int inputtype) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
-    return await sf.setInt(usertypeKey, type);
+    return await sf.setInt(usertypeKey, inputtype);
   }
 
   static Future<bool> saveProjectSF(String proid) async {

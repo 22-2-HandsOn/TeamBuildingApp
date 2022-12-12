@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:team/helper/helper_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/helper/DatabaseService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPageP extends StatefulWidget {
   const SignInPageP({Key? key}) : super(key: key);
@@ -150,6 +151,10 @@ class _SignInPagePState extends State<SignInPageP> {
                                           .gettingproData(userEmail);
                                   await HelperFunctions.saveUserLoggedInStatus(
                                       true);
+                                  SharedPreferences sf =
+                                      await SharedPreferences.getInstance();
+                                  await sf.setInt("TYPE", 1);
+                                  await HelperFunctions.saveUsertypeSF(1);
                                   await HelperFunctions.saveUserIDSF(
                                       FirebaseAuth.instance.currentUser!.uid);
                                   await HelperFunctions.saveUserNameSF(
