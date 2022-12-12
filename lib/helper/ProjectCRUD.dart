@@ -114,7 +114,7 @@ class ProjectCRUD {
                     .doc(doc.id)
                     .collection('comments')
                     .doc(doc2.id)
-                    .collection('replys')
+                    .collection('reply')
                     .doc(doc3.id)
                     .update({'content': content});
               }

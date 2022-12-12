@@ -36,7 +36,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
     projectCRUD.getstu_id().then((value) {
       stu_id = value;
     });
-    projectCRUD.getTeamID(widget.teamName).then((value) {
+    projectCRUD.getTeamID().then((value) {
       team_id = value;
     });
   }
