@@ -26,6 +26,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
   bool isNull = true;
+  String changedText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -169,20 +170,121 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 future: projectCRUD.getTeamComment(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
+                                    print(snapshot.data.toString());
                                     return ListView.builder(
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (context, index) {
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          TextEditingController _textFieldController =
+                                          TextEditingController(
+                                              text: snapshot.data[index]
+                                              ['content']);
+                                          TextEditingController _textFieldController2 =
+                                          TextEditingController();
+                                          return Row(
                                             children: [
-                                              Text(
-                                                  snapshot.data[index]['name']),
-                                              Text(snapshot.data[index]
-                                                  ['content']),
-                                              SizedBox(
-                                                height: 10,
-                                              )
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                      snapshot.data[index]['name']),
+                                                  Text(snapshot.data[index]
+                                                      ['content']),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  )
+                                                ],
+                                              ),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                              title: Text('대댓글 달기'),
+                                                              content: TextField(
+                                                                onChanged: (value) {
+                                                                  newComment =
+                                                                      value;
+                                                                },
+                                                                controller:
+                                                                _textFieldController2,
+                                                                decoration:
+                                                                InputDecoration(
+                                                                    hintText:
+                                                                    "대댓글 달기"),
+                                                              ),
+                                                              actions: [
+                                                                IconButton(
+                                                                    onPressed: () {
+                                                                      projectCRUD.addTeamReply(
+                                                                          newComment,
+                                                                          snapshot
+                                                                              .data[
+                                                                          index]
+                                                                              .toString());
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      setState(
+                                                                              () {});
+                                                                    },
+                                                                    icon: Icon(
+                                                                        Icons.done))
+                                                              ]);
+                                                        });
+                                                  },
+                                                  icon: Icon(Icons.comment_bank)),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                              title: Text('댓글 수정'),
+                                                              content: TextField(
+                                                                onChanged: (value) {
+                                                                  changedText =
+                                                                      value;
+                                                                },
+                                                                controller:
+                                                                _textFieldController,
+                                                                decoration:
+                                                                InputDecoration(
+                                                                    hintText:
+                                                                    "댓글 수정"),
+                                                              ),
+                                                              actions: [
+                                                                IconButton(
+                                                                    onPressed: () {
+                                                                      if (changedText
+                                                                          .length >
+                                                                          0) {
+                                                                        projectCRUD.updateTeamComment(
+                                                                            changedText,
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .toString());
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        setState(
+                                                                                () {});
+                                                                      }
+                                                                    },
+                                                                    icon: Icon(
+                                                                        Icons.done))
+                                                              ]);
+                                                        });
+                                                  },
+                                                  icon: Icon(Icons.edit)),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    projectCRUD
+                                                        .deleteTeamComment(
+                                                        snapshot.data[index]
+                                                            .toString());
+                                                    setState(() {});
+                                                  },
+                                                  icon: Icon(Icons.delete))
                                             ],
                                           );
                                         });
@@ -216,6 +318,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                     }
                                     newComment = "";
                                     _controller.clear();
+                                    setState(() {});
                                   },
                                   icon: Icon(Icons.send))
                             ],
