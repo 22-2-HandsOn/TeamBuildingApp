@@ -115,41 +115,46 @@ class _TeamListstate extends State<TeamListPage> {
         // print("???");
         // print(snapshot.data.docs.length);
         return snapshot.hasData && !snapshot.hasError
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  //**해당 부분에 tag 관련!**
-                  final List<dynamic> taglist =
-                      snapshot.data.docs[index]['hashtags'];
-                  bool tagcheck = false;
-                  if (_tagChoices.isEmpty) tagcheck = true;
-                  _tagChoices.forEach((element) {
-                    if (taglist.contains(element)) {
-                      tagcheck = true;
-                    }
-                  });
-                  if (tagcheck) {
-                    return Teamtile(
-                      teamName: snapshot.data.docs[index]['name'],
-                      teaminfo: snapshot.data.docs[index]
-                          ['finding_member_info'],
-                      projectid: widget.projectId,
-                      projectname: widget.projectname,
-                      isfinished:
-                          snapshot.data.docs[index]['isFinished'] != null
-                              ? snapshot.data.docs[index]['isFinished']
-                              : false,
-                      memNum: snapshot.data.docs[index]['members'] != null
-                          ? snapshot.data.docs[index]['members'].length
-                          : 0,
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                //controller: unitcontroller,
-              )
-            : noteamWidget();
+            ? snapshot.data.docs.length != 0
+                ? ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      //**해당 부분에 tag 관련!**
+                      final List<dynamic> taglist =
+                          snapshot.data.docs[index]['hashtags'];
+                      bool tagcheck = false;
+                      if (_tagChoices.isEmpty) tagcheck = true;
+                      _tagChoices.forEach((element) {
+                        if (taglist.contains(element)) {
+                          tagcheck = true;
+                        }
+                      });
+
+                      if (tagcheck) {
+                        return Teamtile(
+                          teamName: snapshot.data.docs[index]['name'],
+                          teaminfo: snapshot.data.docs[index]
+                              ['finding_member_info'],
+                          projectid: widget.projectId,
+                          projectname: widget.projectname,
+                          isfinished:
+                              snapshot.data.docs[index]['isFinished'] != null
+                                  ? snapshot.data.docs[index]['isFinished']
+                                  : false,
+                          memNum: snapshot.data.docs[index]['members'] != null
+                              ? snapshot.data.docs[index]['members'].length
+                              : 0,
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                    //controller: unitcontroller,
+                  )
+                : noteamWidget()
+            : const Center(
+                child:
+                    CircularProgressIndicator(color: Colors.lightBlueAccent));
       },
     );
   }
