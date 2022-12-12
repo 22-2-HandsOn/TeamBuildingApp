@@ -132,11 +132,13 @@ class _Stuliststate extends State<StulistPage> {
                       });
                       if (tagcheck) {
                         return Student_tile(
-                            name: snapshot.data.docs[index]['name'],
-                            info: snapshot.data.docs[index]['introduction'],
-                            id: snapshot.data.docs[index]['stu_id'].toString(),
-                            projectid: widget.projectId,
-                            projectname: widget.projectname);
+                          name: snapshot.data.docs[index]['name'],
+                          info: snapshot.data.docs[index]['introduction'],
+                          id: snapshot.data.docs[index]['stu_id'].toString(),
+                          projectid: widget.projectId,
+                          projectname: widget.projectname,
+                          // isMine: false,
+                        );
                       } else {
                         return Container();
                       }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
+import 'package:team/student/team/OthersTeamInfo.dart';
 
 class Teamtile extends StatefulWidget {
   final String teamName;
@@ -10,6 +11,7 @@ class Teamtile extends StatefulWidget {
   final String projectname;
   final bool isfinished;
   final int memNum;
+  // final bool isMyTeam;
   //final String opponent;
   const Teamtile({
     Key? key,
@@ -19,6 +21,7 @@ class Teamtile extends StatefulWidget {
     required this.projectname,
     required this.isfinished,
     required this.memNum,
+    // required this.isMyTeam,
     //required this.opponent,
   }) : super(key: key);
 
@@ -36,11 +39,19 @@ class _TeamtileState extends State<Teamtile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // if (widget.isMyTeam) {
+        //   Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) =>
+        //               MyTeamInfoPage(widget.projectid, widget.projectname)));
+        // } else {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MyTeamInfoPage(widget.projectid, widget.projectname)));
+                builder: (context) => OthersTeamInfoPage(
+                    widget.projectid, widget.projectname, widget.teamName)));
+        // }
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
@@ -55,7 +66,7 @@ class _TeamtileState extends State<Teamtile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    widget.teamName, //DB에서 가져옴r
+                    widget.teamName, //DB에서 가져옴
                     style: textStyle_title,
                   ),
                   Column(

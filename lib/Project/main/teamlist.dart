@@ -144,6 +144,7 @@ class _TeamListstate extends State<TeamListPage> {
                           memNum: snapshot.data.docs[index]['members'] != null
                               ? snapshot.data.docs[index]['members'].length
                               : 0,
+                          // isMyTeam: false
                         );
                       } else {
                         return SizedBox(

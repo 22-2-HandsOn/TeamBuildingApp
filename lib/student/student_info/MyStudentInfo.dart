@@ -117,20 +117,20 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     ),
                   ),
                   Text(
-                    snapshot.data['introduction'].toString() != "" ||
-                            snapshot.data['introduction'].toString() != "null"
-                        ? snapshot.data['introduction'].toString()
-                        : "아직 소개글을 작성하지 않았습니다. ",
-                    style: snapshot.data['introduction'].toString() != "" ||
-                            snapshot.data['introduction'].toString() != "null"
+                    snapshot.data['introduction'].toString() == "" ||
+                            snapshot.data['introduction'].toString() == "null"
+                        ? "아직 소개글을 작성하지 않았습니다. "
+                        : snapshot.data['introduction'].toString(),
+                    style: snapshot.data['introduction'].toString() == "" ||
+                            snapshot.data['introduction'].toString() == "null"
                         ? TextStyle(
-                            color: Colors.black87,
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 16)
-                        : TextStyle(
                             fontFamily: "GmarketSansTTF",
                             fontSize: 14,
-                            color: Colors.black87),
+                            color: Colors.black87)
+                        : TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -149,20 +149,20 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     snapshot.data['finding_team_info'].toString() != "" ||
                             snapshot.data['finding_team_info'].toString() !=
                                 "null"
-                        ? snapshot.data['finding_team_info'].toString()
-                        : "아직 원하는 팀 정보를 작성하지 않았습니다. ",
+                        ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
+                        : snapshot.data['finding_team_info'].toString(),
                     style:
                         snapshot.data['finding_team_info'].toString() != "" ||
                                 snapshot.data['finding_team_info'].toString() !=
                                     "null"
                             ? TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16)
-                            : TextStyle(
                                 fontFamily: "GmarketSansTTF",
                                 fontSize: 14,
-                                color: Colors.black87),
+                                color: Colors.black87)
+                            : TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -195,17 +195,20 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     height: 150,
                     child: FutureBuilder(
                         future: projectCRUD.getAttendeeComment(),
-                        builder: (context,snapshot){
+                        builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return ListView.builder(
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  TextEditingController _textFieldController = TextEditingController(text:snapshot.data[index]['content']);
+                                  TextEditingController _textFieldController =
+                                      TextEditingController(
+                                          text: snapshot.data[index]
+                                              ['content']);
                                   return Row(
                                     children: [
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(snapshot.data[index]['name']),
                                           Text(snapshot.data[index]['content']),
@@ -215,49 +218,56 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                         ],
                                       ),
                                       IconButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             showDialog(
                                                 context: context,
-                                                builder: (context){
+                                                builder: (context) {
                                                   return AlertDialog(
-                                                    title: Text('댓글 수정'),
-                                                    content: TextField(
-                                                      onChanged: (value) {changedText = value;},
-                                                      controller: _textFieldController,
-                                                      decoration: InputDecoration(hintText: "댓글 수정"),
-                                                    ),
-                                                      actions:[
+                                                      title: Text('댓글 수정'),
+                                                      content: TextField(
+                                                        onChanged: (value) {
+                                                          changedText = value;
+                                                        },
+                                                        controller:
+                                                            _textFieldController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                                hintText:
+                                                                    "댓글 수정"),
+                                                      ),
+                                                      actions: [
                                                         IconButton(
-                                                            onPressed: (){
-                                                              projectCRUD.updateAttendeeComment(changedText, snapshot.data[index].toString());
-                                                              Navigator.pop(context);
+                                                            onPressed: () {
+                                                              projectCRUD.updateAttendeeComment(
+                                                                  changedText,
+                                                                  snapshot.data[
+                                                                          index]
+                                                                      .toString());
+                                                              Navigator.pop(
+                                                                  context);
                                                               setState(() {});
                                                             },
-                                                            icon: Icon(Icons.done)
-                                                        )
-                                                      ]
-                                                  );
-                                                }
-                                            );
-
+                                                            icon: Icon(
+                                                                Icons.done))
+                                                      ]);
+                                                });
                                           },
-                                          icon: Icon(Icons.edit)
-                                      ),
+                                          icon: Icon(Icons.edit)),
                                       IconButton(
-                                          onPressed: (){
-                                            projectCRUD.deleteAttendeeComment(snapshot.data[index].toString());
+                                          onPressed: () {
+                                            projectCRUD.deleteAttendeeComment(
+                                                snapshot.data[index]
+                                                    .toString());
                                             setState(() {});
                                           },
-                                          icon: Icon(Icons.delete)
-                                      )
+                                          icon: Icon(Icons.delete))
                                     ],
                                   );
-                                }
-                            );
+                                });
                           }
-                          return Center(child: Text("No Comment"));;
-                        }
-                    ),
+                          return Center(child: Text("No Comment"));
+                          ;
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +279,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             border: OutlineInputBorder(),
                             labelText: '새 댓글',
                           ),
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
                               newComment = value as String;
                             });
@@ -277,14 +287,14 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         ),
                       ),
                       IconButton(
-                          onPressed: (){
-                            if (newComment.length>0) {
+                          onPressed: () {
+                            if (newComment.length > 0) {
                               projectCRUD.addAttendeeComment(newComment, false);
                             }
                             newComment = "";
                             _controller.clear();
                             setState(() {});
-                            },
+                          },
                           icon: Icon(Icons.send))
                     ],
                   ),

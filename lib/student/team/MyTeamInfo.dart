@@ -167,29 +167,29 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                             height: 150,
                             child: FutureBuilder(
                                 future: projectCRUD.getTeamComment(),
-                                builder: (context,snapshot){
+                                builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return ListView.builder(
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (context, index) {
                                           return Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(snapshot.data[index]['name']),
-                                              Text(snapshot.data[index]['content']),
+                                              Text(
+                                                  snapshot.data[index]['name']),
+                                              Text(snapshot.data[index]
+                                                  ['content']),
                                               SizedBox(
                                                 height: 10,
                                               )
                                             ],
                                           );
-                                        }
-                                    );
-                                  }
-                                  else{
+                                        });
+                                  } else {
                                     return Center(child: Text("No Comment"));
                                   }
-                                }
-                            ),
+                                }),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +201,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                     border: OutlineInputBorder(),
                                     labelText: '새 댓글',
                                   ),
-                                  onChanged: (value){
+                                  onChanged: (value) {
                                     setState(() {
                                       newComment = value as String;
                                     });
@@ -209,9 +209,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 ),
                               ),
                               IconButton(
-                                  onPressed: (){
-                                    if (newComment.length>0) {
-                                      projectCRUD.addTeamComment(newComment, false);
+                                  onPressed: () {
+                                    if (newComment.length > 0) {
+                                      projectCRUD.addTeamComment(
+                                          newComment, false);
                                     }
                                     newComment = "";
                                     _controller.clear();
