@@ -24,6 +24,22 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
   var _controller = TextEditingController();
   bool isNull = true;
   bool isNowLoading = false;
+  String team_id = "";
+  String stu_id = "";
+
+  void initState() {
+    gettingData();
+    super.initState();
+  }
+
+  gettingData() {
+    projectCRUD.getstu_id().then((value) {
+      stu_id = value;
+    });
+    projectCRUD.getTeamID(widget.teamName).then((value) {
+      team_id = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +144,44 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                           ? () async {
                                               try {
                                                 // *TODO : 함수 호출 (초대)
+                                                bool flag = false;
+                                                await DatabaseService()
+                                                    .requsestuToteam(
+                                                        widget.projectId,
+                                                        team_id,
+                                                        stu_id)
+                                                    .then((value) {
+                                                  flag = value!;
+                                                });
+                                                if (flag) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                      "요청을 성공적으로 보냈습니다.",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            "GmarketSansTTF",
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.lightBlueAccent,
+                                                  ));
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                      "이미 요청했습니다.",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            "GmarketSansTTF",
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.lightBlueAccent,
+                                                  ));
+                                                }
                                               } catch (e) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(

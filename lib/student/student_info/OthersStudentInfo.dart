@@ -40,327 +40,391 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
 
   bool isNowLoading = false;
 
+  String team_id = "";
+  String team_name = "";
+  String attend_id = "";
+  void initState() {
+    gettingData();
+    super.initState();
+  }
+
+  gettingData() async {
+    await projectCRUD.getTeamname().then((value) {
+      team_name = value;
+    });
+    projectCRUD.getTeamID(team_name).then((value) {
+      team_id = value;
+    });
+    projectCRUD.getAttendeeIDhdm(widget.stuId).then((value) {
+      attend_id = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+    return Builder(builder: (context) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        gettingData();
+      });
+      return Scaffold(
         backgroundColor: Colors.white,
-        title: Text(
-          "학생 정보",
-          style: TextStyle(
-              color: Colors.black87,
-              fontFamily: "GmarketSansTTF",
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.white,
+          title: Text(
+            "학생 정보",
+            style: TextStyle(
+                color: Colors.black87,
+                fontFamily: "GmarketSansTTF",
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: FutureBuilder(
-        future: projectCRUD.getOthersAttendeeInfo(widget.stuId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: 10, height: 1, color: Colors.grey),
-                        Text("  학번 및 이름  ", style: textStyle),
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(height: 1, color: Colors.grey)),
-                      ],
+        body: FutureBuilder(
+          future: projectCRUD.getOthersAttendeeInfo(widget.stuId),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text("  학번 및 이름  ", style: textStyle),
+                          Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(height: 1, color: Colors.grey)),
+                        ],
+                      ),
                     ),
-                  ),
-                  Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "[" +
-                              widget.stuSecretId +
-                              "] " +
-                              snapshot.data['name'].toString(),
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text("      "),
-                        SizedBox(
-                            width: 55,
-                            height: 26,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  backgroundColor: Colors.lightBlueAccent,
-                                  elevation: 0,
-                                  disabledBackgroundColor:
-                                      Colors.lightBlueAccent.shade100),
-                              child: !isNowLoading
-                                  ? Text(
-                                      "초대",
-                                      style: TextStyle(
-                                          fontFamily: "GmarketSansTTF",
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  : Container(
-                                      width: 10,
-                                      height: 10,
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: const CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
-                                    ),
-                              onPressed: !isNowLoading
-                                  ? () async {
-                                      try {
-                                        // *TODO : 함수 호출 (초대)
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            "초대를 실패하였습니다. ",
-                                            style: TextStyle(
-                                              fontFamily: "GmarketSansTTF",
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          backgroundColor:
-                                              Colors.lightBlueAccent,
-                                        ));
-                                      }
-                                      setState(() {
-                                        isNowLoading = false;
-                                      });
-                                    }
-                                  : null,
-                            ))
-                      ]),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: 10, height: 1, color: Colors.grey),
-                        Text("  내 소개  ", style: textStyle),
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(height: 1, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    snapshot.data['introduction'].toString() == "" ||
-                            snapshot.data['introduction'].toString() == "null"
-                        ? "아직 소개글을 작성하지 않았습니다. "
-                        : snapshot.data['introduction'].toString(),
-                    style: snapshot.data['introduction'].toString() == "" ||
-                            snapshot.data['introduction'].toString() == "null"
-                        ? TextStyle(
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 14,
-                            color: Colors.black87)
-                        : TextStyle(
-                            color: Colors.black87,
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 16),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: 10, height: 1, color: Colors.grey),
-                        Text("  원하는 팀  ", style: textStyle),
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(height: 1, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    snapshot.data['finding_team_info'].toString() != "" ||
-                            snapshot.data['finding_team_info'].toString() !=
-                                "null"
-                        ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
-                        : snapshot.data['finding_team_info'].toString(),
-                    style:
-                        snapshot.data['finding_team_info'].toString() != "" ||
-                                snapshot.data['finding_team_info'].toString() !=
-                                    "null"
-                            ? TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 14,
-                                color: Colors.black87)
-                            : TextStyle(
+                    Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "[" +
+                                widget.stuSecretId +
+                                "] " +
+                                snapshot.data['name'].toString(),
+                            style: TextStyle(
                                 color: Colors.black87,
                                 fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: 10, height: 1, color: Colors.grey),
-                        Text("  연락 방법  ", style: textStyle),
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(height: 1, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                  Contact(snapshot),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: 10, height: 1, color: Colors.grey),
-                        Text("  댓글  ", style: textStyle),
-                        Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(height: 1, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 150,
-                    child: FutureBuilder(
-                        future: projectCRUD.getAttendeeComment(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, index) {
-                                  TextEditingController _textFieldController =
-                                      TextEditingController(
-                                          text: snapshot.data[index]
-                                              ['content']);
-                                  return Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(snapshot.data[index]['name']),
-                                          Text(snapshot.data[index]['content']),
-                                          SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                      title: Text('댓글 수정'),
-                                                      content: TextField(
-                                                        onChanged: (value) {
-                                                          changedText = value;
-                                                        },
-                                                        controller:
-                                                            _textFieldController,
-                                                        decoration:
-                                                            InputDecoration(
-                                                                hintText:
-                                                                    "댓글 수정"),
-                                                      ),
-                                                      actions: [
-                                                        IconButton(
-                                                            onPressed: () {
-                                                              projectCRUD.updateAttendeeComment(
-                                                                  changedText,
-                                                                  snapshot.data[
-                                                                          index]
-                                                                      .toString());
-                                                              Navigator.pop(
-                                                                  context);
-                                                              setState(() {});
-                                                            },
-                                                            icon: Icon(
-                                                                Icons.done))
-                                                      ]);
-                                                });
-                                          },
-                                          icon: Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {
-                                            projectCRUD.deleteAttendeeComment(
-                                                snapshot.data[index]
-                                                    .toString());
-                                            setState(() {});
-                                          },
-                                          icon: Icon(Icons.delete))
-                                    ],
-                                  );
-                                });
-                          }
-                          return Center(child: Text("No Comment"));
-                          ;
-                        }),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          controller: _controller,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: '새 댓글',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
-                          onChanged: (value) {
-                            setState(() {
-                              newComment = value as String;
-                            });
-                          },
-                        ),
+                          Text("      "),
+                          SizedBox(
+                              width: 55,
+                              height: 26,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                    backgroundColor: Colors.lightBlueAccent,
+                                    elevation: 0,
+                                    disabledBackgroundColor:
+                                        Colors.lightBlueAccent.shade100),
+                                child: !isNowLoading
+                                    ? Text(
+                                        "초대",
+                                        style: TextStyle(
+                                            fontFamily: "GmarketSansTTF",
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : Container(
+                                        width: 10,
+                                        height: 10,
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                onPressed: !isNowLoading
+                                    ? () async {
+                                        try {
+                                          bool flag = false;
+                                          print(attend_id);
+                                          print(team_id);
+                                          print(team_name);
+                                          await DatabaseService()
+                                              .requseteamTostu(widget.projectId,
+                                                  attend_id, team_id, team_name)
+                                              .then((value) {
+                                            flag = value!;
+                                          });
+                                          if (flag) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                "요청을 성공적으로 보냈습니다.",
+                                                style: TextStyle(
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              backgroundColor:
+                                                  Colors.lightBlueAccent,
+                                            ));
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                "이미 요청했습니다.",
+                                                style: TextStyle(
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              backgroundColor:
+                                                  Colors.lightBlueAccent,
+                                            ));
+                                          }
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                              "초대를 실패하였습니다. ",
+                                              style: TextStyle(
+                                                fontFamily: "GmarketSansTTF",
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightBlueAccent,
+                                          ));
+                                        }
+                                        setState(() {
+                                          isNowLoading = false;
+                                        });
+                                      }
+                                    : null,
+                              ))
+                        ]),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text("  내 소개  ", style: textStyle),
+                          Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(height: 1, color: Colors.grey)),
+                        ],
                       ),
-                      IconButton(
-                          onPressed: () {
-                            if (newComment.length > 0) {
-                              projectCRUD.addAttendeeComment(newComment, false);
+                    ),
+                    Text(
+                      snapshot.data['introduction'].toString() == "" ||
+                              snapshot.data['introduction'].toString() == "null"
+                          ? "아직 소개글을 작성하지 않았습니다. "
+                          : snapshot.data['introduction'].toString(),
+                      style: snapshot.data['introduction'].toString() == "" ||
+                              snapshot.data['introduction'].toString() == "null"
+                          ? TextStyle(
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 14,
+                              color: Colors.black87)
+                          : TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 16),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text("  원하는 팀  ", style: textStyle),
+                          Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(height: 1, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      snapshot.data['finding_team_info'].toString() != "" ||
+                              snapshot.data['finding_team_info'].toString() !=
+                                  "null"
+                          ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
+                          : snapshot.data['finding_team_info'].toString(),
+                      style: snapshot.data['finding_team_info'].toString() !=
+                                  "" ||
+                              snapshot.data['finding_team_info'].toString() !=
+                                  "null"
+                          ? TextStyle(
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 14,
+                              color: Colors.black87)
+                          : TextStyle(
+                              color: Colors.black87,
+                              fontFamily: "GmarketSansTTF",
+                              fontSize: 16),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text("  연락 방법  ", style: textStyle),
+                          Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(height: 1, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                    Contact(snapshot),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text("  댓글  ", style: textStyle),
+                          Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(height: 1, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 150,
+                      child: FutureBuilder(
+                          future: projectCRUD.getAttendeeComment(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    TextEditingController _textFieldController =
+                                        TextEditingController(
+                                            text: snapshot.data[index]
+                                                ['content']);
+                                    return Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(snapshot.data[index]['name']),
+                                            Text(snapshot.data[index]
+                                                ['content']),
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        ),
+                                        IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                        title: Text('댓글 수정'),
+                                                        content: TextField(
+                                                          onChanged: (value) {
+                                                            changedText = value;
+                                                          },
+                                                          controller:
+                                                              _textFieldController,
+                                                          decoration:
+                                                              InputDecoration(
+                                                                  hintText:
+                                                                      "댓글 수정"),
+                                                        ),
+                                                        actions: [
+                                                          IconButton(
+                                                              onPressed: () {
+                                                                projectCRUD.updateAttendeeComment(
+                                                                    changedText,
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                        .toString());
+                                                                Navigator.pop(
+                                                                    context);
+                                                                setState(() {});
+                                                              },
+                                                              icon: Icon(
+                                                                  Icons.done))
+                                                        ]);
+                                                  });
+                                            },
+                                            icon: Icon(Icons.edit)),
+                                        IconButton(
+                                            onPressed: () {
+                                              projectCRUD.deleteAttendeeComment(
+                                                  snapshot.data[index]
+                                                      .toString());
+                                              setState(() {});
+                                            },
+                                            icon: Icon(Icons.delete))
+                                      ],
+                                    );
+                                  });
                             }
-                            newComment = "";
-                            _controller.clear();
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.send))
-                    ],
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return const Center(
-                child:
-                    CircularProgressIndicator(color: Colors.lightBlueAccent));
-          }
-        },
-      ),
-    );
+                            return Center(child: Text("No Comment"));
+                            ;
+                          }),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: TextField(
+                            controller: _controller,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: '새 댓글',
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                newComment = value as String;
+                              });
+                            },
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              if (newComment.length > 0) {
+                                projectCRUD.addAttendeeComment(
+                                    newComment, false);
+                              }
+                              newComment = "";
+                              _controller.clear();
+                              setState(() {});
+                            },
+                            icon: Icon(Icons.send))
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(
+                  child:
+                      CircularProgressIndicator(color: Colors.lightBlueAccent));
+            }
+          },
+        ),
+      );
+    });
   }
 }
 
