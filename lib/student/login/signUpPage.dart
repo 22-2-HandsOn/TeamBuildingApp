@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/helper/helper_function.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpPageS extends StatefulWidget {
   const SignUpPageS({Key? key}) : super(key: key);
@@ -211,6 +212,10 @@ class SignUpPageState extends State<SignUpPageS> {
                                     // await HelperFunctions.saveUserNameSF(userName);
                                     // await HelperFunctions.saveUserEmailSF(userEmail);
                                     // await HelperFunctions.saveUserstuIDSF(studentid);
+
+                                    SharedPreferences sf =
+                                        await SharedPreferences.getInstance();
+                                    await sf.setInt("TYPE", 0);
                                     Navigator.of(context)
                                         .pushNamed("/toStuProjectlistPage");
                                   }

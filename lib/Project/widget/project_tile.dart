@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:team/professor/MyprojectMain.dart';
+import 'package:team/professor/ProMyprojectMain.dart';
+import 'package:team/student/StuMyProjectMain.dart';
+import 'package:team/helper/helper_function.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class projectTile extends StatefulWidget {
   final String userName;
@@ -30,22 +33,38 @@ class _projectTileState extends State<projectTile> {
       fontSize: 18,
       color: Colors.black,
       fontWeight: FontWeight.bold);
-
+  int type = -1;
   String resentmessage = "";
   @override
   void initState() {
     super.initState();
   }
 
+  typeinit() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    type = sf.getInt("TYPE")!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyProjectMain(
-                    widget.projectId, widget.projectName, widget.userName)));
+        HelperFunctions.getUsertypeSFFromSF().then((value) {
+          type = value!;
+        });
+        if (type == 1) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProMyProjectMain(
+                      widget.projectId, widget.projectName, widget.userName)));
+        } else if (type == 0) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StuMyProjectMain(
+                      widget.projectId, widget.projectName, widget.userName)));
+        }
       },
       child: Container(
           padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),

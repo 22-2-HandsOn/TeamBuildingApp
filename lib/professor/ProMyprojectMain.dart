@@ -3,17 +3,17 @@ import 'package:team/Project/main/teamlist.dart';
 import 'package:team/Project/main/studentlist.dart';
 import 'package:team/Project/main/home.dart';
 
-class MyProjectMain extends StatefulWidget {
+class ProMyProjectMain extends StatefulWidget {
   String projectId = "";
   String projectName = "";
   String userName = "";
-  MyProjectMain(this.projectId, this.projectName, this.userName);
+  ProMyProjectMain(this.projectId, this.projectName, this.userName);
 
   @override
-  State<MyProjectMain> createState() => _MyProjectMainState();
+  State<ProMyProjectMain> createState() => _ProMyProjectMainState();
 }
 
-class _MyProjectMainState extends State<MyProjectMain> {
+class _ProMyProjectMainState extends State<ProMyProjectMain> {
   int _currentIndex = 0;
   List<Widget> pageList = [];
 
