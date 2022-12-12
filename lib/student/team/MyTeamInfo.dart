@@ -104,7 +104,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
+                            padding: const EdgeInsets.only(top: 15, bottom: 7),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -118,12 +118,35 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ],
                             ),
                           ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.only(bottom: 7),
+                            child: Wrap(
+                              direction: Axis.horizontal, // 정렬 방향
+                              alignment: WrapAlignment.start,
+                              spacing: 6, // 상하(좌우) 공간
+                              children: _buildChipList(snapshot.data[
+                                  'hashtags']), //타입 1: food, 2: place, 3: pref
+                            ),
+                          ),
                           Text(
-                            snapshot.data['introduction'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['introduction'].toString() == "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? "아직 팀 소개를 작성하지 않았습니다. "
+                                : snapshot.data['introduction'].toString(),
+                            style: snapshot.data['introduction'].toString() ==
+                                        "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -141,11 +164,28 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['finding_member_info'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['finding_member_info'].toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
+                                : snapshot.data['finding_member_info']
+                                    .toString(),
+                            style: snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
                           // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                           Padding(
@@ -265,5 +305,23 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                         color: Colors.lightBlueAccent));
               }
             }));
+  }
+
+  _buildChipList(List<dynamic> hashtags) {
+    List<Widget> chips = [];
+    hashtags.forEach((element) {
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text("# " + element),
+          visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
+          labelStyle: TextStyle(
+              fontFamily: "GmarketSansTTF",
+              color: Colors.black87,
+              fontSize: 12),
+        ),
+      );
+    });
+    return chips;
   }
 }

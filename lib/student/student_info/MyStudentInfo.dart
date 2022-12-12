@@ -104,7 +104,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    padding: const EdgeInsets.only(top: 15, bottom: 7),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -114,6 +114,17 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             fit: FlexFit.loose,
                             child: Container(height: 1, color: Colors.grey)),
                       ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(bottom: 7),
+                    child: Wrap(
+                      direction: Axis.horizontal, // 정렬 방향
+                      alignment: WrapAlignment.start,
+                      spacing: 6, // 상하(좌우) 공간
+                      children: _buildChipList(snapshot
+                          .data['hashtags']), //타입 1: food, 2: place, 3: pref
                     ),
                   ),
                   Text(
@@ -146,14 +157,14 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     ),
                   ),
                   Text(
-                    snapshot.data['finding_team_info'].toString() != "" ||
-                            snapshot.data['finding_team_info'].toString() !=
+                    snapshot.data['finding_team_info'].toString() == "" ||
+                            snapshot.data['finding_team_info'].toString() ==
                                 "null"
                         ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
                         : snapshot.data['finding_team_info'].toString(),
                     style:
-                        snapshot.data['finding_team_info'].toString() != "" ||
-                                snapshot.data['finding_team_info'].toString() !=
+                        snapshot.data['finding_team_info'].toString() == "" ||
+                                snapshot.data['finding_team_info'].toString() ==
                                     "null"
                             ? TextStyle(
                                 fontFamily: "GmarketSansTTF",
@@ -467,6 +478,24 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         },
       ),
     );
+  }
+
+  _buildChipList(List<dynamic> hashtags) {
+    List<Widget> chips = [];
+    hashtags.forEach((element) {
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text("# " + element),
+          visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
+          labelStyle: TextStyle(
+              fontFamily: "GmarketSansTTF",
+              color: Colors.black87,
+              fontSize: 12),
+        ),
+      );
+    });
+    return chips;
   }
 }
 

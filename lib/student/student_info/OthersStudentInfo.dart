@@ -198,14 +198,14 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                     ),
                   ),
                   Text(
-                    snapshot.data['finding_team_info'].toString() != "" ||
-                            snapshot.data['finding_team_info'].toString() !=
+                    snapshot.data['finding_team_info'].toString() == "" ||
+                            snapshot.data['finding_team_info'].toString() ==
                                 "null"
                         ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
                         : snapshot.data['finding_team_info'].toString(),
                     style:
-                        snapshot.data['finding_team_info'].toString() != "" ||
-                                snapshot.data['finding_team_info'].toString() !=
+                        snapshot.data['finding_team_info'].toString() == "" ||
+                                snapshot.data['finding_team_info'].toString() ==
                                     "null"
                             ? TextStyle(
                                 fontFamily: "GmarketSansTTF",

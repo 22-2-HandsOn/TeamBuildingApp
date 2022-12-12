@@ -166,11 +166,23 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['introduction'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['introduction'].toString() == "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? "아직 팀 소개를 작성하지 않았습니다. "
+                                : snapshot.data['introduction'].toString(),
+                            style: snapshot.data['introduction'].toString() ==
+                                        "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -188,11 +200,28 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['finding_member_info'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['finding_member_info'].toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
+                                : snapshot.data['finding_member_info']
+                                    .toString(),
+                            style: snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
                           // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                           Padding(
