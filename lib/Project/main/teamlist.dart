@@ -92,7 +92,6 @@ class _TeamListstate extends State<TeamListPage> {
         body: Column(
           children: [
             Container(
-              // height: 50,
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(left: 14, right: 14),
               child: Wrap(
@@ -140,6 +139,7 @@ class _TeamListstate extends State<TeamListPage> {
                           tagcheck = true;
                         }
                       });
+
                       if (tagcheck) {
                         return Teamtile(
                             teamName: snapshot.data.docs[index]['name'],
@@ -159,10 +159,7 @@ class _TeamListstate extends State<TeamListPage> {
                                     snapshot.data.docs[index]['members']
                                         .contains(stuId));
                       } else {
-                        return SizedBox(
-                          height: 0,
-                          width: 0,
-                        );
+                        return Container();
                       }
                     },
                     //controller: unitcontroller,

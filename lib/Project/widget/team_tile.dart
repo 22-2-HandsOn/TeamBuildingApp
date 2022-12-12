@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
-import 'package:team/student/team/OthersTeamInfo.dart';
+import '../../student/team/OthersTeamInfo.dart';
 
 class Teamtile extends StatefulWidget {
   final String teamName;
@@ -66,7 +66,7 @@ class _TeamtileState extends State<Teamtile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    widget.teamName, //DB에서 가져옴
+                    widget.teamName, //DB에서 가져옴r
                     style: textStyle_title,
                   ),
                   Column(

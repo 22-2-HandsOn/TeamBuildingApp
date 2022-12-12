@@ -36,16 +36,6 @@ class ProjectCRUD {
     }
   }
 
-  Future getOthersAttendeeInfo(String stu_id) async {
-    final snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        return dataElement;
-      }
-    }
-  }
-
   Future addAttendeeReply(String content, String comment_data) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
@@ -237,6 +227,43 @@ class ProjectCRUD {
     }
   }
 
+  Future getTeamID() async {
+    var stu_id = await getstu_id();
+    final QuerySnapshot snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var mapp = doc.data() as Map<String, dynamic>;
+      var dataElement = mapp['members'];
+      for (int i = 0; i < dataElement.length; i++) {
+        if (dataElement[i].toString() == stu_id) {
+          print(doc.id);
+          return doc.id;
+        }
+      }
+    }
+  }
+
+  Future getOthersAttendeeInfo(String stu_id) async {
+    final snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return dataElement;
+      }
+    }
+  }
+
+  Future getOthersTeamInfo(String teamName) async {
+    final snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      for (int i = 0; i < dataElement.length; i++) {
+        if (dataElement['name'].toString() == teamName) {
+          return doc.data() as Map<String, dynamic>;
+        }
+      }
+    }
+  }
+
   Future addTeamComment(String content, bool isSecret) async {
     var stu_id = await getstu_id();
     var attendee = await getAttendeeInfo() as Map<String, dynamic>;
@@ -271,6 +298,47 @@ class ProjectCRUD {
               'author_doc_id': attendeeId,
               'name': attendee["name"],
               'isSecret': isSecret,
+              'content': content,
+              'timestamp': FieldValue.serverTimestamp()
+            });
+          }
+        }
+      }
+    }
+  }
+
+  Future addTeamReply(String content, String comment_data) async {
+    var stu_id = await getstu_id();
+    var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+    var attendeeId = await getAttendeeID();
+    final QuerySnapshot snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var mapp = doc.data() as Map<String, dynamic>;
+      var dataElement = mapp['members'];
+      for (int i = 0; i < dataElement.length; i++) {
+        if (dataElement[i].toString() == stu_id) {
+          if (teamsCollection
+                  .doc(doc.id)
+                  .collection('comments')
+                  .get()
+                  .toString()
+                  .length ==
+              0) {
+            final b =
+                await teamsCollection.doc(doc.id).collection('comments').add({
+              'author_doc_id': attendeeId,
+              'name': attendee["name"],
+              'content': content,
+              'timestamp': FieldValue.serverTimestamp()
+            });
+          } else {
+            final a = await teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc()
+                .set({
+              'author_doc_id': attendeeId,
+              'name': attendee["name"],
               'content': content,
               'timestamp': FieldValue.serverTimestamp()
             });
@@ -358,18 +426,6 @@ class ProjectCRUD {
                 .doc(doc2.id)
                 .delete();
           }
-        }
-      }
-    }
-  }
-
-  Future getOthersTeamInfo(String teamName) async {
-    final snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement['name'].toString() == teamName) {
-          return doc.data() as Map<String, dynamic>;
         }
       }
     }
