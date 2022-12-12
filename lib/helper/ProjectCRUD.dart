@@ -72,7 +72,6 @@ class ProjectCRUD {
         }
       }
       }
-
       }
     }
   }
@@ -199,6 +198,21 @@ class ProjectCRUD {
     }
   }
 
+  Future getTeamID() async {
+    var stu_id = await getstu_id();
+    final QuerySnapshot snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var mapp = doc.data() as Map<String, dynamic>;
+      var dataElement = mapp['members'];
+      for (int i=0;i<dataElement.length;i++ ) {
+        if (dataElement[i].toString() == stu_id) {
+          print(doc.id);
+          return doc.id;
+        }
+      }
+    }
+  }
+
   Future addTeamComment(String content, bool isSecret) async {
     var stu_id = await getstu_id();
     var attendee = await getAttendeeInfo() as Map<String,dynamic>;
@@ -242,6 +256,48 @@ class ProjectCRUD {
       }
     }
   }
+  Future addTeamReply(String content, String comment_data) async {
+    var stu_id = await getstu_id();
+    var attendee = await getAttendeeInfo() as Map<String,dynamic>;
+    var attendeeId = await getAttendeeID();
+    final QuerySnapshot snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var mapp = doc.data() as Map<String, dynamic>;
+      var dataElement = mapp['members'];
+      for (int i=0;i<dataElement.length;i++ ) {
+        if (dataElement[i].toString() == stu_id) {
+          if (teamsCollection
+              .doc(doc.id)
+              .collection('comments')
+              .get()
+              .toString()
+              .length == 0) {
+            final b = await teamsCollection
+                .doc(doc.id)
+                .collection('comments').add({
+              'author_doc_id': attendeeId,
+              'name': attendee["name"],
+              'content': content,
+              'timestamp': FieldValue.serverTimestamp()
+            });
+          }
+          else {
+            final a = await teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc()
+                .set({
+              'author_doc_id': attendeeId,
+              'name': attendee["name"],
+              'content': content,
+              'timestamp': FieldValue.serverTimestamp()
+            });
+          }
+        }
+      }
+    }
+  }
+
 
   Future updateAttendeeComment(String content, String comment_data) async {
     var stu_id = await getstu_id();
