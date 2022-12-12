@@ -423,6 +423,7 @@ class ProjectCRUD {
     }
 
     Future addTeamComment(String content, bool isSecret) async {
+    print("oinkoink");
       var stu_id = await getstu_id();
       var attendee = await getAttendeeInfo() as Map<String, dynamic>;
       var attendeeId = await getAttendeeID();
@@ -568,8 +569,8 @@ class ProjectCRUD {
       List data = [];
       final QuerySnapshot snapshot = await teamsCollection.get();
       for (var doc in snapshot.docs) {
-        var mapp = doc.data() as Map<String, dynamic>;
-        List dataElement = mapp['members'];
+        var temp = doc.data() as Map<String, dynamic>;
+        List dataElement = temp['members'];
         for (int i = 0; i < dataElement.length; i++) {
           if (dataElement[i].toString() == stu_id) {
             QuerySnapshot snapshot2 =
@@ -617,7 +618,6 @@ class ProjectCRUD {
           }
         }
       }
-      return {"isNull": true};
     }
 
     Future addTeam(String teamname, String introduction,
