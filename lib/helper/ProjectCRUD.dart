@@ -36,7 +36,17 @@ class ProjectCRUD {
     }
   }
 
-  Future addAttendeeReply(String comment_id, String content) async {
+  Future getOthersAttendeeInfo(String stu_id) async {
+    final snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return dataElement;
+      }
+    }
+  }
+
+  Future addAttendeeReply(String content, String comment_data) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
