@@ -26,6 +26,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
+  var _controller = TextEditingController();
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
       throw 'Could not launch $url';
@@ -196,7 +197,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                 }
                             );
                           }
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: Text("No Comment"));;
                         }
                     ),
                   ),
@@ -205,6 +206,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     children: [
                       Flexible(
                         child: TextField(
+                          controller: _controller,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: '새 댓글',
@@ -221,6 +223,8 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             if (newComment.length>0) {
                               projectCRUD.addAttendeeComment(newComment, false);
                             }
+                            newComment = "";
+                            _controller.clear();
                             },
                           icon: Icon(Icons.send))
                     ],
