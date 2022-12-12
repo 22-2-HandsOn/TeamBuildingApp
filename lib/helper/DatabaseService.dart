@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team/helper/helper_function.dart';
-import 'package:flutter/material.dart';
+import 'package:team/helper/ProjectCRUD.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String? uid;
@@ -63,6 +63,118 @@ class DatabaseService {
         .collection("teams_hashtags")
         .doc("Tags")
         .get();
+  }
+
+  requseteamTostu(String projectid, String attendeesuid, String teamuid,
+      String teamname) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("attendees")
+        .doc(attendeesuid);
+    DocumentSnapshot<Map<String, dynamic>>? stusnapshot;
+    attendeesCollection.get().then((value) {
+      stusnapshot = value;
+    });
+
+    final data = stusnapshot!.data();
+    final teamlist =
+        List<String>.from(data?['후보팀'] == null ? [] : data?['후보팀']);
+    if (!teamlist.contains(teamuid)) {
+      await attendeesCollection.update({
+        "후보팀": FieldValue.arrayUnion(["${teamuid}_$teamname"])
+      });
+    }
+  }
+
+  requsestuToteam(String projectid, String teamuid, String stuid) async {
+    final teamsCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("teams")
+        .doc(teamuid);
+    DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
+    teamsCollection.get().then((value) {
+      teamsnapshot = value;
+    });
+
+    final data = teamsnapshot!.data();
+    final stulist =
+        List<String>.from(data?['후보학생'] == null ? [] : data?['후보학생']);
+    if (!stulist.contains(stuid)) {
+      await teamsCollection.update({
+        "후보학생": FieldValue.arrayUnion([stuid])
+      });
+    }
+  }
+
+  responsestu(String projectid, String attendeesuid, String teamuid,
+      String teamname, bool accept, String stuid) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("attendees")
+        .doc(attendeesuid);
+    DocumentSnapshot<Map<String, dynamic>>? stusnapshot;
+    attendeesCollection.get().then((value) {
+      stusnapshot = value;
+    });
+
+    final data = stusnapshot!.data();
+    final teamlist =
+        List<String>.from(data?['후보팀'] == null ? [] : data?['후보팀']);
+    if (teamlist.contains(teamuid)) {
+      await attendeesCollection.update({
+        "후보팀": FieldValue.arrayRemove(["${teamuid}_$teamname"])
+      });
+      if (accept) {
+        final teamsCollection = FirebaseFirestore.instance
+            .collection("projects")
+            .doc(projectid)
+            .collection("teams")
+            .doc(teamuid);
+        DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
+        teamsCollection.get().then((value) {
+          teamsnapshot = value;
+        });
+
+        final data = teamsnapshot!.data();
+        final stulist =
+            List<String>.from(data?['member'] == null ? [] : data?['member']);
+        if (!stulist.contains(stuid)) {
+          await teamsCollection.update({
+            "member": FieldValue.arrayUnion([stuid])
+          });
+        }
+      }
+    }
+  }
+
+  responseteam(String projectid, String attendeesuid, String teamuid,
+      String teamname, bool accept, String stuid) async {
+    final teamsCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("teams")
+        .doc(teamuid);
+    DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
+    teamsCollection.get().then((value) {
+      teamsnapshot = value;
+    });
+
+    final data = teamsnapshot!.data();
+    final stulist =
+        List<String>.from(data?['후보학생'] == null ? [] : data?['후보학생']);
+    if (stulist.contains(stuid)) {
+      await teamsCollection.update({
+        "후보학생": FieldValue.arrayRemove([stuid])
+      });
+      if (accept) {
+        teamsCollection.update({
+          "member": FieldValue.arrayUnion([stuid])
+        });
+      }
+    }
   }
 
   getstuhashtags(String projectId) async {

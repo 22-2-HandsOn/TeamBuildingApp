@@ -36,11 +36,11 @@ class _TeamtileState extends State<Teamtile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyTeamInfoPage(widget.projectid, widget.projectname)));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) =>
+        //             MyTeamInfoPage(widget.projectid, widget.projectname)));
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
