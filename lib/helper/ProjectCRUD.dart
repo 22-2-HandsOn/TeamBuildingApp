@@ -207,25 +207,31 @@ class ProjectCRUD {
     }
   }
 
-  Future updateAttendeeComment(String content, String comment_id) async {
+  Future updateAttendeeComment(String content, String comment_data) async {
     var stu_id = await getstu_id();
     var timeZoneOffset = DateTime.now().timeZoneOffset.inMilliseconds;
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        final a = await attendeesCollection
-            .doc(doc.id)
-            .collection('comments')
-            .doc(comment_id)
-            .update({'content': content});
+        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+            .collection('comments').get();
+        for (var doc2 in snapshot2.docs) {
+          var dataElement2 = doc2.data().toString();
+          if (dataElement2 == comment_data){
+            attendeesCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc(doc2.id)
+                .update({'content': content});
+          }
+        }
       }
     }
   }
 
   Future getAttendeeComment() async {
     var stu_id = await getstu_id();
-    var attendee_id = await getAttendeeID();
     List data = [];
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
@@ -258,22 +264,25 @@ class ProjectCRUD {
         }
       }
     }
-    print(data);
     return data;
   }
 
-  Future deleteAttendeeComment(String comment_id) async {
+  Future deleteAttendeeComment(String comment_data) async {
     var stu_id = await getstu_id();
     var timeZoneOffset = DateTime.now().timeZoneOffset.inMilliseconds;
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        DocumentReference delete = await attendeesCollection
-            .doc(doc.id)
-            .collection('comments')
-            .doc(comment_id);
-        await delete.delete();
+        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+            .collection('comments').get();
+        for (var doc2 in snapshot2.docs) {
+          var dataElement2 = doc2.data().toString();
+          if (dataElement2 == comment_data){
+            attendeesCollection.doc(doc.id)
+                .collection('comments').doc(doc2.id).delete();
+          }
+        }
       }
     }
   }

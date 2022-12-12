@@ -27,6 +27,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
 
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
+  String changedText = "";
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
       throw 'Could not launch $url';
@@ -67,7 +68,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             ChangeMyStudentInfo(widget.projectId)));
               },
               color: Colors.black87,
-              icon: const Icon(Icons.edit, size: 22)),
+              icon: const Icon(Icons.edit_note, size: 22)),
         ],
       ),
       body: FutureBuilder(
@@ -182,15 +183,55 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             return ListView.builder(
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  print(snapshot.data.toString());
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                  TextEditingController _textFieldController = TextEditingController(text:snapshot.data[index]['content']);
+                                  return Row(
                                     children: [
-                                      Text(snapshot.data[index]['name']),
-                                      Text(snapshot.data[index]['content']),
-                                      SizedBox(
-                                        height: 10,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: [
+                                          Text(snapshot.data[index]['name']),
+                                          Text(snapshot.data[index]['content']),
+                                          SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      ),
+                                      IconButton(
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context){
+                                                  return AlertDialog(
+                                                    title: Text('댓글 수정'),
+                                                    content: TextField(
+                                                      onChanged: (value) {changedText = value;},
+                                                      controller: _textFieldController,
+                                                      decoration: InputDecoration(hintText: "댓글 수정"),
+                                                    ),
+                                                      actions:[
+                                                        IconButton(
+                                                            onPressed: (){
+                                                              projectCRUD.updateAttendeeComment(changedText, snapshot.data[index].toString());
+                                                              Navigator.pop(context);
+                                                              setState(() {});
+                                                            },
+                                                            icon: Icon(Icons.done)
+                                                        )
+                                                      ]
+                                                  );
+                                                }
+                                            );
+
+                                          },
+                                          icon: Icon(Icons.edit)
+                                      ),
+                                      IconButton(
+                                          onPressed: (){
+                                            projectCRUD.deleteAttendeeComment(snapshot.data[index].toString());
+                                            setState(() {});
+                                          },
+                                          icon: Icon(Icons.delete)
                                       )
                                     ],
                                   );
@@ -225,6 +266,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                             }
                             newComment = "";
                             _controller.clear();
+                            setState(() {});
                             },
                           icon: Icon(Icons.send))
                     ],

@@ -16,18 +16,14 @@ class MyTeamInfoPage extends StatefulWidget {
   MyTeamInfoPage(this.projectId, this.projectname);
 
   @override
-  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState(projectId);
+  State<MyTeamInfoPage> createState() => _MyTeamInfoPageState();
 }
 
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
-
-  String projectId = "";
-  _MyTeamInfoPageState(this.projectId);
-
-  late ProjectCRUD projectCRUD = ProjectCRUD(projectId);
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
   bool isNull = true;
 
@@ -63,10 +59,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ChangeTeamInfo(projectId)));
+                                      ChangeTeamInfo(widget.projectId)));
                         },
                         color: Colors.black87,
-                        icon: const Icon(Icons.edit, size: 22)),
+                        icon: const Icon(Icons.edit_note, size: 22)),
                   ]
                 : []),
         body: FutureBuilder(
@@ -168,10 +164,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                     return ListView.builder(
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (context, index) {
-                                          print(snapshot.data.toString());
                                           return Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(snapshot.data[index]['name']),
                                               Text(snapshot.data[index]['content']),
@@ -183,7 +177,9 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                         }
                                     );
                                   }
-                                  return Center(child: Text("No Comment"));
+                                  else{
+                                    return Center(child: Text("No Comment"));
+                                  }
                                 }
                             ),
                           ),
@@ -246,7 +242,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          AddNewTeam(projectId)));
+                                          AddNewTeam(widget.projectId)));
                             })
                       ],
                     ),
