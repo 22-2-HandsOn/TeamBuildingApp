@@ -11,16 +11,19 @@ class Student_tile extends StatefulWidget {
   final String id;
   final String projectid;
   final String projectname;
+  final bool isMine;
   //final String opponent;
-  const Student_tile({
-    Key? key,
-    required this.projectname,
-    required this.name,
-    required this.info,
-    required this.id,
-    required this.projectid,
-    //required this.opponent,
-  }) : super(key: key);
+  const Student_tile(
+      {Key? key,
+      required this.projectname,
+      required this.name,
+      required this.info,
+      required this.id,
+      required this.projectid,
+      required this.isMine
+      //required this.opponent,
+      })
+      : super(key: key);
 
   @override
   State<Student_tile> createState() => _StudenttileState();
@@ -38,19 +41,19 @@ class _StudenttileState extends State<Student_tile> {
     String secretId = widget.id.substring(0, 4) + "##" + widget.id.substring(6);
     return GestureDetector(
       onTap: () {
-        // if (widget.isMine) {
-        //   Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //           builder: (context) =>
-        //               MyStudentInfoPage(widget.projectid, widget.projectname)));
-        // } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OthersStudentInfoPage(widget.projectid,
-                    widget.projectname, widget.id, secretId, widget.name)));
-        // }
+        if (widget.isMine) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyStudentInfoPage(widget.projectid, widget.projectname)));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OthersStudentInfoPage(widget.projectid,
+                      widget.projectname, widget.id, secretId, widget.name)));
+        }
       },
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
