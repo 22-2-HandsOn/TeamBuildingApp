@@ -81,7 +81,7 @@ class _TeamListstate extends State<TeamListPage> {
         body: Column(
           children: [
             Container(
-              height: 50,
+              // ==>//  height: 50,
               padding: EdgeInsets.all(10),
               width: MediaQuery.of(context).size.width,
               child: Wrap(
@@ -130,7 +130,7 @@ class _TeamListstate extends State<TeamListPage> {
                           ['finding_member_info'],
                       projectid: widget.projectId,
                       projectname: widget.projectname,
-                      isfinished: snapshot.data.docs[index]['isfinished'],
+                      isfinished: snapshot.data.docs[index]['isFinished'],
                     );
                   } else {
                     return Container();
