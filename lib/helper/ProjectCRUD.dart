@@ -36,7 +36,7 @@ class ProjectCRUD {
     }
   }
 
-  Future addAttendeeReply(String content,String comment_data) async {
+  Future addAttendeeReply(String content, String comment_data) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
@@ -204,10 +204,33 @@ class ProjectCRUD {
     for (var doc in snapshot.docs) {
       var mapp = doc.data() as Map<String, dynamic>;
       var dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
+      for (int i = 0; i < dataElement.length; i++) {
         if (dataElement[i].toString() == stu_id) {
           print(doc.id);
           return doc.id;
+        }
+      }
+    }
+  }
+
+
+  Future getOthersAttendeeInfo(String stu_id) async {
+    final snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return dataElement;
+      }
+    }
+  }
+
+  Future getOthersTeamInfo(String teamName) async {
+    final snapshot = await teamsCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      for (int i = 0; i < dataElement.length; i++) {
+        if (dataElement['name'].toString() == teamName) {
+          return doc.data() as Map<String, dynamic>;
         }
       }
     }
@@ -297,7 +320,6 @@ class ProjectCRUD {
       }
     }
   }
-
 
   Future updateAttendeeComment(String content, String comment_data) async {
     var stu_id = await getstu_id();
