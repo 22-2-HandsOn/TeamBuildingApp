@@ -24,6 +24,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
+  int candidateNum = 0;
 
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
@@ -59,6 +60,28 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
               fontWeight: FontWeight.bold),
         ),
         actions: [
+          ActionChip(
+              avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(Icons.people, color: Colors.black87, size: 15)),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(
+                  width: 1,
+                  color: Colors.black26,
+                ),
+              ),
+              labelStyle: TextStyle(
+                  fontFamily: "GmarketSansTTF",
+                  fontSize: 12,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold),
+              visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
+              label: Text(candidateNum.toString()),
+              onPressed: () {
+                print('If you stand for nothing, Burr, what’ll you fall for?');
+              }),
           IconButton(
               onPressed: () {
                 Navigator.push(
@@ -75,6 +98,14 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            Future.delayed(Duration.zero, () {
+              setState(() {
+                candidateNum = snapshot.data['후보팀'] == null
+                    ? 0
+                    : snapshot.data['후보팀'].length;
+              });
+            });
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListView(
@@ -518,21 +549,21 @@ class Contact extends StatelessWidget {
             if (RegExp(
                     r"^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/\S*)?")
                 .hasMatch(content)) {
-              print(content);
+              // print(content);
               if (!RegExp(r"^(((http(s))\:\/\/))").hasMatch(content)) {
-                print("https 달아주기");
+                // print("https 달아주기");
                 content = "https://" + content;
               }
-              print("링크");
+              // print("링크");
             } else if (RegExp(
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                 .hasMatch(content)) {
-              print(content);
-              print("메일");
+              // print(content);
+              // print("메일");
               prefix = 'mailto:';
             } else if (RegExp(r"^\d{3}-?\d{3,4}-?\d{4}$").hasMatch(content)) {
-              print(content);
-              print("전화");
+              // print(content);
+              // print("전화");
               prefix = 'tel:';
             } else {
               notLinkable = true;

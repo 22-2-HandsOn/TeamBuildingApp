@@ -5,10 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'AddNewTeam.dart';
 import 'ChangeTeamInfo.dart';
-import 'package:team/Project/main/studentlist.dart';
-import 'package:team/Project/main/teamlist.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/student/student_info/MyStudentInfo.dart';
+import 'Candidate.dart';
 
 class MyTeamInfoPage extends StatefulWidget {
   String projectId = "";
@@ -26,6 +23,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
   bool isNull = true;
+  int candidateNum = 0;
   String changedText = "";
 
   @override
@@ -54,6 +52,31 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
             backgroundColor: Colors.white,
             actions: !isNull
                 ? [
+                    ActionChip(
+                        avatar: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(Icons.people,
+                                color: Colors.black87, size: 15)),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(
+                            width: 1,
+                            color: Colors.black26,
+                          ),
+                        ),
+                        labelStyle: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 12,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold),
+                        visualDensity:
+                            VisualDensity(horizontal: -1, vertical: -3.5),
+                        label: Text(candidateNum.toString()),
+                        onPressed: () {
+                          print(
+                              'If you stand for nothing, Burr, what’ll you fall for?');
+                        }),
                     IconButton(
                         onPressed: () {
                           Navigator.push(
@@ -71,6 +94,13 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
+                Future.delayed(Duration.zero, () {
+                  setState(() {
+                    candidateNum = snapshot.data['후보학생'] == null
+                        ? 0
+                        : snapshot.data['후보학생'].length;
+                  });
+                });
                 if (snapshot.data['isNull'] == null) {
                   Future.delayed(Duration.zero, () {
                     setState(() {
@@ -214,22 +244,25 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                     return ListView.builder(
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (context, index) {
-                                          TextEditingController _textFieldController =
-                                          TextEditingController(
-                                              text: snapshot.data[index]
-                                              ['content']);
-                                          TextEditingController _textFieldController2 =
-                                          TextEditingController();
+                                          TextEditingController
+                                              _textFieldController =
+                                              TextEditingController(
+                                                  text: snapshot.data[index]
+                                                      ['content']);
+                                          TextEditingController
+                                              _textFieldController2 =
+                                              TextEditingController();
                                           return Column(
                                             children: [
                                               Row(
                                                 children: [
                                                   Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Text(
-                                                          snapshot.data[index]['name']),
+                                                      Text(snapshot.data[index]
+                                                          ['name']),
                                                       Text(snapshot.data[index]
                                                           ['content']),
                                                       SizedBox(
@@ -243,73 +276,71 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                             context: context,
                                                             builder: (context) {
                                                               return AlertDialog(
-                                                                  title: Text('대댓글 달기'),
-                                                                  content: TextField(
-                                                                    onChanged: (value) {
+                                                                  title: Text(
+                                                                      '대댓글 달기'),
+                                                                  content:
+                                                                      TextField(
+                                                                    onChanged:
+                                                                        (value) {
                                                                       newComment =
                                                                           value;
                                                                     },
                                                                     controller:
-                                                                    _textFieldController2,
-                                                                    decoration:
-                                                                    InputDecoration(
+                                                                        _textFieldController2,
+                                                                    decoration: InputDecoration(
                                                                         hintText:
-                                                                        "대댓글 달기"),
+                                                                            "대댓글 달기"),
                                                                   ),
                                                                   actions: [
                                                                     IconButton(
-                                                                        onPressed: () {
+                                                                        onPressed:
+                                                                            () {
                                                                           projectCRUD.addTeamReply(
                                                                               newComment,
-                                                                              snapshot
-                                                                                  .data[
-                                                                              index]
-                                                                                  .toString());
+                                                                              snapshot.data[index].toString());
                                                                           Navigator.pop(
                                                                               context);
                                                                           setState(
-                                                                                  () {});
+                                                                              () {});
                                                                         },
                                                                         icon: Icon(
                                                                             Icons.done))
                                                                   ]);
                                                             });
                                                       },
-                                                      icon: Icon(Icons.comment_bank)),
+                                                      icon: Icon(
+                                                          Icons.comment_bank)),
                                                   IconButton(
                                                       onPressed: () {
                                                         showDialog(
                                                             context: context,
                                                             builder: (context) {
                                                               return AlertDialog(
-                                                                  title: Text('댓글 수정'),
-                                                                  content: TextField(
-                                                                    onChanged: (value) {
+                                                                  title: Text(
+                                                                      '댓글 수정'),
+                                                                  content:
+                                                                      TextField(
+                                                                    onChanged:
+                                                                        (value) {
                                                                       changedText =
                                                                           value;
                                                                     },
                                                                     controller:
-                                                                    _textFieldController,
-                                                                    decoration:
-                                                                    InputDecoration(
+                                                                        _textFieldController,
+                                                                    decoration: InputDecoration(
                                                                         hintText:
-                                                                        "댓글 수정"),
+                                                                            "댓글 수정"),
                                                                   ),
                                                                   actions: [
                                                                     IconButton(
-                                                                        onPressed: () {
-                                                                          if (changedText
-                                                                              .length >
+                                                                        onPressed:
+                                                                            () {
+                                                                          if (changedText.length >
                                                                               0) {
-                                                                            projectCRUD.updateTeamComment(
-                                                                                changedText,
-                                                                                snapshot
-                                                                                    .data[index]
-                                                                                    .toString());
-                                                                            Navigator.pop(
-                                                                                context);
-                                                                            setState(
-                                                                                    () {});
+                                                                            projectCRUD.updateTeamComment(changedText,
+                                                                                snapshot.data[index].toString());
+                                                                            Navigator.pop(context);
+                                                                            setState(() {});
                                                                           }
                                                                         },
                                                                         icon: Icon(
@@ -322,8 +353,9 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                       onPressed: () {
                                                         projectCRUD
                                                             .deleteTeamComment(
-                                                            snapshot.data[index]
-                                                                .toString());
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .toString());
                                                         setState(() {});
                                                       },
                                                       icon: Icon(Icons.delete))
@@ -332,45 +364,41 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                               SizedBox(
                                                 height: 50,
                                                 child: FutureBuilder(
-                                                    future:
-                                                    projectCRUD.getTeamReply(
-                                                        snapshot.data[index]
+                                                    future: projectCRUD
+                                                        .getTeamReply(snapshot
+                                                            .data[index]
                                                             .toString()),
-                                                    builder: (context, snapshot2) {
+                                                    builder:
+                                                        (context, snapshot2) {
                                                       if (snapshot2.hasData) {
                                                         return ListView.builder(
-                                                            itemCount:
-                                                            snapshot2.data.length,
+                                                            itemCount: snapshot2
+                                                                .data.length,
                                                             itemBuilder:
-                                                                (context, index2) {
+                                                                (context,
+                                                                    index2) {
                                                               TextEditingController
-                                                              _textFieldController3 =
-                                                              TextEditingController(
-                                                                  text: snapshot2
-                                                                      .data[
-                                                                  index2]
-                                                                  ['content']);
+                                                                  _textFieldController3 =
+                                                                  TextEditingController(
+                                                                      text: snapshot2
+                                                                              .data[index2]
+                                                                          [
+                                                                          'content']);
                                                               return Column(
                                                                 children: [
                                                                   Row(
                                                                     children: [
                                                                       Column(
                                                                         crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
+                                                                            CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text("    " +
-                                                                              snapshot2.data[
-                                                                              index2]
-                                                                              [
-                                                                              'name']),
+                                                                              snapshot2.data[index2]['name']),
                                                                           Text("    " +
-                                                                              snapshot2.data[
-                                                                              index2]
-                                                                              [
-                                                                              'content']),
+                                                                              snapshot2.data[index2]['content']),
                                                                           SizedBox(
-                                                                            height: 10,
+                                                                            height:
+                                                                                10,
                                                                           )
                                                                         ],
                                                                       ),
@@ -378,10 +406,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                           onPressed:
                                                                               () {
                                                                             showDialog(
-                                                                                context:
-                                                                                context,
-                                                                                builder:
-                                                                                    (context) {
+                                                                                context: context,
+                                                                                builder: (context) {
                                                                                   return AlertDialog(
                                                                                       title: Text('대댓글 수정'),
                                                                                       content: TextField(
@@ -404,18 +430,17 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                                       ]);
                                                                                 });
                                                                           },
-                                                                          icon: Icon(Icons
-                                                                              .edit)),
+                                                                          icon:
+                                                                              Icon(Icons.edit)),
                                                                       IconButton(
                                                                           onPressed:
                                                                               () {
                                                                             projectCRUD.deleteTeamReply(snapshot.data[index].toString(),
                                                                                 snapshot2.data[index2].toString());
-                                                                            setState(
-                                                                                    () {});
+                                                                            setState(() {});
                                                                           },
-                                                                          icon: Icon(Icons
-                                                                              .delete))
+                                                                          icon:
+                                                                              Icon(Icons.delete))
                                                                     ],
                                                                   ),
                                                                 ],
@@ -424,7 +449,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                       }
                                                       return Center(
                                                           child:
-                                                          CircularProgressIndicator());
+                                                              CircularProgressIndicator());
                                                     }),
                                               ),
                                             ],
