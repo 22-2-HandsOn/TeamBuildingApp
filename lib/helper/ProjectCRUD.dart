@@ -6,7 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 class ProjectCRUD {
   String projectID;
+
   ProjectCRUD(this.projectID);
+
   late final attendeesCollection = FirebaseFirestore.instance
       .collection("projects")
       .doc(projectID)
@@ -42,14 +44,19 @@ class ProjectCRUD {
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+        final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
             .collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data){
+          if (dataElement2 == comment_data) {
             if (attendeesCollection
                 .doc(doc.id)
-                .collection('comments').doc(doc2.id).collection('reply').get().toString().length == 0){
+                .collection('comments')
+                .doc(doc2.id)
+                .collection('reply')
+                .get()
+                .toString()
+                .length == 0) {
               final b = await attendeesCollection
                   .doc(doc.id)
                   .collection('comments').doc(doc2.id).collection('reply').add({
@@ -76,22 +83,24 @@ class ProjectCRUD {
     }
   }
 
-  Future updateAttendeeReply(String comment_data, String reply_data, String content) async {
+  Future updateAttendeeReply(String comment_data, String reply_data,
+      String content) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+        final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
             .collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data){
-            final QuerySnapshot snapshot3 =  await attendeesCollection.doc(doc.id)
+          if (dataElement2 == comment_data) {
+            final QuerySnapshot snapshot3 = await attendeesCollection.doc(
+                doc.id)
                 .collection('comments').doc(doc2.id).collection('reply').get();
             for (var doc3 in snapshot3.docs) {
               var dataElement3 = doc3.data().toString();
-              if (dataElement3 == reply_data){
+              if (dataElement3 == reply_data) {
                 attendeesCollection.doc(doc.id)
                     .collection('comments').doc(doc2.id).collection('replys')
                     .doc(doc3.id).update({'content': content});
@@ -104,30 +113,32 @@ class ProjectCRUD {
   }
 
 
-
   Future deleteAttendeeReply(String comment_data, String reply_data) async {
     var stu_id = await getstu_id();
-    var timeZoneOffset = DateTime.now().timeZoneOffset.inMilliseconds;
+    var timeZoneOffset = DateTime
+        .now()
+        .timeZoneOffset
+        .inMilliseconds;
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+        final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
             .collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data){
-            final QuerySnapshot snapshot3 = await attendeesCollection.doc(doc.id)
+          if (dataElement2 == comment_data) {
+            final QuerySnapshot snapshot3 = await attendeesCollection.doc(
+                doc.id)
                 .collection('comments').doc(doc2.id).collection('reply').get();
-            for (var doc3 in snapshot3.docs){
+            for (var doc3 in snapshot3.docs) {
               var dataElement3 = doc3.data().toString();
-              if (dataElement3 == reply_data){
+              if (dataElement3 == reply_data) {
                 attendeesCollection.doc(doc.id)
                     .collection('comments').doc(doc2.id)
                     .collection('reply').doc(doc3.id).delete();
               }
             }
-
           }
         }
       }
@@ -143,11 +154,11 @@ class ProjectCRUD {
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
+        final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
             .collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data){
+          if (dataElement2 == comment_data) {
             QuerySnapshot snapshot3 = await attendeesCollection.doc(doc.id)
                 .collection('comments').doc(doc2.id).collection('reply')
                 .get();
@@ -156,7 +167,6 @@ class ProjectCRUD {
             }
           }
         }
-
       }
     }
     return data;
@@ -164,26 +174,33 @@ class ProjectCRUD {
 
   Future addTeamReply(String content, String comment_data) async {
     var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String,dynamic>;
+    var attendee = await getAttendeeInfo() as Map<String, dynamic>;
     var attendeeId = await getAttendeeID();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
       var mapp = doc.data() as Map<String, dynamic>;
       var dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
+      for (int i = 0; i < dataElement.length; i++) {
         if (dataElement[i].toString() == stu_id) {
-          final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id).collection('comments').get();
-          for (var doc2 in snapshot2.docs){
+          final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+              .collection('comments')
+              .get();
+          for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-            if (dataElement2 == comment_data){
+            if (dataElement2 == comment_data) {
               if (teamsCollection
                   .doc(doc.id)
-                  .collection('comments').doc(doc2.id).collection('reply').get()
+                  .collection('comments')
+                  .doc(doc2.id)
+                  .collection('reply')
+                  .get()
                   .toString()
                   .length == 0) {
                 final b = await teamsCollection
                     .doc(doc.id)
-                    .collection('comments').doc(doc2.id).collection('reply').add({
+                    .collection('comments').doc(doc2.id)
+                    .collection('reply')
+                    .add({
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -193,7 +210,10 @@ class ProjectCRUD {
               else {
                 final a = await teamsCollection
                     .doc(doc.id)
-                    .collection('comments').doc(doc2.id).collection('reply').doc().set({
+                    .collection('comments').doc(doc2.id)
+                    .collection('reply')
+                    .doc()
+                    .set({
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -207,125 +227,143 @@ class ProjectCRUD {
     }
   }
 
-  Future addAttendeeComment(String content, bool isSecret) async {
+  Future getTeamReply(String comment_data) async {
     var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        if (attendeesCollection
-            .doc(doc.id)
-            .collection('comments').get().toString().length == 0){
-          final b = await attendeesCollection
-              .doc(doc.id)
-              .collection('comments').add({
-            'author_doc_id': doc.id,
-            'name': dataElement['name'],
-            'isSecret': isSecret,
-            'content': content,
-            'timestamp': FieldValue.serverTimestamp()
-          });
-        }
-        else {
-          final a = await attendeesCollection
-              .doc(doc.id)
-              .collection('comments')
-              .doc()
-              .set({
-            'author_doc_id': doc.id,
-            'name': dataElement['name'],
-            'isSecret': isSecret,
-            'content': content,
-            'timestamp': FieldValue.serverTimestamp()
-          });
-        }
-      }
-    }
-  }
-
-  Future getTeamID() async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var mapp = doc.data() as Map<String, dynamic>;
-      var dataElement = mapp['members'];
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement[i].toString() == stu_id) {
-          print(doc.id);
-          return doc.id;
-        }
-      }
-    }
-  }
-
-
-  Future getOthersAttendeeInfo(String stu_id) async {
-    final snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        return dataElement;
-      }
-    }
-  }
-
-  Future getOthersTeamInfo(String teamName) async {
-    final snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement['name'].toString() == teamName) {
-          return doc.data() as Map<String, dynamic>;
-        }
-      }
-    }
-  }
-
-  Future getAttendeeID() async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.get("stu_id");
-      if (dataElement == stu_id) {
-        return doc.id;
-      }
-    }
-  }
-
-  Future addTeamComment(String content, bool isSecret) async {
-    var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String,dynamic>;
+    List data = [];
+    var attendee = await getAttendeeInfo() as Map<String, dynamic>;
     var attendeeId = await getAttendeeID();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
       var mapp = doc.data() as Map<String, dynamic>;
       var dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
+      for (int i = 0; i < dataElement.length; i++) {
         if (dataElement[i].toString() == stu_id) {
-          if (teamsCollection
+          final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+              .collection('comments')
+              .get();
+          for (var doc2 in snapshot2.docs) {
+            var dataElement2 = doc2.data().toString();
+            if (dataElement2 == comment_data) {
+              QuerySnapshot snapshot3 = await teamsCollection.doc(doc.id)
+                  .collection('comments').doc(doc2.id).collection('reply')
+                  .get();
+              for (var doc3 in snapshot3.docs) {
+                data.add(doc3.data());
+              }
+            }
+          }
+        }
+      }
+      return data;
+    }
+  }
+
+    Future updateTeamReply(String comment_data, String reply_data,
+        String content) async {
+      var stu_id = await getstu_id();
+      var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+      var attendeeId = await getAttendeeID();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+                .collection('comments')
+                .get();
+            for (var doc2 in snapshot2.docs) {
+              var dataElement2 = doc2.data().toString();
+              if (dataElement2 == comment_data) {
+                final QuerySnapshot snapshot3 = await teamsCollection.doc(
+                    doc.id)
+                    .collection('comments').doc(doc2.id)
+                    .collection('reply')
+                    .get();
+                for (var doc3 in snapshot3.docs) {
+                  var dataElement3 = doc3.data().toString();
+                  if (dataElement3 == reply_data) {
+                    teamsCollection.doc(doc.id)
+                        .collection('comments').doc(doc2.id).collection(
+                        'replys')
+                        .doc(doc3.id).update({'content': content});
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    Future deleteTeamReply(String comment_data, String reply_data) async {
+      var stu_id = await getstu_id();
+      var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+      var attendeeId = await getAttendeeID();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+                .collection('comments')
+                .get();
+            for (var doc2 in snapshot2.docs) {
+              var dataElement2 = doc2.data().toString();
+              if (dataElement2 == comment_data) {
+                final QuerySnapshot snapshot3 = await teamsCollection.doc(
+                    doc.id)
+                    .collection('comments').doc(doc2.id)
+                    .collection('reply')
+                    .get();
+                for (var doc3 in snapshot3.docs) {
+                  var dataElement3 = doc3.data().toString();
+                  if (dataElement3 == reply_data) {
+                    teamsCollection.doc(doc.id)
+                        .collection('comments').doc(doc2.id).collection(
+                        'replys')
+                        .doc(doc3.id).delete();
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Future addAttendeeComment(String content, bool isSecret) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          if (attendeesCollection
               .doc(doc.id)
               .collection('comments')
               .get()
               .toString()
               .length == 0) {
-            final b = await teamsCollection
+            final b = await attendeesCollection
                 .doc(doc.id)
                 .collection('comments').add({
-              'author_doc_id': attendeeId,
-              'name': attendee["name"],
+              'author_doc_id': doc.id,
+              'name': dataElement['name'],
               'isSecret': isSecret,
               'content': content,
               'timestamp': FieldValue.serverTimestamp()
             });
           }
           else {
-            final a = await teamsCollection
+            final a = await attendeesCollection
                 .doc(doc.id)
                 .collection('comments')
                 .doc()
                 .set({
-              'author_doc_id': attendeeId,
-              'name': attendee["name"],
+              'author_doc_id': doc.id,
+              'name': dataElement['name'],
               'isSecret': isSecret,
               'content': content,
               'timestamp': FieldValue.serverTimestamp()
@@ -334,24 +372,169 @@ class ProjectCRUD {
         }
       }
     }
-  }
 
-  Future updateTeamComment(String content, String comment_data) async {
-    var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String,dynamic>;
-    var attendeeId = await getAttendeeID();
-    final QuerySnapshot snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var mapp = doc.data() as Map<String, dynamic>;
-      var dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
-        if (dataElement[i].toString() == stu_id) {
-          final QuerySnapshot snapshot2 =  await teamsCollection.doc(doc.id)
+    Future getTeamID() async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            print(doc.id);
+            return doc.id;
+          }
+        }
+      }
+    }
+
+
+    Future getOthersAttendeeInfo(String stu_id) async {
+      final snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          return dataElement;
+        }
+      }
+    }
+
+    Future getOthersTeamInfo(String teamName) async {
+      final snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement['name'].toString() == teamName) {
+            return doc.data() as Map<String, dynamic>;
+          }
+        }
+      }
+    }
+
+    Future getAttendeeID() async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get("stu_id");
+        if (dataElement == stu_id) {
+          return doc.id;
+        }
+      }
+    }
+
+    Future addTeamComment(String content, bool isSecret) async {
+      var stu_id = await getstu_id();
+      var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+      var attendeeId = await getAttendeeID();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            if (teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .get()
+                .toString()
+                .length == 0) {
+              final b = await teamsCollection
+                  .doc(doc.id)
+                  .collection('comments').add({
+                'author_doc_id': attendeeId,
+                'name': attendee["name"],
+                'isSecret': isSecret,
+                'content': content,
+                'timestamp': FieldValue.serverTimestamp()
+              });
+            }
+            else {
+              final a = await teamsCollection
+                  .doc(doc.id)
+                  .collection('comments')
+                  .doc()
+                  .set({
+                'author_doc_id': attendeeId,
+                'name': attendee["name"],
+                'isSecret': isSecret,
+                'content': content,
+                'timestamp': FieldValue.serverTimestamp()
+              });
+            }
+          }
+        }
+      }
+    }
+
+    Future updateTeamComment(String content, String comment_data) async {
+      var stu_id = await getstu_id();
+      var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+      var attendeeId = await getAttendeeID();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+                .collection('comments').get();
+            for (var doc2 in snapshot2.docs) {
+              var dataElement2 = doc2.data().toString();
+              if (dataElement2 == comment_data) {
+                teamsCollection
+                    .doc(doc.id)
+                    .collection('comments')
+                    .doc(doc2.id)
+                    .update({'content': content});
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Future deleteTeamComment(String comment_data) async {
+      var stu_id = await getstu_id();
+      var attendee = await getAttendeeInfo() as Map<String, dynamic>;
+      var attendeeId = await getAttendeeID();
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        var dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            final QuerySnapshot snapshot2 = await teamsCollection.doc(doc.id)
+                .collection('comments').get();
+            for (var doc2 in snapshot2.docs) {
+              var dataElement2 = doc2.data().toString();
+              if (dataElement2 == comment_data) {
+                teamsCollection
+                    .doc(doc.id)
+                    .collection('comments')
+                    .doc(doc2.id).delete();
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Future updateAttendeeComment(String content, String comment_data) async {
+      var stu_id = await getstu_id();
+      var timeZoneOffset = DateTime
+          .now()
+          .timeZoneOffset
+          .inMilliseconds;
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
               .collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-            if (dataElement2 == comment_data){
-              teamsCollection
+            if (dataElement2 == comment_data) {
+              attendeesCollection
                   .doc(doc.id)
                   .collection('comments')
                   .doc(doc2.id)
@@ -361,224 +544,174 @@ class ProjectCRUD {
         }
       }
     }
-  }
-
-  Future deleteTeamComment(String comment_data) async {
-    var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String,dynamic>;
-    var attendeeId = await getAttendeeID();
-    final QuerySnapshot snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var mapp = doc.data() as Map<String, dynamic>;
-      var dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
-        if (dataElement[i].toString() == stu_id) {
-          final QuerySnapshot snapshot2 =  await teamsCollection.doc(doc.id)
-              .collection('comments').get();
-          for (var doc2 in snapshot2.docs) {
-            var dataElement2 = doc2.data().toString();
-            if (dataElement2 == comment_data){
-              teamsCollection
-                  .doc(doc.id)
-                  .collection('comments')
-                  .doc(doc2.id).delete();
-            }
-          }
-        }
-      }
-    }
-  }
-
-  Future updateAttendeeComment(String content, String comment_data) async {
-    var stu_id = await getstu_id();
-    var timeZoneOffset = DateTime
-        .now()
-        .timeZoneOffset
-        .inMilliseconds;
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
-            .collection('comments').get();
-        for (var doc2 in snapshot2.docs) {
-          var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data) {
-            attendeesCollection
-                .doc(doc.id)
-                .collection('comments')
-                .doc(doc2.id)
-                .update({'content': content});
-          }
-        }
-      }
-    }
-  }
 
 
-  Future getAttendeeComment() async {
-    var stu_id = await getstu_id();
-    List data = [];
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        QuerySnapshot snapshot2 =
-        await attendeesCollection.doc(doc.id).collection('comments').get();
-        for (var doc2 in snapshot2.docs) {
-          data.add(doc2.data());
-        }
-      }
-    }
-    return data;
-  }
-
-  Future getTeamComment() async {
-    var stu_id = await getstu_id();
-    List data = [];
-    final QuerySnapshot snapshot = await teamsCollection.get();
-    for (var doc in snapshot.docs) {
-      var mapp = doc.data() as Map<String, dynamic>;
-      List dataElement = mapp['members'];
-      for (int i=0;i<dataElement.length;i++ ) {
-        if (dataElement[i].toString() == stu_id) {
+    Future getAttendeeComment() async {
+      var stu_id = await getstu_id();
+      List data = [];
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
           QuerySnapshot snapshot2 =
-          await teamsCollection.doc(doc.id).collection('comments').get();
+          await attendeesCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             data.add(doc2.data());
           }
         }
       }
+      return data;
     }
-    return data;
-  }
 
-  Future deleteAttendeeComment(String comment_data) async {
-    var stu_id = await getstu_id();
-    var timeZoneOffset = DateTime.now().timeZoneOffset.inMilliseconds;
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        final QuerySnapshot snapshot2 =  await attendeesCollection.doc(doc.id)
-            .collection('comments').get();
-        for (var doc2 in snapshot2.docs) {
-          var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data){
-            attendeesCollection.doc(doc.id)
-                .collection('comments').doc(doc2.id).delete();
+    Future getTeamComment() async {
+      var stu_id = await getstu_id();
+      List data = [];
+      final QuerySnapshot snapshot = await teamsCollection.get();
+      for (var doc in snapshot.docs) {
+        var mapp = doc.data() as Map<String, dynamic>;
+        List dataElement = mapp['members'];
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            QuerySnapshot snapshot2 =
+            await teamsCollection.doc(doc.id).collection('comments').get();
+            for (var doc2 in snapshot2.docs) {
+              data.add(doc2.data());
+            }
+          }
+        }
+      }
+      return data;
+    }
+
+    Future deleteAttendeeComment(String comment_data) async {
+      var stu_id = await getstu_id();
+      var timeZoneOffset = DateTime
+          .now()
+          .timeZoneOffset
+          .inMilliseconds;
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          final QuerySnapshot snapshot2 = await attendeesCollection.doc(doc.id)
+              .collection('comments').get();
+          for (var doc2 in snapshot2.docs) {
+            var dataElement2 = doc2.data().toString();
+            if (dataElement2 == comment_data) {
+              attendeesCollection.doc(doc.id)
+                  .collection('comments').doc(doc2.id).delete();
+            }
           }
         }
       }
     }
-  }
 
-  Future getTeamInfo() async {
-    final snapshot = await teamsCollection.get();
-    var stu_id = await getstu_id();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.get('members') as List;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement[i].toString() == stu_id) {
-          return doc.data() as Map<String, dynamic>;
+    Future getTeamInfo() async {
+      final snapshot = await teamsCollection.get();
+      var stu_id = await getstu_id();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get('members') as List;
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            return doc.data() as Map<String, dynamic>;
+          }
+        }
+      }
+      return {"isNull": true};
+    }
+
+    Future addTeam(String teamname, String introduction,
+        String finding_member_info, List members) async {
+      final teamDoc = await teamsCollection.doc().set({
+        'name': teamname,
+        'introduction': introduction,
+        'finding_member_info': finding_member_info,
+        'members': members,
+        'isFinished': false,
+      });
+    }
+
+    Future setStudentIntro(String intro) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          attendeesCollection.doc(doc.id).update({'introduction': intro});
         }
       }
     }
-    return {"isNull": true};
-  }
 
-  Future addTeam(String teamname, String introduction,
-      String finding_member_info, List members) async {
-    final teamDoc = await teamsCollection.doc().set({
-      'name': teamname,
-      'introduction': introduction,
-      'finding_member_info': finding_member_info,
-      'members': members,
-      'isFinished': false,
-    });
-  }
-
-  Future setStudentIntro(String intro) async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        attendeesCollection.doc(doc.id).update({'introduction': intro});
+    Future setContactInfo(List<dynamic> contacts) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          print(contacts);
+          attendeesCollection.doc(doc.id).update({'contact_infos': contacts});
+        }
       }
     }
-  }
 
-  Future setContactInfo(List<dynamic> contacts) async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        print(contacts);
-        attendeesCollection.doc(doc.id).update({'contact_infos': contacts});
+    Future setWantedTeam(String intro) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          attendeesCollection.doc(doc.id).update({'finding_team_info': intro});
+        }
       }
     }
-  }
 
-  Future setWantedTeam(String intro) async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        attendeesCollection.doc(doc.id).update({'finding_team_info': intro});
+    Future setWantedMember(String intro) async {
+      final snapshot = await teamsCollection.get();
+      var stu_id = await getstu_id();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get('members') as List;
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            teamsCollection.doc(doc.id).update({'finding_member_info': intro});
+          }
+        }
       }
     }
-  }
 
-  Future setWantedMember(String intro) async {
-    final snapshot = await teamsCollection.get();
-    var stu_id = await getstu_id();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.get('members') as List;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement[i].toString() == stu_id) {
-          teamsCollection.doc(doc.id).update({'finding_member_info': intro});
+    Future setTeamIntro(String intro) async {
+      final snapshot = await teamsCollection.get();
+      var stu_id = await getstu_id();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get('members') as List;
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            teamsCollection.doc(doc.id).update({'introduction': intro});
+          }
+        }
+      }
+    }
+
+    Future setTeamName(String intro) async {
+      final snapshot = await teamsCollection.get();
+      var stu_id = await getstu_id();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.get('members') as List;
+        for (int i = 0; i < dataElement.length; i++) {
+          if (dataElement[i].toString() == stu_id) {
+            teamsCollection.doc(doc.id).update({'name': intro});
+          }
+        }
+      }
+    }
+
+    Future getattendeedoc(String comment) async {
+      var stu_id = await getstu_id();
+      final QuerySnapshot snapshot = await attendeesCollection.get();
+      for (var doc in snapshot.docs) {
+        var dataElement = doc.data() as Map<String, dynamic>;
+        if (dataElement['stu_id'].toString() == stu_id) {
+          return doc.id;
         }
       }
     }
   }
-
-  Future setTeamIntro(String intro) async {
-    final snapshot = await teamsCollection.get();
-    var stu_id = await getstu_id();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.get('members') as List;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement[i].toString() == stu_id) {
-          teamsCollection.doc(doc.id).update({'introduction': intro});
-        }
-      }
-    }
-  }
-
-  Future setTeamName(String intro) async {
-    final snapshot = await teamsCollection.get();
-    var stu_id = await getstu_id();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.get('members') as List;
-      for (int i = 0; i < dataElement.length; i++) {
-        if (dataElement[i].toString() == stu_id) {
-          teamsCollection.doc(doc.id).update({'name': intro});
-        }
-      }
-    }
-  }
-
-  Future getattendeedoc(String comment) async {
-    var stu_id = await getstu_id();
-    final QuerySnapshot snapshot = await attendeesCollection.get();
-    for (var doc in snapshot.docs) {
-      var dataElement = doc.data() as Map<String, dynamic>;
-      if (dataElement['stu_id'].toString() == stu_id) {
-        return doc.id;
-      }
-    }
-  }
-}
