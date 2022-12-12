@@ -316,7 +316,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 100,
+                                        height: 50,
                                         child: FutureBuilder(
                                             future:
                                                 projectCRUD.getAttendeeReply(
