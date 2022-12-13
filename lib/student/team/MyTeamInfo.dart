@@ -132,7 +132,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                   //   });
                   // });
 
-                  Future.delayed(Duration.zero, () {
+                  Future.sync( () {
                     setState(() {
                       candidateNum = snapshot.data['후보학생'] == null
                           ? 0
@@ -144,8 +144,10 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                       leaderId = snapshot.data["leader_id"] == null
                           ? ""
                           : snapshot.data["leader_id"];
+
                     });
                   });
+
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),

@@ -132,7 +132,8 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
             //      isNull = false;
             //    });
             //  });
-            Future.delayed(Duration.zero, () {
+
+            Future.sync(() {
               setState(() {
                 candidateNum = snapshot.data['후보팀'] == null
                     ? 0
