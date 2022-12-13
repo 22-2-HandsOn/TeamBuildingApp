@@ -280,6 +280,23 @@ class DatabaseService {
     return teamlist;
   }
 
+  Future<List<String>> getteamcandidatelist(
+      String projectid, String teamid) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("teams")
+        .doc(teamid);
+    DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
+    await attendeesCollection.get().then((value) {
+      teamsnapshot = value;
+    });
+    final data = teamsnapshot!.data();
+    List<String> stulist =
+        List<String>.from(data?['후보학생'] == null ? [] : data?['후보학생']);
+    return stulist;
+  }
+
   Future<bool?> responsestu(String projectid, String attendeesuid,
       String teamuid, String teamname, bool accept, String stuid) async {
     late final attendeesCollection = FirebaseFirestore.instance

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future addProject(final projectData, final attendeeDataList) async {
   final db = FirebaseFirestore.instance;
   final batch = db.batch();
-
+  List<String> empty = [];
   // 1. projects 문서 추가
   final projectDoc = await db.collection('projects').add(projectData);
 
@@ -24,7 +24,14 @@ Future addProject(final projectData, final attendeeDataList) async {
   // 3. attendees 추가 및 students 업데이트
   final studentsRef = db.collection('students');
   final attendeesRef = db.collection('projects/${projectDoc.id}/attendees');
-
+  db
+      .collection('projects/${projectDoc.id}/teams_hashtags')
+      .doc("Tags")
+      .set({"hashtags": empty});
+  db
+      .collection('projects/${projectDoc.id}/attendees_hashtags')
+      .doc("Tags")
+      .set({"hashtags": empty});
   final stus = await studentsRef.get();
   final stuMap = stus.docs
       .map((stu) =>

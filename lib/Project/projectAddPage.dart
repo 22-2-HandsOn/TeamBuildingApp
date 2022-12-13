@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'widget/memNumPicker.dart';
@@ -255,6 +256,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                       int row;
                                       for (row = 0; row < nullableInt; row++) {
                                         // 한 학생에 대한 정보
+                                        List<String> temp = [];
                                         if (row == 0) continue;
                                         final rowData =
                                             excel.tables[table]?.rows[row];
@@ -264,8 +266,14 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                               rowData?.elementAt(1)?.value,
                                           "introduction": "",
                                           "finding_team_info": "",
-                                          "contacts": {"email":"","phone":"",
-                                          "url1":"","url2":"","url3":""}
+                                          "contacts": {
+                                            "email": "",
+                                            "phone": "",
+                                            "url1": "",
+                                            "url2": "",
+                                            "url3": ""
+                                          },
+                                          "hashtags": temp,
                                         });
                                       }
 
