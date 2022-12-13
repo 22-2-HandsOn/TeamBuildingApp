@@ -115,93 +115,100 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                 ),
                                 SizedBox(width: 15),
                                 ActionChip(
-                                    backgroundColor: Colors.lightBlueAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                      // side: BorderSide(
-                                      //   width: 1,
-                                      //   color: Colors.black26,
-                                      // ),
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontFamily: "GmarketSansTTF",
-                                        fontSize: 12,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                    visualDensity: VisualDensity(
-                                        horizontal: -1, vertical: -3.5),
-                                    label: !isNowLoading
-                                        ? Text(
-                                            "참여 신청",
-                                            style: TextStyle(
-                                                fontFamily: "GmarketSansTTF",
-                                                fontSize: 13,
-                                                color: Colors.white,
-                                                strokeWidth: 2,
-                                              ),
-                                            ),
-                                      onPressed: !isNowLoading
-                                          ? () async {
-                                              try {
-                                                bool flag = false;
-                                                await DatabaseService()
-                                                    .requsestuToteam(
-                                                        widget.projectId,
-                                                        team_id,
-                                                        stu_id)
-                                                    .then((value) {
-                                                  flag = value!;
-                                                });
-                                                if (flag) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                      "요청을 성공적으로 보냈습니다.",
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            "GmarketSansTTF",
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.lightBlueAccent,
-                                                  ));
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                      "이미 요청했습니다.",
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            "GmarketSansTTF",
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.lightBlueAccent,
-                                                  ));
-                                                }
-                                              } catch (e) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                    "팀원 신청을 실패하였습니다. ",
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          "GmarketSansTTF",
-                                                      fontSize: 14,
-                                                    ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    // side: BorderSide(
+                                    //   width: 1,
+                                    //   color: Colors.black26,
+                                    // ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 12,
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold),
+                                  visualDensity: VisualDensity(
+                                      horizontal: -1, vertical: -3.5),
+                                  label: !isNowLoading
+                                      ? Text(
+                                          "참여 신청",
+                                          style: TextStyle(
+                                              fontFamily: "GmarketSansTTF",
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      : Container(
+                                          width: 10,
+                                          height: 10,
+                                          padding: const EdgeInsets.all(2.0),
+                                          child:
+                                              const CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                  onPressed: !isNowLoading
+                                      ? () async {
+                                          try {
+                                            bool flag = false;
+                                            await DatabaseService()
+                                                .requsestuToteam(
+                                                    widget.projectId,
+                                                    team_id,
+                                                    stu_id)
+                                                .then((value) {
+                                              flag = value!;
+                                            });
+                                            if (flag) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(
+                                                  "요청을 성공적으로 보냈습니다.",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        "GmarketSansTTF",
+                                                    fontSize: 14,
                                                   ),
-                                                  backgroundColor:
-                                                      Colors.lightBlueAccent,
-                                                ));
-                                              }
-                                              setState(() {
-                                                isNowLoading = false;
-                                              });
+                                                ),
+                                                backgroundColor:
+                                                    Colors.lightBlueAccent,
+                                              ));
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(
+                                                  "이미 요청했습니다.",
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        "GmarketSansTTF",
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                backgroundColor:
+                                                    Colors.lightBlueAccent,
+                                              ));
                                             }
-                                          : null,
-                                    ))
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                "팀원 신청을 실패하였습니다. ",
+                                                style: TextStyle(
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              backgroundColor:
+                                                  Colors.lightBlueAccent,
+                                            ));
+                                          }
+                                          setState(() {
+                                            isNowLoading = false;
+                                          });
+                                        }
+                                      : null,
+                                )
                               ]),
                           Padding(
                             padding: const EdgeInsets.only(top: 7, bottom: 12),

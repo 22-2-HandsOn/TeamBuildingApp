@@ -28,19 +28,18 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     setState(() {});
     _refreshController.loadComplete();
   }
 
-
   String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
-  bool isNull = true;
+  bool isNull = false;
   int candidateNum = 0;
   List<String> docIds = [];
   List<String> teamnames = [];
@@ -128,30 +127,29 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-          //  Future.delayed(Duration.zero, () {
-          //    setState(() {
-          //      isNull = false;
-          //    });
-          //  });
-          candidateNum = snapshot.data['후보팀'] == null
-                  ? 0
-                  : snapshot.data['후보팀'].length;
+            //  Future.delayed(Duration.zero, () {
+            //    setState(() {
+            //      isNull = false;
+            //    });
+            //  });
+            candidateNum =
+                snapshot.data['후보팀'] == null ? 0 : snapshot.data['후보팀'].length;
 
-          if (candidateNum != 0) {
-            docIds = [];
-            teamnames = [];
+            if (candidateNum != 0) {
+              docIds = [];
+              teamnames = [];
 
-            final datas = snapshot.data['후보팀'];
-            datas.forEach((val) {
-              String docId = val.substring(0, val.indexOf('_'));
-              String teamname = val.substring(val.indexOf('_'));
+              final datas = snapshot.data['후보팀'];
+              datas.forEach((val) {
+                String docId = val.substring(0, val.indexOf('_'));
+                String teamname = val.substring(val.indexOf('_'));
 
-
-                  docIds.add(docId);
-                  teamnames.add(teamname);
-                });
-                isNull = false;
-              };
+                docIds.add(docId);
+                teamnames.add(teamname);
+              });
+              isNull = false;
+            }
+            ;
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -294,86 +292,91 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (context, index) {
                                     TextEditingController _textFieldController =
-                                    TextEditingController(
-                                        text: snapshot.data[index]
-                                        ['content']);
-                                     return Column(
+                                        TextEditingController(
+                                            text: snapshot.data[index]
+                                                ['content']);
+                                    return Column(
                                       children: [
                                         Row(
                                           children: [
                                             Comment(snapshot.data[index]),
-                                            EditIcon(snapshot.data[index],projectCRUD),
+                                            EditIcon(snapshot.data[index],
+                                                projectCRUD),
                                             IconButton(
                                                 onPressed: () {
                                                   showDialog(
                                                       context: context,
                                                       builder: (context) {
                                                         return AlertDialog(
-                                                            title: Text('댓글 수정'),
+                                                            title:
+                                                                Text('댓글 수정'),
                                                             content: TextField(
-                                                              onChanged: (value) {
+                                                              onChanged:
+                                                                  (value) {
                                                                 changedText =
                                                                     value;
                                                               },
                                                               controller:
-                                                              _textFieldController,
+                                                                  _textFieldController,
                                                               decoration:
-                                                              InputDecoration(
-                                                                  hintText:
-                                                                  "댓글 수정"),
+                                                                  InputDecoration(
+                                                                      hintText:
+                                                                          "댓글 수정"),
                                                             ),
                                                             actions: [
                                                               IconButton(
-                                                                  onPressed: () {
+                                                                  onPressed:
+                                                                      () {
                                                                     if (changedText
-                                                                        .length >
+                                                                            .length >
                                                                         0) {
                                                                       if (snapshot
-                                                                          .data[index]
+                                                                          .data[
+                                                                              index]
                                                                           .containsKey(
-                                                                          'comment_id')) {
-                                                                        projectCRUD.updateAttendeeReply(snapshot
-                                                                            .data[index]
-                                                                            .toString(),changedText);
-                                                                        Navigator
-                                                                            .pop(
+                                                                              'comment_id')) {
+                                                                        projectCRUD.updateAttendeeReply(
+                                                                            snapshot.data[index].toString(),
+                                                                            changedText);
+                                                                        Navigator.pop(
                                                                             context);
                                                                         setState(
-                                                                                () {});
+                                                                            () {});
                                                                       } else {
-                                                                        projectCRUD
-                                                                            .updateAttendeeComment(
+                                                                        projectCRUD.updateAttendeeComment(
                                                                             changedText,
-                                                                            snapshot
-                                                                                .data[index]
-                                                                                .toString());
-                                                                        Navigator
-                                                                            .pop(
+                                                                            snapshot.data[index].toString());
+                                                                        Navigator.pop(
                                                                             context);
                                                                         setState(
-                                                                                () {});
+                                                                            () {});
                                                                       }
                                                                     }
                                                                   },
                                                                   icon: Icon(
-                                                                      Icons.done))
+                                                                      Icons
+                                                                          .done))
                                                             ]);
                                                       });
                                                 },
                                                 icon: Icon(Icons.edit)),
                                             IconButton(
                                                 onPressed: () {
-                                                  if (snapshot.data[index].containsKey('comment_id')){
-                                                    projectCRUD.deleteAttendeeReply(snapshot.data[index].toString());
-
-                                                  }else{
-                                                  projectCRUD
-                                                      .deleteAttendeeComment(
-                                                      snapshot.data[index]
-                                                          .toString());
-                                                  setState(() {});
-                                                }
-                                                  },
+                                                  if (snapshot.data[index]
+                                                      .containsKey(
+                                                          'comment_id')) {
+                                                    projectCRUD
+                                                        .deleteAttendeeReply(
+                                                            snapshot.data[index]
+                                                                .toString());
+                                                  } else {
+                                                    projectCRUD
+                                                        .deleteAttendeeComment(
+                                                            snapshot.data[index]
+                                                                .toString());
+                                                    setState(() {});
+                                                  }
+                                                },
                                                 icon: Icon(Icons.delete))
                                           ],
                                         ),
@@ -577,11 +580,9 @@ class Comment extends StatelessWidget {
       additional = "    ";
     }
     return Column(
-      crossAxisAlignment:
-      CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            additional + newcolumn['name']),
+        Text(additional + newcolumn['name']),
         Text(additional + newcolumn['content']),
         SizedBox(
           height: 10,
@@ -594,7 +595,7 @@ class Comment extends StatelessWidget {
 class EditIcon extends StatefulWidget {
   Map<String, dynamic> newcolumn = {};
   ProjectCRUD projectCRUD;
-  EditIcon(this.newcolumn,this.projectCRUD);
+  EditIcon(this.newcolumn, this.projectCRUD);
   @override
   State<EditIcon> createState() => _EditIconState();
 }
@@ -602,8 +603,7 @@ class EditIcon extends StatefulWidget {
 class _EditIconState extends State<EditIcon> {
   String newComment = "";
   @override
-  TextEditingController _textFieldController2 =
-  TextEditingController();
+  TextEditingController _textFieldController2 = TextEditingController();
   Widget build(BuildContext context) {
     if (!widget.newcolumn.containsKey('comment_id')) {
       return IconButton(
@@ -612,44 +612,29 @@ class _EditIconState extends State<EditIcon> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                      title: Text(
-                          '대댓글 달기'),
+                      title: Text('대댓글 달기'),
                       content: TextField(
                         onChanged: (value) {
-                          newComment =
-                              value;
+                          newComment = value;
                         },
-                        controller:
-                        _textFieldController2,
-                        decoration:
-                        InputDecoration(
-                            hintText:
-                            "대댓글 달기"),
+                        controller: _textFieldController2,
+                        decoration: InputDecoration(hintText: "대댓글 달기"),
                       ),
                       actions: [
                         IconButton(
                             onPressed: () {
-                              widget.projectCRUD
-                                  .addAttendeeReply(
-                                  newComment,
-                                  widget.newcolumn.toString());
-                              Navigator
-                                  .pop(
-                                  context);
-                              setState(
-                                      () {});
+                              widget.projectCRUD.addAttendeeReply(
+                                  newComment, widget.newcolumn.toString());
+                              Navigator.pop(context);
+                              setState(() {});
                             },
-                            icon: Icon(
-                                Icons
-                                    .done))
+                            icon: Icon(Icons.done))
                       ]);
                 });
           },
-          icon: Icon(
-              Icons.comment_bank));
+          icon: Icon(Icons.comment_bank));
     } else {
       return Text(" ");
     }
   }
 }
-
