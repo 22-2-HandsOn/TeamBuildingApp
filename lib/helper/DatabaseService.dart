@@ -214,8 +214,6 @@ class DatabaseService {
     return result;
   }
 
-  getReqToStu() {}
-
   Future<bool?> requseteamTostu(String projectid, String attendeesuid,
       String teamuid, String teamname) async {
     late final attendeesCollection = FirebaseFirestore.instance
@@ -263,6 +261,23 @@ class DatabaseService {
       return true;
     }
     return false;
+  }
+
+  Future<List<String>> getattendcandidatelist(
+      String projectid, String attendeesuid) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("attendees")
+        .doc(attendeesuid);
+    DocumentSnapshot<Map<String, dynamic>>? stusnapshot;
+    await attendeesCollection.get().then((value) {
+      stusnapshot = value;
+    });
+    final data = stusnapshot!.data();
+    List<String> teamlist =
+        List<String>.from(data?['후보팀'] == null ? [] : data?['후보팀']);
+    return teamlist;
   }
 
   Future<bool?> responsestu(String projectid, String attendeesuid,

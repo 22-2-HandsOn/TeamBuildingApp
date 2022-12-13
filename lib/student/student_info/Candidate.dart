@@ -25,20 +25,36 @@ class _Candidatestate extends State<Candidate> {
   Stream<QuerySnapshot>? teams;
   String projectid = "";
   String stuId = "";
-
+  String attendid = "";
+  List<String> teamsid = [];
   @override
   void initState() {
     gettingteamData();
     super.initState();
   }
 
-  gettingteamData() {
+  gettingteamData() async {
     // getting the list of snapshots in our stream
     DatabaseService().getTeamlist(widget.projectId).then((snapshot) {
       setState(() {
         teams = snapshot;
       });
     });
+    await ProjectCRUD(projectid).getstu_id().then((value) {
+      stuId = value;
+    });
+
+    await ProjectCRUD(projectid).getAttendeeIDhdm(stuId).then((value) {
+      attendid = value;
+    });
+    await DatabaseService()
+        .getattendcandidatelist(widget.projectId, attendid)
+        .then((value) {
+      teamsid = value;
+    });
+    for (int i = 0; i < teamsid.length; i++) {
+      teamsid[i] = teamsid[i].substring(0, teamsid[i].indexOf('_'));
+    }
   }
 
   @override
@@ -62,7 +78,7 @@ class _Candidatestate extends State<Candidate> {
               }),
           backgroundColor: Colors.white,
           title: Text(
-            "초대받은 팀 목록 (${widget.docIds.length})",
+            "초대받은 팀 목록 (${teamsid.length})",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",

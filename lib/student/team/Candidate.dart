@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:team/Project/widget/student_tile_with_btn.dart';
 import 'package:team/helper/DatabaseService.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class Candidate extends StatefulWidget {
   final String projectId;
@@ -23,6 +24,8 @@ class _CandidateState extends State<Candidate> {
   String projectid = "";
   String stuId = "";
 
+  String teamid = "";
+  List<String> stuidlist = [];
   @override
   void initState() {
     gettingstuData();
@@ -34,6 +37,14 @@ class _CandidateState extends State<Candidate> {
       setState(() {
         stulist = snapshot;
       });
+    });
+    await ProjectCRUD(widget.projectId).getTeamID().then((value) {
+      teamid = value;
+    });
+    await DatabaseService()
+        .getteamcandidatelist(widget.projectId, teamid)
+        .then((value) {
+      stuidlist = value;
     });
   }
 
@@ -58,7 +69,7 @@ class _CandidateState extends State<Candidate> {
                 }),
             backgroundColor: Colors.white,
             title: Text(
-              "신청자 목록 (${widget.stuIds.length})",
+              "신청자 목록 (${stuidlist.length})",
               style: TextStyle(
                   color: Colors.black87,
                   fontFamily: "GmarketSansTTF",
@@ -75,14 +86,14 @@ class _CandidateState extends State<Candidate> {
       stream: stulist,
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData && !snapshot.hasError
-            ? widget.stuIds.length != 0
+            ? stuidlist.length != 0
                 ? ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       // print(snapshot.data.docs[index]['stu_id']);
                       // print(widget.stuIds);
-                      if (widget.stuIds.contains(
+                      if (stuidlist.contains(
                           snapshot.data.docs[index]['stu_id'].toString())) {
                         return Student_tile_with_btn(
                           name: snapshot.data.docs[index]['name'],
