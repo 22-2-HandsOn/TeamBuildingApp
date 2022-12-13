@@ -273,7 +273,7 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                             "url2": "",
                                             "url3": ""
                                           },
-                                          "hashtags": temp,
+                                          "hashtags": [],
                                         });
                                       }
 

@@ -32,6 +32,7 @@ Future addProject(final projectData, final attendeeDataList) async {
       .collection('projects/${projectDoc.id}/attendees_hashtags')
       .doc("Tags")
       .set({"hashtags": empty});
+
   final stus = await studentsRef.get();
   final stuMap = stus.docs
       .map((stu) =>

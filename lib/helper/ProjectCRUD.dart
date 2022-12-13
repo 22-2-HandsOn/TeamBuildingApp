@@ -747,6 +747,7 @@ class ProjectCRUD {
       'finding_member_info': finding_member_info,
       'members': members,
       'isFinished': false,
+      'hashtags': [],
     });
   }
 
