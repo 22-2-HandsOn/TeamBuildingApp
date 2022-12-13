@@ -66,6 +66,8 @@ class _TeamtileState extends State<Teamtile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(children: <Widget>[
+                    Icon(Icons.people),
+                    SizedBox(width: 10),
                     Text(
                       widget.teamName, //DB에서 가져옴
                       style: textStyle_title,
@@ -74,7 +76,7 @@ class _TeamtileState extends State<Teamtile> {
                     Chip(
                       avatar: CircleAvatar(
                           backgroundColor: Colors.transparent,
-                          child: Icon(Icons.people,
+                          child: Icon(Icons.person,
                               color: Colors.black87, size: 15)),
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(

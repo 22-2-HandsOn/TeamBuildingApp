@@ -100,7 +100,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         fontWeight: FontWeight.bold),
                     visualDensity:
                         VisualDensity(horizontal: -1, vertical: -3.5),
-                    label: Text(candidateNum.toString()),
+                    label: Text("+ " + candidateNum.toString()),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -128,24 +128,30 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            candidateNum = snapshot.data['후보팀'] == null
-                    ? 0
-                    : snapshot.data['후보팀'].length;
+          //  Future.delayed(Duration.zero, () {
+          //    setState(() {
+          //      isNull = false;
+          //    });
+          //  });
+          candidateNum = snapshot.data['후보팀'] == null
+                  ? 0
+                  : snapshot.data['후보팀'].length;
 
-                if (candidateNum != 0) {
-                  docIds = [];
-                  teamnames = [];
+          if (candidateNum != 0) {
+            docIds = [];
+            teamnames = [];
 
-                  final datas = snapshot.data['후보팀'];
-                  datas.forEach((val) {
-                    String docId = val.substring(0, val.indexOf('_'));
-                    String teamname = val.substring(val.indexOf('_'));
+            final datas = snapshot.data['후보팀'];
+            datas.forEach((val) {
+              String docId = val.substring(0, val.indexOf('_'));
+              String teamname = val.substring(val.indexOf('_'));
 
-                    docIds.add(docId);
-                    teamnames.add(teamname);
-                  });
-                  isNull = false;
-                };
+
+                  docIds.add(docId);
+                  teamnames.add(teamname);
+                });
+                isNull = false;
+              };
 
             return Padding(
               padding: const EdgeInsets.all(16.0),

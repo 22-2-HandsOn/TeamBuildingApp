@@ -7,6 +7,7 @@ import 'AddNewTeam.dart';
 import 'ChangeTeamInfo.dart';
 import 'Candidate.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../../Project/widget/student_tile_small.dart';
 
 class MyTeamInfoPage extends StatefulWidget {
   String projectId = "";
@@ -29,14 +30,27 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   }
 
   String newComment = "";
+  String stuId = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
-  bool isNull = true;
+  bool isNull = false; // for test
   int candidateNum = 0;
   List<dynamic> stuIds = [];
+  List<dynamic> mems = [];
+  String leaderId = "";
   String changedText = "";
+
+  @override
+  void initState() {
+    projectCRUD.getstu_id().then((id) {
+      setState(() {
+        stuId = id;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,47 +78,47 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
             backgroundColor: Colors.white,
             actions: !isNull
                 ? [
-              ActionChip(
-                  avatar: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Icon(Icons.people,
-                          color: Colors.black87, size: 15)),
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: BorderSide(
-                      width: 1,
-                      color: Colors.black26,
-                    ),
-                  ),
-                  labelStyle: TextStyle(
-                      fontFamily: "GmarketSansTTF",
-                      fontSize: 12,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold),
-                  visualDensity:
-                  VisualDensity(horizontal: -1, vertical: -3.5),
-                  label: Text(candidateNum.toString()),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Candidate(
-                                projectId: widget.projectId,
-                                projectname: widget.projectname,
-                                stuIds: stuIds)));
-                  }),
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeTeamInfo(widget.projectId)));
-                  },
-                  color: Colors.black87,
-                  icon: const Icon(Icons.edit_note, size: 22)),
-            ]
+                    ActionChip(
+                        avatar: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(Icons.person,
+                                color: Colors.black87, size: 15)),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(
+                            width: 1,
+                            color: Colors.black26,
+                          ),
+                        ),
+                        labelStyle: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 12,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold),
+                        visualDensity:
+                            VisualDensity(horizontal: -1, vertical: -3.5),
+                        label: Text("+ " + candidateNum.toString()),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Candidate(
+                                      projectId: widget.projectId,
+                                      projectname: widget.projectname,
+                                      stuIds: stuIds)));
+                        }),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangeTeamInfo(widget.projectId)));
+                        },
+                        color: Colors.black87,
+                        icon: const Icon(Icons.edit_note, size: 22)),
+                  ]
                 : []),
         body: FutureBuilder(
             future: projectCRUD.getTeamInfo(),
@@ -112,17 +126,23 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  Future.delayed(Duration.zero, () {
-                    setState(() {
-                      isNull = false;
+                  // Future.delayed(Duration.zero, () {
+                  //   setState(() {
+                  isNull = false;
+                  //   });
+                  // });
 
-                      candidateNum = snapshot.data['후보학생'] == null
-                          ? 0
-                          : snapshot.data['후보학생'].length;
+                  candidateNum = snapshot.data['후보학생'] == null
+                      ? 0
+                      : snapshot.data['후보학생'].length;
 
-                      if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
-                    });
-                  });
+                  if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
+
+                  mems = snapshot.data['members'];
+                  leaderId = snapshot.data["leader_id"] == null
+                      ? ""
+                      : snapshot.data["leader_id"];
+
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: SmartRefresher(
@@ -157,7 +177,27 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.only(top: 15, bottom: 7),
+                                    const EdgeInsets.only(top: 15, bottom: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        width: 10,
+                                        height: 1,
+                                        color: Colors.grey),
+                                    Text("  팀원 정보  ", style: textStyle),
+                                    Flexible(
+                                        fit: FlexFit.loose,
+                                        child: Container(
+                                            height: 1, color: Colors.grey)),
+                                  ],
+                                ),
+                              ),
+                              members(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 12, bottom: 7),
+
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -451,6 +491,34 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                         color: Colors.lightBlueAccent));
               }
             }));
+  }
+
+  members() {
+    return FutureBuilder(
+        future: projectCRUD.getMemsInfo(mems),
+        builder: (context, snapshot) {
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data == null ? 1 : snapshot.data.length,
+              itemBuilder: (context, index) {
+                if (snapshot.data == null) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: Colors.lightBlueAccent));
+                } else {
+                  return Student_tile_small(
+                      name: snapshot.data[index]['name'],
+                      info: snapshot.data[index]['introduction'],
+                      id: snapshot.data[index]['stu_id'],
+                      projectid: widget.projectId,
+                      projectname: widget.projectname,
+                      isMine:
+                          stuId == snapshot.data[index]['stu_id'].toString(),
+                      isLeader: leaderId ==
+                          snapshot.data[index]['stu_id'].toString());
+                }
+              });
+        });
   }
 
   _buildChipList(List<dynamic> hashtags) {
