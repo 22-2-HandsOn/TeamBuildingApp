@@ -41,6 +41,7 @@ class _StudenttileSmallState extends State<Student_tile_small> {
   @override
   Widget build(BuildContext context) {
     String secretId = widget.id.substring(0, 4) + "##" + widget.id.substring(6);
+
     return GestureDetector(
       onTap: () {
         if (widget.isMine) {

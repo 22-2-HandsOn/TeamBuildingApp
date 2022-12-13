@@ -48,6 +48,7 @@ class ProjectCRUD {
   }
 
   Future getMemsInfo(List<dynamic> memIds) async {
+    // print("?");
     // print(memIds);
     List<dynamic> result = [];
     final snapshot = await attendeesCollection.get();
@@ -57,6 +58,7 @@ class ProjectCRUD {
         result.add(dataElement);
       }
     }
+    // print(result);
     return result;
   }
 

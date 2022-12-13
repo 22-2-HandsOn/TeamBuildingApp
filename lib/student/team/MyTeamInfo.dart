@@ -12,6 +12,7 @@ import '../../Project/widget/student_tile_small.dart';
 class MyTeamInfoPage extends StatefulWidget {
   String projectId = "";
   String projectname = "";
+  bool renderOnce = false;
   MyTeamInfoPage(this.projectId, this.projectname);
 
   @override
@@ -35,7 +36,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
-  bool isNull = false; // for test
+  bool isNull = true; // for test
   int candidateNum = 0;
   List<dynamic> stuIds = [];
   List<dynamic> mems = [];
@@ -126,13 +127,16 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  // Future.delayed(Duration.zero, () {
-                  //   setState(() {
-                  isNull = false;
-                  //   });
-                  // });
+                  if (widget.renderOnce == false) {
+                    widget.renderOnce = true;
+                    Future.delayed(Duration.zero, () {
+                      setState(() {
+                        isNull = false;
+                      });
+                    });
+                  }
 
-                  Future.sync( () {
+                  Future.sync(() {
                     setState(() {
                       candidateNum = snapshot.data['후보학생'] == null
                           ? 0
@@ -144,10 +148,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                       leaderId = snapshot.data["leader_id"] == null
                           ? ""
                           : snapshot.data["leader_id"];
-
                     });
                   });
-
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),

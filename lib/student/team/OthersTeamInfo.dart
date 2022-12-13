@@ -11,6 +11,7 @@ class OthersTeamInfoPage extends StatefulWidget {
   String projectId = "";
   String projectname = "";
   String teamName = "";
+  bool renderOnce = false;
   OthersTeamInfoPage(this.projectId, this.projectname, this.teamName);
 
   @override
@@ -41,7 +42,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
     projectCRUD.getstu_id().then((value) {
       stu_id = value;
     });
-    projectCRUD.getTeamIDHDM(widget.teamName).then((value) {
+    projectCRUD.getTeamID().then((value) {
       team_id = value;
     });
   }
@@ -76,12 +77,28 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  isNull = false;
+                  if (widget.renderOnce == false) {
+                    widget.renderOnce = true;
+                    Future.delayed(Duration.zero, () {
+                      setState(() {
+                        isNull = false;
+                      });
+                    });
+                  }
 
-                  mems = snapshot.data['members'];
-                  leaderId = snapshot.data["leader_id"] == null
-                      ? ""
-                      : snapshot.data["leader_id"];
+                  if (!widget.renderOnce) {
+                    widget.renderOnce = true;
+                    Future.delayed(Duration.zero, () {
+                      setState(() {
+                        mems = snapshot.data['members'];
+                        leaderId = snapshot.data["leader_id"] == null
+                            ? ""
+                            : snapshot.data["leader_id"];
+
+                        print(mems);
+                      });
+                    });
+                  }
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -136,6 +153,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                           style: TextStyle(
                                               fontFamily: "GmarketSansTTF",
                                               fontSize: 13,
+                                              color: Colors.white,
                                               fontWeight: FontWeight.bold),
                                         )
                                       : Container(
@@ -242,11 +260,23 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['introduction'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['introduction'].toString() == "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? "아직 팀 소개를 작성하지 않았습니다. "
+                                : snapshot.data['introduction'].toString(),
+                            style: snapshot.data['introduction'].toString() ==
+                                        "" ||
+                                    snapshot.data['introduction'].toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
 
                           Padding(
@@ -265,11 +295,28 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['finding_member_info'].toString(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16),
+                            snapshot.data['finding_member_info'].toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
+                                : snapshot.data['finding_member_info']
+                                    .toString(),
+                            style: snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "" ||
+                                    snapshot.data['finding_member_info']
+                                            .toString() ==
+                                        "null"
+                                ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                           ),
                           // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                           Padding(
@@ -347,11 +394,11 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                         ],
                       ));
                 } else {
-                  Future.delayed(Duration.zero, () {
-                    setState(() {
-                      isNull = true;
-                    });
-                  });
+                  // Future.delayed(Duration.zero, () {
+                  //   setState(() {
+                  //     isNull = true;
+                  //   });
+                  // });
 
                   return Center(
                     child: Column(

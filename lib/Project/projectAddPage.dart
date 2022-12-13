@@ -262,16 +262,18 @@ class ProjectAddPageState extends State<ProjectAddPage> {
                                             excel.tables[table]?.rows[row];
                                         attendeeData.add({
                                           "name": rowData?.elementAt(0)?.value,
-                                          "stu_id":
-                                              rowData?.elementAt(1)?.value,
+                                          "stu_id": rowData
+                                              ?.elementAt(1)
+                                              ?.value
+                                              .toString(),
                                           "introduction": "",
                                           "finding_team_info": "",
                                           "contacts": {
-                                            "email": "",
-                                            "phone": "",
-                                            "url1": "",
-                                            "url2": "",
-                                            "url3": ""
+                                            // "email": "",
+                                            // "phone": "",
+                                            // "url1": "",
+                                            // "url2": "",
+                                            // "url3": ""
                                           },
                                           "hashtags": [],
                                         });

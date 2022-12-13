@@ -142,6 +142,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                         style: TextStyle(
                                             fontFamily: "GmarketSansTTF",
                                             fontSize: 13,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       )
                                     : Container(
