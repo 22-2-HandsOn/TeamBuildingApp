@@ -113,8 +113,7 @@ class ProjectCRUD {
     }
   }
 
-  Future updateAttendeeReply(
-      String comment_data,String content) async {
+  Future updateAttendeeReply(String comment_data, String content) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
@@ -124,23 +123,23 @@ class ProjectCRUD {
             await attendeesCollection.doc(doc.id).collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-            final QuerySnapshot snapshot3 = await attendeesCollection
-                .doc(doc.id)
-                .collection('comments')
-                .doc(doc2.id)
-                .collection('reply')
-                .get();
-            for (var doc3 in snapshot3.docs) {
-              var dataElement3 = doc3.data().toString();
-              if (dataElement3 == comment_data) {
-                attendeesCollection
-                    .doc(doc.id)
-                    .collection('comments')
-                    .doc(doc2.id)
-                    .collection('reply')
-                    .doc(doc3.id)
-                    .update({'content': content});
-              }
+          final QuerySnapshot snapshot3 = await attendeesCollection
+              .doc(doc.id)
+              .collection('comments')
+              .doc(doc2.id)
+              .collection('reply')
+              .get();
+          for (var doc3 in snapshot3.docs) {
+            var dataElement3 = doc3.data().toString();
+            if (dataElement3 == comment_data) {
+              attendeesCollection
+                  .doc(doc.id)
+                  .collection('comments')
+                  .doc(doc2.id)
+                  .collection('reply')
+                  .doc(doc3.id)
+                  .update({'content': content});
+            }
           }
         }
       }
@@ -158,22 +157,22 @@ class ProjectCRUD {
             await attendeesCollection.doc(doc.id).collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-            final QuerySnapshot snapshot3 = await attendeesCollection
-                .doc(doc.id)
-                .collection('comments')
-                .doc(doc2.id)
-                .collection('reply')
-                .get();
-            for (var doc3 in snapshot3.docs) {
-              var dataElement3 = doc3.data().toString();
-              if (dataElement3 == comment_data) {
-                attendeesCollection
-                    .doc(doc.id)
-                    .collection('comments')
-                    .doc(doc2.id)
-                    .collection('reply')
-                    .doc(doc3.id)
-                    .delete();
+          final QuerySnapshot snapshot3 = await attendeesCollection
+              .doc(doc.id)
+              .collection('comments')
+              .doc(doc2.id)
+              .collection('reply')
+              .get();
+          for (var doc3 in snapshot3.docs) {
+            var dataElement3 = doc3.data().toString();
+            if (dataElement3 == comment_data) {
+              attendeesCollection
+                  .doc(doc.id)
+                  .collection('comments')
+                  .doc(doc2.id)
+                  .collection('reply')
+                  .doc(doc3.id)
+                  .delete();
             }
           }
         }
@@ -241,7 +240,7 @@ class ProjectCRUD {
                     .doc(doc2.id)
                     .collection('reply')
                     .add({
-                  'comment_id' : doc2.id,
+                  'comment_id': doc2.id,
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -255,7 +254,7 @@ class ProjectCRUD {
                     .collection('reply')
                     .doc()
                     .set({
-                  'comment_id' : doc2.id,
+                  'comment_id': doc2.id,
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -302,8 +301,7 @@ class ProjectCRUD {
     }
   }
 
-  Future updateTeamReply(
-      String comment_data,String content) async {
+  Future updateTeamReply(String comment_data, String content) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
@@ -315,22 +313,22 @@ class ProjectCRUD {
               await teamsCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-              final QuerySnapshot snapshot3 = await teamsCollection
-                  .doc(doc.id)
-                  .collection('comments')
-                  .doc(doc2.id)
-                  .collection('reply')
-                  .get();
-              for (var doc3 in snapshot3.docs) {
-                var dataElement3 = doc3.data().toString();
-                if (dataElement3 == comment_data) {
-                  teamsCollection
-                      .doc(doc.id)
-                      .collection('comments')
-                      .doc(doc2.id)
-                      .collection('reply')
-                      .doc(doc3.id)
-                      .update({'content': content});
+            final QuerySnapshot snapshot3 = await teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc(doc2.id)
+                .collection('reply')
+                .get();
+            for (var doc3 in snapshot3.docs) {
+              var dataElement3 = doc3.data().toString();
+              if (dataElement3 == comment_data) {
+                teamsCollection
+                    .doc(doc.id)
+                    .collection('comments')
+                    .doc(doc2.id)
+                    .collection('reply')
+                    .doc(doc3.id)
+                    .update({'content': content});
               }
             }
           }
@@ -353,22 +351,22 @@ class ProjectCRUD {
               await teamsCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-              final QuerySnapshot snapshot3 = await teamsCollection
-                  .doc(doc.id)
-                  .collection('comments')
-                  .doc(doc2.id)
-                  .collection('reply')
-                  .get();
-              for (var doc3 in snapshot3.docs) {
-                var dataElement3 = doc3.data().toString();
-                if (dataElement3 == comment_data) {
-                  teamsCollection
-                      .doc(doc.id)
-                      .collection('comments')
-                      .doc(doc2.id)
-                      .collection('reply')
-                      .doc(doc3.id)
-                      .delete();
+            final QuerySnapshot snapshot3 = await teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc(doc2.id)
+                .collection('reply')
+                .get();
+            for (var doc3 in snapshot3.docs) {
+              var dataElement3 = doc3.data().toString();
+              if (dataElement3 == comment_data) {
+                teamsCollection
+                    .doc(doc.id)
+                    .collection('comments')
+                    .doc(doc2.id)
+                    .collection('reply')
+                    .doc(doc3.id)
+                    .delete();
               }
             }
           }
@@ -421,8 +419,11 @@ class ProjectCRUD {
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        return attendeesCollection.doc(doc.id)
-            .collection('comments').snapshots().listen((event) => {print("rarara")});
+        return attendeesCollection
+            .doc(doc.id)
+            .collection('comments')
+            .snapshots()
+            .listen((event) => {print("rarara")});
       }
     }
   }
@@ -734,6 +735,8 @@ class ProjectCRUD {
         }
       }
     }
+
+    return {"isNull": true};
   }
 
   Future addTeam(String teamname, String introduction,
