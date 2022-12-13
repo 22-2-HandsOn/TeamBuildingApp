@@ -314,69 +314,106 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                             text: snapshot.data[index]
                                                 ['content']);
                                     return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(snapshot.data[index]['name']),
-                                            Text(snapshot.data[index]
-                                                ['content']),
-                                            SizedBox(
-                                              height: 10,
-                                            )
+                                            Text(
+                                              snapshot.data[index]['name'],
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                                snapshot.data[index]['content'],
+                                                style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 14,
+                                                )),
                                           ],
                                         ),
-                                        IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                        title: Text('댓글 수정'),
-                                                        content: TextField(
-                                                          onChanged: (value) {
-                                                            changedText = value;
-                                                          },
-                                                          controller:
-                                                              _textFieldController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  hintText:
-                                                                      "댓글 수정"),
-                                                        ),
-                                                        actions: [
-                                                          IconButton(
-                                                              onPressed: () {
-                                                                projectCRUD.updateAttendeeComment(
-                                                                    changedText,
-                                                                    snapshot
-                                                                        .data[
-                                                                            index]
-                                                                        .toString());
-                                                                Navigator.pop(
-                                                                    context);
-                                                                setState(() {});
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                            title: Text('댓글 수정',
+                                                                style:
+                                                                    textStyle),
+                                                            content: TextField(
+                                                              onChanged:
+                                                                  (value) {
+                                                                changedText =
+                                                                    value;
                                                               },
-                                                              icon: Icon(
-                                                                  Icons.done))
-                                                        ]);
-                                                  });
-                                            },
-                                            icon: Icon(Icons.edit)),
-                                        IconButton(
-                                            onPressed: () {
-                                              projectCRUD.deleteAttendeeComment(
-                                                  snapshot.data[index]
-                                                      .toString());
-                                              setState(() {});
-                                            },
-                                            icon: Icon(Icons.delete))
+                                                              controller:
+                                                                  _textFieldController,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder(),
+                                                                floatingLabelBehavior:
+                                                                    FloatingLabelBehavior
+                                                                        .always,
+                                                                labelStyle:
+                                                                    const TextStyle(
+                                                                  fontFamily:
+                                                                      "GmarketSansTTF",
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            actions: [
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    projectCRUD.updateAttendeeComment(
+                                                                        changedText,
+                                                                        snapshot
+                                                                            .data[index]
+                                                                            .toString());
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    setState(
+                                                                        () {});
+                                                                  },
+                                                                  icon: Icon(
+                                                                      Icons
+                                                                          .done,
+                                                                      size: 18))
+                                                            ]);
+                                                      });
+                                                },
+                                                icon:
+                                                    Icon(Icons.edit, size: 18)),
+                                            IconButton(
+                                                onPressed: () {
+                                                  projectCRUD
+                                                      .deleteAttendeeComment(
+                                                          snapshot.data[index]
+                                                              .toString());
+                                                  setState(() {});
+                                                },
+                                                icon: Icon(Icons.delete,
+                                                    size: 18))
+                                          ],
+                                        )
                                       ],
                                     );
                                   });
                             }
-                            return Center(child: Text("No Comment"));
+                            return Center(
+                                child: Text("No Comment", style: textStyle));
                             ;
                           }),
                     ),
@@ -387,8 +424,14 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                           child: TextField(
                             controller: _controller,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
                               labelText: '새 댓글',
+                              border: OutlineInputBorder(),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16,
+                              ),
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -407,7 +450,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                               _controller.clear();
                               setState(() {});
                             },
-                            icon: Icon(Icons.send))
+                            icon: Icon(Icons.send, size: 20))
                       ],
                     ),
                   ],

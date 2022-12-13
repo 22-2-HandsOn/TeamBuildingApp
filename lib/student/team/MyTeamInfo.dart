@@ -12,7 +12,6 @@ import '../../Project/widget/student_tile_small.dart';
 class MyTeamInfoPage extends StatefulWidget {
   String projectId = "";
   String projectname = "";
-  bool renderOnce = false;
   MyTeamInfoPage(this.projectId, this.projectname);
 
   @override
@@ -42,6 +41,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   List<dynamic> mems = [];
   String leaderId = "";
   String changedText = "";
+
+  bool renderOnce = false;
 
   @override
   void initState() {
@@ -127,29 +128,27 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  if (widget.renderOnce == false) {
-                    widget.renderOnce = true;
+                  if (renderOnce == false) {
+                    renderOnce = true;
                     Future.delayed(Duration.zero, () {
                       setState(() {
                         isNull = false;
+
+                        setState(() {
+                          candidateNum = snapshot.data['후보학생'] == null
+                              ? 0
+                              : snapshot.data['후보학생'].length;
+
+                          if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
+
+                          mems = snapshot.data['members'];
+                          leaderId = snapshot.data["leader_id"] == null
+                              ? ""
+                              : snapshot.data["leader_id"];
+                        });
                       });
                     });
                   }
-
-                  Future.sync(() {
-                    setState(() {
-                      candidateNum = snapshot.data['후보학생'] == null
-                          ? 0
-                          : snapshot.data['후보학생'].length;
-
-                      if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
-
-                      mems = snapshot.data['members'];
-                      leaderId = snapshot.data["leader_id"] == null
-                          ? ""
-                          : snapshot.data["leader_id"];
-                    });
-                  });
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -351,8 +350,12 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                 builder:
                                                                     (context) {
                                                                   return AlertDialog(
-                                                                      title: Text(
-                                                                          '댓글 수정'),
+                                                                      title:
+                                                                          Text(
+                                                                        '댓글 수정',
+                                                                        style:
+                                                                            textStyle,
+                                                                      ),
                                                                       content:
                                                                           TextField(
                                                                         onChanged:
@@ -363,7 +366,21 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                                                         controller:
                                                                             _textFieldController,
                                                                         decoration:
-                                                                            InputDecoration(hintText: "댓글 수정"),
+                                                                            InputDecoration(
+                                                                          hintText:
+                                                                              "댓글 수정",
+                                                                          border:
+                                                                              OutlineInputBorder(),
+                                                                          floatingLabelBehavior:
+                                                                              FloatingLabelBehavior.always,
+                                                                          labelStyle:
+                                                                              const TextStyle(
+                                                                            fontFamily:
+                                                                                "GmarketSansTTF",
+                                                                            fontSize:
+                                                                                16,
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                       actions: [
                                                                         IconButton(
@@ -427,6 +444,12 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                       controller: _controller,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        labelStyle: const TextStyle(
+                                          fontFamily: "GmarketSansTTF",
+                                          fontSize: 16,
+                                        ),
                                         labelText: '새 댓글',
                                       ),
                                       onChanged: (value) {
@@ -595,7 +618,15 @@ class _EditIconState extends State<EditIcon> {
                           newComment = value;
                         },
                         controller: _textFieldController2,
-                        decoration: InputDecoration(hintText: "대댓글 달기"),
+                        decoration: InputDecoration(
+                          hintText: "대댓글 달기",
+                          border: OutlineInputBorder(),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelStyle: const TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                       actions: [
                         IconButton(

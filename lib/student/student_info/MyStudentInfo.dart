@@ -39,6 +39,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
+  bool renderOnce = false;
   bool isNull = false;
   int candidateNum = 0;
   List<String> docIds = [];
@@ -119,7 +120,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                   ChangeMyStudentInfo(widget.projectId)));
                     },
                     color: Colors.black87,
-                    icon: const Icon(Icons.edit_note, size: 22)),
+                    icon: const Icon(Icons.edit_note, size: 18)),
               ]
             : [],
       ),
@@ -127,19 +128,18 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            //  Future.delayed(Duration.zero, () {
-            //    setState(() {
-            //      isNull = false;
-            //    });
-            //  });
+            if (renderOnce == false) {
+              renderOnce = true;
+              Future.delayed(Duration.zero, () {
+                setState(() {
+                  isNull = false;
 
-            Future.sync(() {
-              setState(() {
-                candidateNum = snapshot.data['후보팀'] == null
-                    ? 0
-                    : snapshot.data['후보팀'].length;
+                  candidateNum = snapshot.data['후보팀'] == null
+                      ? 0
+                      : snapshot.data['후보팀'].length;
+                });
               });
-            });
+            }
 
             if (candidateNum != 0) {
               docIds = [];
@@ -305,92 +305,111 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                                       children: [
                                         Row(
                                           children: [
-                                            Comment(snapshot.data[index]),
-                                            EditIcon(snapshot.data[index],
-                                                projectCRUD),
-                                            IconButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                            title:
-                                                                Text('댓글 수정'),
-                                                            content: TextField(
-                                                              onChanged:
-                                                                  (value) {
-                                                                changedText =
-                                                                    value;
-                                                              },
-                                                              controller:
-                                                                  _textFieldController,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                      hintText:
-                                                                          "댓글 수정"),
-                                                            ),
-                                                            actions: [
-                                                              IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    if (changedText
-                                                                            .length >
-                                                                        0) {
-                                                                      if (snapshot
-                                                                          .data[
-                                                                              index]
-                                                                          .containsKey(
-                                                                              'comment_id')) {
-                                                                        projectCRUD.updateAttendeeReply(
-                                                                            snapshot.data[index].toString(),
-                                                                            changedText);
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        setState(
-                                                                            () {});
-                                                                      } else {
-                                                                        projectCRUD.updateAttendeeComment(
-                                                                            changedText,
-                                                                            snapshot.data[index].toString());
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        setState(
-                                                                            () {});
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  icon: Icon(
-                                                                      Icons
-                                                                          .done))
-                                                            ]);
-                                                      });
-                                                },
-                                                icon: Icon(Icons.edit)),
-                                            IconButton(
-                                                onPressed: () {
-                                                  if (snapshot.data[index]
-                                                      .containsKey(
-                                                          'comment_id')) {
-                                                    projectCRUD
-                                                        .deleteAttendeeReply(
-                                                            snapshot.data[index]
-                                                                .toString());
-                                                  } else {
-                                                    projectCRUD
-                                                        .deleteAttendeeComment(
-                                                            snapshot.data[index]
-                                                                .toString());
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                icon: Icon(Icons.delete))
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Comment(snapshot.data[index]),
+                                                  Row(children: [
+                                                    EditIcon(
+                                                        snapshot.data[index],
+                                                        projectCRUD),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return AlertDialog(
+                                                                    title: Text(
+                                                                        '댓글 수정',
+                                                                        style:
+                                                                            textStyle),
+                                                                    content: TextField(
+                                                                        onChanged: (value) {
+                                                                          changedText =
+                                                                              value;
+                                                                        },
+                                                                        controller: _textFieldController,
+                                                                        decoration: InputDecoration(
+                                                                          border:
+                                                                              OutlineInputBorder(),
+                                                                          floatingLabelBehavior:
+                                                                              FloatingLabelBehavior.always,
+                                                                          labelStyle:
+                                                                              const TextStyle(
+                                                                            fontFamily:
+                                                                                "GmarketSansTTF",
+                                                                            fontSize:
+                                                                                16,
+                                                                          ),
+                                                                        )),
+                                                                    actions: [
+                                                                      IconButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            if (changedText.length >
+                                                                                0) {
+                                                                              if (snapshot.data[index].containsKey('comment_id')) {
+                                                                                projectCRUD.updateAttendeeReply(snapshot.data[index].toString(), changedText);
+                                                                                Navigator.pop(context);
+                                                                                setState(() {});
+                                                                              } else {
+                                                                                projectCRUD.updateAttendeeComment(changedText, snapshot.data[index].toString());
+                                                                                Navigator.pop(context);
+                                                                                setState(() {});
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                          icon: Icon(
+                                                                              Icons.done,
+                                                                              size: 18,
+                                                                              color: Colors.white))
+                                                                    ]);
+                                                              });
+                                                        },
+                                                        icon: Icon(Icons.edit,
+                                                            size: 18,
+                                                            color:
+                                                                Colors.white)),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          if (snapshot
+                                                              .data[index]
+                                                              .containsKey(
+                                                                  'comment_id')) {
+                                                            projectCRUD
+                                                                .deleteAttendeeReply(
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                        .toString());
+                                                          } else {
+                                                            projectCRUD
+                                                                .deleteAttendeeComment(
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                        .toString());
+                                                            setState(() {});
+                                                          }
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          size: 18,
+                                                          color: Colors.white,
+                                                        ))
+                                                  ]),
+                                                ])
                                           ],
                                         ),
                                       ],
                                     );
                                   });
                             }
-                            return Center(child: Text("No Comment"));
+                            return Center(
+                                child: Text("No Comment", style: textStyle));
                             ;
                           }),
                     ),
@@ -401,9 +420,14 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                           child: TextField(
                             controller: _controller,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: '새 댓글',
-                            ),
+                                labelText: '새 댓글',
+                                border: OutlineInputBorder(),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: const TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 16,
+                                )),
                             onChanged: (value) {
                               setState(() {
                                 newComment = value as String;
@@ -421,7 +445,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                               _controller.clear();
                               setState(() {});
                             },
-                            icon: Icon(Icons.send))
+                            icon: Icon(Icons.send, size: 20))
                       ],
                     ),
                   ],
@@ -588,11 +612,21 @@ class Comment extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(additional + newcolumn['name']),
-        Text(additional + newcolumn['content']),
-        SizedBox(
-          height: 10,
+        Text(
+          additional + newcolumn['name'],
+          style: TextStyle(
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 16,
+              fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 5),
+        Text(additional + newcolumn['content'],
+            style: TextStyle(
+              color: Colors.black87,
+              fontFamily: "GmarketSansTTF",
+              fontSize: 14,
+            )),
       ],
     );
   }
@@ -634,11 +668,11 @@ class _EditIconState extends State<EditIcon> {
                               Navigator.pop(context);
                               setState(() {});
                             },
-                            icon: Icon(Icons.done))
+                            icon: Icon(Icons.done, size: 18))
                       ]);
                 });
           },
-          icon: Icon(Icons.comment_bank));
+          icon: Icon(Icons.comment_bank, size: 18, color: Colors.white));
     } else {
       return Text(" ");
     }
