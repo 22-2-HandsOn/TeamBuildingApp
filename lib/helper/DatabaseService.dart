@@ -91,47 +91,53 @@ class DatabaseService {
 
   getReqToStu() {}
 
-  requseteamTostu(String projectid, String attendeesuid, String teamuid,
-      String teamname) async {
+  Future<bool?> requseteamTostu(String projectid, String attendeesuid,
+      String teamuid, String teamname) async {
     late final attendeesCollection = FirebaseFirestore.instance
         .collection("projects")
         .doc(projectid)
         .collection("attendees")
         .doc(attendeesuid);
     DocumentSnapshot<Map<String, dynamic>>? stusnapshot;
-    attendeesCollection.get().then((value) {
+    await attendeesCollection.get().then((value) {
       stusnapshot = value;
     });
 
     final data = stusnapshot!.data();
     final teamlist =
         List<String>.from(data?['후보팀'] == null ? [] : data?['후보팀']);
-    if (!teamlist.contains(teamuid)) {
+    if (!teamlist.contains(teamuid + "_" + teamname)) {
       await attendeesCollection.update({
         "후보팀": FieldValue.arrayUnion(["${teamuid}_$teamname"])
       });
+      return true;
     }
+    return false;
   }
 
-  requsestuToteam(String projectid, String teamuid, String stuid) async {
+  Future<bool?> requsestuToteam(
+      String projectid, String teamuid, String stuid) async {
     final teamsCollection = FirebaseFirestore.instance
         .collection("projects")
         .doc(projectid)
         .collection("teams")
         .doc(teamuid);
     DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
-    teamsCollection.get().then((value) {
+    await teamsCollection.get().then((value) {
       teamsnapshot = value;
     });
 
     final data = teamsnapshot!.data();
     final stulist =
         List<String>.from(data?['후보학생'] == null ? [] : data?['후보학생']);
+
     if (!stulist.contains(stuid)) {
       await teamsCollection.update({
         "후보학생": FieldValue.arrayUnion([stuid])
       });
+      return true;
     }
+    return false;
   }
 
   responsestu(String projectid, String attendeesuid, String teamuid,
