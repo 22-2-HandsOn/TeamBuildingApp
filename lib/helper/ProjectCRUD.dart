@@ -415,6 +415,18 @@ class ProjectCRUD {
     }
   }
 
+  Future getStudentCommentDocRef() async {
+    var stu_id = await getstu_id();
+    final QuerySnapshot snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (dataElement['stu_id'].toString() == stu_id) {
+        return attendeesCollection.doc(doc.id)
+            .collection('comments').snapshots().listen((event) => {print("rarara")});
+      }
+    }
+  }
+
   Future getTeamhdm() async {
     final snapshot = await teamsCollection.get();
     var stu_id = await getstu_id();
