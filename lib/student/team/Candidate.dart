@@ -1,68 +1,129 @@
-// import 'package:flutter/material.dart';
-// import 'package:team/helper/helper_function.dart';
-// import 'package:team/helper/DatabaseService.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:team/Project/widget/student_tile_with_btn.dart';
+import 'package:team/helper/DatabaseService.dart';
 
-// class StuProjectListPage extends StatefulWidget {
-//   const StuProjectListPage({Key? key}) : super(key: key);
+class Candidate extends StatefulWidget {
+  final String projectId;
+  final String projectname;
+  List<dynamic> stuIds = [];
 
-//   @override
-//   _StuProjectListPagestate createState() => _StuProjectListPagestate();
-// }
+  Candidate({
+    Key? key,
+    required this.projectId,
+    required this.projectname,
+    required this.stuIds,
+  }) : super(key: key);
+  @override
+  _CandidateState createState() => _CandidateState();
+}
 
-// class _StuProjectListPagestate extends State<StuProjectListPage> {
-//   @override
-//   void initState() {
-//     gettingUserData();
-//     super.initState();
-//   }
+class _CandidateState extends State<Candidate> {
+  Stream<QuerySnapshot>? stulist;
+  String projectid = "";
+  String stuId = "";
 
-//   gettingUserData() async {}
+  @override
+  void initState() {
+    gettingstuData();
+    super.initState();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         elevation: 0,
-//         centerTitle: true,
-//         leading: IconButton(
-//             icon: Icon(
-//               Icons.arrow_back,
-//               color: Colors.black87,
-//             ),
-//             onPressed: () {
-//               Navigator.pop(context);
-//             }),
-//         backgroundColor: Colors.white,
-//         title: const Text(
-//           "팀원 신청 목록",
-//           style: TextStyle(
-//               color: Colors.black87,
-//               fontFamily: "GmarketSansTTF",
-//               fontSize: 20,
-//               fontWeight: FontWeight.bold),
-//         ),
-//       ),
-//       backgroundColor: Colors.white,
-//       body: Container(
-//           padding: const EdgeInsets.symmetric(vertical: 7),
-//           child: projectlist()),
-//     );
-//   }
+  gettingstuData() async {
+    DatabaseService().getstulist(widget.projectId).then((snapshot) {
+      setState(() {
+        stulist = snapshot;
+      });
+    });
+  }
 
-//   projectlist() {
-//     return StreamBuilder(
-//       // stream: ,
-//       builder: (context, AsyncSnapshot snapshot) {
-//         // make some checks
-//         if (snapshot.hasData) {
-//           //
-//         } else {
-//           return Center(
-//             child: CircularProgressIndicator(color: Colors.lightBlueAccent),
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Builder(builder: (context) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        gettingstuData();
+      });
+      return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            backgroundColor: Colors.white,
+            title: Text(
+              "신청자 목록 (${widget.stuIds.length})",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontFamily: "GmarketSansTTF",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          body: attendees());
+    });
+  }
+
+  attendees() {
+    return StreamBuilder(
+      stream: stulist,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData && !snapshot.hasError
+            ? widget.stuIds.length != 0
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      // print(snapshot.data.docs[index]['stu_id']);
+                      // print(widget.stuIds);
+                      if (widget.stuIds.contains(
+                          snapshot.data.docs[index]['stu_id'].toString())) {
+                        return Student_tile_with_btn(
+                          name: snapshot.data.docs[index]['name'],
+                          info: snapshot.data.docs[index]['introduction'],
+                          id: snapshot.data.docs[index]['stu_id'].toString(),
+                          projectid: widget.projectId,
+                          projectname: widget.projectname,
+                          isMine: false,
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                    //controller: unitcontroller,
+                  )
+                : nostudWidget()
+            : const Center(
+                child:
+                    CircularProgressIndicator(color: Colors.lightBlueAccent));
+      },
+    );
+  }
+
+  nostudWidget() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "참여를 희망하는 학생이 없습니다.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: "GmarketSansTTF",
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}

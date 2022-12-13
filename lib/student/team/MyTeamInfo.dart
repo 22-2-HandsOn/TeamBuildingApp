@@ -24,6 +24,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   var _controller = TextEditingController();
   bool isNull = true;
   int candidateNum = 0;
+  List<dynamic> stuIds = [];
   String changedText = "";
 
   @override
@@ -74,8 +75,13 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                             VisualDensity(horizontal: -1, vertical: -3.5),
                         label: Text(candidateNum.toString()),
                         onPressed: () {
-                          print(
-                              'If you stand for nothing, Burr, what’ll you fall for?');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Candidate(
+                                      projectId: widget.projectId,
+                                      projectname: widget.projectname,
+                                      stuIds: stuIds)));
                         }),
                     IconButton(
                         onPressed: () {
@@ -99,6 +105,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                     candidateNum = snapshot.data['후보학생'] == null
                         ? 0
                         : snapshot.data['후보학생'].length;
+
+                    if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
                   });
                 });
                 if (snapshot.data['isNull'] == null) {

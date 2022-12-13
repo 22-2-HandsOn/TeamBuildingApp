@@ -5,11 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'ChangeStudentInfo.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:team/Project/main/studentlist.dart';
-import 'package:team/Project/main/teamlist.dart';
-import 'package:team/Project/main/home.dart';
-import 'package:team/student/team/MyTeamInfo.dart';
-import 'package:form_validator/form_validator.dart';
+import 'Candidate.dart';
 
 class MyStudentInfoPage extends StatefulWidget {
   String projectId = "";
@@ -24,7 +20,11 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   String newComment = "";
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
+
+  bool isNull = true;
   int candidateNum = 0;
+  List<String> docIds = [];
+  List<String> teamnames = [];
 
   late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectId);
   var _controller = TextEditingController();
@@ -59,40 +59,51 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
               fontSize: 20,
               fontWeight: FontWeight.bold),
         ),
-        actions: [
-          ActionChip(
-              avatar: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(Icons.people, color: Colors.black87, size: 15)),
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-                side: BorderSide(
-                  width: 1,
-                  color: Colors.black26,
-                ),
-              ),
-              labelStyle: TextStyle(
-                  fontFamily: "GmarketSansTTF",
-                  fontSize: 12,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold),
-              visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
-              label: Text(candidateNum.toString()),
-              onPressed: () {
-                print('If you stand for nothing, Burr, what’ll you fall for?');
-              }),
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ChangeMyStudentInfo(widget.projectId)));
-              },
-              color: Colors.black87,
-              icon: const Icon(Icons.edit_note, size: 22)),
-        ],
+        actions: !isNull
+            ? [
+                ActionChip(
+                    avatar: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Icon(Icons.people,
+                            color: Colors.black87, size: 15)),
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: BorderSide(
+                        width: 1,
+                        color: Colors.black26,
+                      ),
+                    ),
+                    labelStyle: TextStyle(
+                        fontFamily: "GmarketSansTTF",
+                        fontSize: 12,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold),
+                    visualDensity:
+                        VisualDensity(horizontal: -1, vertical: -3.5),
+                    label: Text(candidateNum.toString()),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Candidate(
+                                  projectId: widget.projectId,
+                                  projectname: widget.projectname,
+                                  docIds: docIds,
+                                  teamnames: teamnames)));
+                    }),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeMyStudentInfo(widget.projectId)));
+                    },
+                    color: Colors.black87,
+                    icon: const Icon(Icons.edit_note, size: 22)),
+              ]
+            : [],
       ),
       body: FutureBuilder(
         future: projectCRUD.getAttendeeInfo(),
@@ -100,9 +111,27 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
           if (snapshot.hasData) {
             Future.delayed(Duration.zero, () {
               setState(() {
+                // print(snapshot.data['후보팀']);
                 candidateNum = snapshot.data['후보팀'] == null
                     ? 0
                     : snapshot.data['후보팀'].length;
+
+                if (candidateNum != 0) {
+                  docIds = [];
+                  teamnames = [];
+
+                  final datas = snapshot.data['후보팀'];
+                  datas.forEach((val) {
+                    String docId = val.substring(0, val.indexOf('_'));
+                    String teamname = val.substring(val.indexOf('_'));
+
+                    docIds.add(docId);
+                    teamnames.add(teamname);
+                  });
+
+                  isNull = false;
+                }
+                ;
               });
             });
 

@@ -101,59 +101,62 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text("      "),
-                        SizedBox(
-                            width: 55,
-                            height: 26,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  backgroundColor: Colors.lightBlueAccent,
-                                  elevation: 0,
-                                  disabledBackgroundColor:
-                                      Colors.lightBlueAccent.shade100),
-                              child: !isNowLoading
-                                  ? Text(
-                                      "초대",
-                                      style: TextStyle(
-                                          fontFamily: "GmarketSansTTF",
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  : Container(
-                                      width: 10,
-                                      height: 10,
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: const CircularProgressIndicator(
+                        ActionChip(
+                            backgroundColor: Colors.lightBlueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              // side: BorderSide(
+                              //   width: 1,
+                              //   color: Colors.black26,
+                              // ),
+                            ),
+                            labelStyle: TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 12,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
+                            visualDensity:
+                                VisualDensity(horizontal: -1, vertical: -3.5),
+                            label: !isNowLoading
+                                ? Text(
+                                    "초대",
+                                    style: TextStyle(
+                                        fontFamily: "GmarketSansTTF",
+                                        fontSize: 13,
                                         color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                : Container(
+                                    width: 10,
+                                    height: 10,
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: const CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
                                     ),
-                              onPressed: !isNowLoading
-                                  ? () async {
-                                      try {
-                                        // *TODO : 함수 호출 (초대)
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            "초대를 실패하였습니다. ",
-                                            style: TextStyle(
-                                              fontFamily: "GmarketSansTTF",
-                                              fontSize: 14,
-                                            ),
+                                  ),
+                            onPressed: !isNowLoading
+                                ? () async {
+                                    try {
+                                      // *TODO : 함수 호출 (초대)
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          "초대를 실패하였습니다. ",
+                                          style: TextStyle(
+                                            fontFamily: "GmarketSansTTF",
+                                            fontSize: 14,
                                           ),
-                                          backgroundColor:
-                                              Colors.lightBlueAccent,
-                                        ));
-                                      }
-                                      setState(() {
-                                        isNowLoading = false;
-                                      });
+                                        ),
+                                        backgroundColor: Colors.lightBlueAccent,
+                                      ));
                                     }
-                                  : null,
-                            ))
+                                    setState(() {
+                                      isNowLoading = false;
+                                    });
+                                  }
+                                : null),
                       ]),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 15),

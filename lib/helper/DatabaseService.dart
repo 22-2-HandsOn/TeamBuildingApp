@@ -65,6 +65,32 @@ class DatabaseService {
         .get();
   }
 
+  List<dynamic> getReqToTeam(String projectid, List<dynamic> stuids) {
+    // 학번으로 데이터 가져오기
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("attendees");
+    QuerySnapshot<Map<String, dynamic>>? stusnapshot;
+    attendeesCollection.get().then((value) {
+      stusnapshot = value;
+    });
+
+    final result = [];
+    final docs = stusnapshot!.docs;
+    docs.forEach((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      if (stuids.contains(data['stu_id'])) {
+        final temp = data;
+        result.add(temp);
+      }
+    });
+
+    return result;
+  }
+
+  getReqToStu() {}
+
   requseteamTostu(String projectid, String attendeesuid, String teamuid,
       String teamname) async {
     late final attendeesCollection = FirebaseFirestore.instance
