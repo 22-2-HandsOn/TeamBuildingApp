@@ -36,7 +36,7 @@ class DatabaseService {
     });
   }
 
-  Future<bool>? checkALLAttendeetag(String projectid, String tags) async {
+  Future<bool>? checkALLAttendeetag(String projectid, List<String> tags) async {
     late final attendeesCollection = FirebaseFirestore.instance
         .collection("projects")
         .doc(projectid)
@@ -46,7 +46,7 @@ class DatabaseService {
     for (var doc in snapshot.docs) {
       var dataElement = doc.get("hashtags");
       for (var data in dataElement) {
-        if (data == tags) {
+        if (tags.contains(data)) {
           return true;
         }
       }
@@ -54,7 +54,7 @@ class DatabaseService {
     return false;
   }
 
-  Future<bool>? checkALLteamtag(String projectid, String tags) async {
+  Future<bool>? checkALLteamtag(String projectid, List<String> tags) async {
     late final attendeesCollection = FirebaseFirestore.instance
         .collection("projects")
         .doc(projectid)
@@ -64,7 +64,7 @@ class DatabaseService {
     for (var doc in snapshot.docs) {
       var dataElement = doc.get("hashtags");
       for (var data in dataElement) {
-        if (data == tags) {
+        if (tags.contains(data)) {
           return true;
         }
       }
@@ -95,43 +95,11 @@ class DatabaseService {
     return false;
   }
 
-  removeteamhashtags(String projectid, String teamuid, String tags) async {
+  removeteamhashtags(
+      String projectid, String teamuid, List<String> tags) async {
     bool flag = false;
 
     await checkALLteamtag(projectid, tags)?.then((value) {
-      flag = value;
-    });
-    if (flag) {
-      await teamCollection
-          .doc(projectid)
-          .collection("attendees_hashtags")
-          .doc("Tags")
-          .update({
-        "hashtags": FieldValue.arrayRemove([tags])
-      });
-    }
-  }
-
-  addteamhashtags(String projectid, String teamuid, String tags) async {
-    bool flag = true;
-
-    await checkALLteamtag(projectid, tags)?.then((value) {
-      flag = value;
-    });
-    if (!flag) {
-      await teamCollection
-          .doc(projectid)
-          .collection("attendees_hashtags")
-          .doc("Tags")
-          .update({
-        "hashtags": FieldValue.arrayUnion([tags])
-      });
-    }
-  }
-
-  removestuhashtags(String projectid, String tags) async {
-    bool flag = false;
-    await checkALLAttendeetag(projectid, tags)?.then((value) {
       flag = value;
     });
     if (flag) {
@@ -145,19 +113,55 @@ class DatabaseService {
     }
   }
 
-  addstuhashtags(String projectid, String tags) async {
+  addteamhashtags(String projectid, String teamuid, List<String> tags) async {
     bool flag = true;
-    await checkALLAttendeetag(projectid, tags)?.then((value) {
-      flag = value;
-    });
-    if (!flag) {
+    if (true) {
       await teamCollection
           .doc(projectid)
           .collection("teams_hashtags")
           .doc("Tags")
-          .update({
-        "hashtags": FieldValue.arrayUnion([tags])
-      });
+          .update({"hashtags": FieldValue.arrayUnion(tags)});
+
+      await teamCollection
+          .doc(projectid)
+          .collection("teams")
+          .doc(teamuid)
+          .set({"hashtags": FieldValue.arrayUnion(tags)});
+    }
+  }
+
+  removestuhashtags(String projectid, List<String> tags) async {
+    bool flag = false;
+    await checkALLAttendeetag(projectid, tags)?.then((value) {
+      flag = value;
+    });
+    if (true) {
+      await teamCollection
+          .doc(projectid)
+          .collection("attendees_hashtags")
+          .doc("Tags")
+          .update({"hashtags": tags});
+    }
+  }
+
+  addstuhashtags(String projectid, String attdocid, List<String> tags) async {
+    bool flag = true;
+    // await checkALLAttendeetag(projectid, tags)?.then((value) {
+    //   flag = value;
+    // });
+
+    if (true) {
+      await teamCollection
+          .doc(projectid)
+          .collection("attendees_hashtags")
+          .doc("Tags")
+          .set({"hashtags": FieldValue.arrayUnion(tags)});
+
+      await teamCollection
+          .doc(projectid)
+          .collection("attendees")
+          .doc(attdocid)
+          .update({"hashtags": FieldValue.arrayUnion(tags)});
     }
   }
 

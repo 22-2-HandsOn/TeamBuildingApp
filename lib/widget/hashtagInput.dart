@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:team/helper/DatabaseService.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class Hashtags extends StatefulWidget {
   final List<dynamic> hashtags;
   final Function(List<String> tags) setter;
-  const Hashtags({Key? key, required this.hashtags, required this.setter})
-      : super(key: key);
+  final String projectid;
+  final String type;
+  const Hashtags({
+    Key? key,
+    required this.hashtags,
+    required this.setter,
+    required this.projectid,
+    required this.type,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _hashtagsInputState();
@@ -24,14 +33,11 @@ class _hashtagsInputState extends State<Hashtags> {
         widget.setter(tags);
       });
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(tags);
-
     // TODO: implement build
     return ListView.builder(
         shrinkWrap: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import 'package:form_validator/form_validator.dart';
 import '../../widget/hashtagInput.dart';
+import 'package:team/helper/DatabaseService.dart';
 
 class ChangeMyStudentInfo extends StatelessWidget {
   String projectID;
@@ -67,6 +68,16 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
         contacts.add(temp);
       }
     });
+  }
+
+  dbupdate(List<String> tags) async {
+    {
+      String attend = "";
+      await ProjectCRUD(widget.projectID).getAttendeeID().then((value) {
+        attend = value;
+      });
+      DatabaseService().addstuhashtags(widget.projectID, attend, tags);
+    }
   }
 
   void _setHashtags(List<String> tags) {
@@ -139,10 +150,13 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                       ),
                     ),
                     Hashtags(
-                        hashtags: snapshot.data["hashtags"] != null
-                            ? snapshot.data["hashtags"]
-                            : [],
-                        setter: _setHashtags),
+                      hashtags: snapshot.data["hashtags"] != null
+                          ? snapshot.data["hashtags"]
+                          : [],
+                      setter: _setHashtags,
+                      projectid: widget.projectID,
+                      type: "stu",
+                    ),
                     const SizedBox(
                       height: 5,
                     ),
@@ -208,6 +222,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                             projectCRUD.setStudentIntro(introduction);
                             projectCRUD.setWantedTeam(wantedteam);
                             projectCRUD.setContactInfo(contacts);
+                            dbupdate(List.from(hashtags));
                             Navigator.pop(context);
                           }
                           ;
