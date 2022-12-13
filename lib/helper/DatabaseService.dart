@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:team/helper/ProjectCRUD.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String? uid;
