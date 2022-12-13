@@ -3,6 +3,7 @@ import 'package:team/professor/profprojectList.dart';
 import 'package:team/helper/DatabaseService.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
 import '../../student/team/OthersTeamInfo.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class Teamtile_with_btn extends StatefulWidget {
   final String teamName;
@@ -35,6 +36,28 @@ class _Teamtile_with_btnState extends State<Teamtile_with_btn> {
       fontSize: 18,
       color: Colors.black,
       fontWeight: FontWeight.bold);
+
+  String team_id = "";
+  String attend_id = "";
+  String stu_id = "";
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectid);
+  void initState() {
+    gettingData();
+    super.initState();
+  }
+
+  gettingData() async {
+    projectCRUD.getTeamIDHDM(widget.teamName).then((value) {
+      team_id = value;
+    });
+    await projectCRUD.getstu_id().then((value) {
+      stu_id = value;
+    });
+    await projectCRUD.getAttendeeIDhdm(stu_id).then((value) {
+      attend_id = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -122,7 +145,26 @@ class _Teamtile_with_btnState extends State<Teamtile_with_btn> {
                           ),
                           onPressed: () async {
                             try {
-                              // *TODO : 함수 호출 (초대)
+                              bool flag = false;
+                              await DatabaseService()
+                                  .responsestu(widget.projectid, attend_id,
+                                      team_id, widget.teamName, true, stu_id)
+                                  .then((value) {
+                                flag = value!;
+                              });
+                              if (flag) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "팀원 신청을 수락했습니다.",
+                                    style: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ));
+                              }
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -164,7 +206,26 @@ class _Teamtile_with_btnState extends State<Teamtile_with_btn> {
                           ),
                           onPressed: () async {
                             try {
-                              // *TODO : 함수 호출 (초대)
+                              bool flag = false;
+                              await DatabaseService()
+                                  .responsestu(widget.projectid, attend_id,
+                                      team_id, widget.teamName, false, stu_id)
+                                  .then((value) {
+                                flag = value!;
+                              });
+                              if (flag) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "팀원 신청을 거절했습니다.",
+                                    style: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ));
+                              }
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(

@@ -20,7 +20,7 @@ class MyTeamInfoPage extends StatefulWidget {
 
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -197,6 +197,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 12, bottom: 7),
+
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -220,35 +221,35 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                   alignment: WrapAlignment.start,
                                   spacing: 6, // 상하(좌우) 공간
                                   children: _buildChipList(snapshot.data[
-                                      'hashtags']), //타입 1: food, 2: place, 3: pref
+                                  'hashtags']), //타입 1: food, 2: place, 3: pref
                                 ),
                               ),
                               Text(
                                 snapshot.data['introduction'].toString() ==
-                                            "" ||
-                                        snapshot.data['introduction']
-                                                .toString() ==
-                                            "null"
+                                    "" ||
+                                    snapshot.data['introduction']
+                                        .toString() ==
+                                        "null"
                                     ? "아직 팀 소개를 작성하지 않았습니다. "
                                     : snapshot.data['introduction'].toString(),
                                 style:
-                                    snapshot.data['introduction'].toString() ==
-                                                "" ||
-                                            snapshot.data['introduction']
-                                                    .toString() ==
-                                                "null"
-                                        ? TextStyle(
-                                            fontFamily: "GmarketSansTTF",
-                                            fontSize: 14,
-                                            color: Colors.black87)
-                                        : TextStyle(
-                                            color: Colors.black87,
-                                            fontFamily: "GmarketSansTTF",
-                                            fontSize: 16),
+                                snapshot.data['introduction'].toString() ==
+                                    "" ||
+                                    snapshot.data['introduction']
+                                        .toString() ==
+                                        "null"
+                                    ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                    : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                const EdgeInsets.only(top: 15, bottom: 15),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -266,33 +267,33 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ),
                               Text(
                                 snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "" ||
-                                        snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "null"
+                                    .toString() ==
+                                    "" ||
+                                    snapshot.data['finding_member_info']
+                                        .toString() ==
+                                        "null"
                                     ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
                                     : snapshot.data['finding_member_info']
-                                        .toString(),
+                                    .toString(),
                                 style: snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "" ||
-                                        snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "null"
+                                    .toString() ==
+                                    "" ||
+                                    snapshot.data['finding_member_info']
+                                        .toString() ==
+                                        "null"
                                     ? TextStyle(
-                                        fontFamily: "GmarketSansTTF",
-                                        fontSize: 14,
-                                        color: Colors.black87)
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
                                     : TextStyle(
-                                        color: Colors.black87,
-                                        fontFamily: "GmarketSansTTF",
-                                        fontSize: 16),
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                               ),
                               // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                const EdgeInsets.only(top: 15, bottom: 15),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -319,206 +320,92 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                             itemCount: snapshot.data.length,
                                             itemBuilder: (context, index) {
                                               TextEditingController
-                                                  _textFieldController =
-                                                  TextEditingController(
-                                                      text: snapshot.data[index]
-                                                          ['content']);
+                                              _textFieldController =
+                                              TextEditingController(
+                                                  text: snapshot.data[index]
+                                                  ['content']);
                                               TextEditingController
-                                                  _textFieldController2 =
-                                                  TextEditingController();
+                                              _textFieldController2 =
+                                              TextEditingController();
                                               return Column(
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(snapshot
-                                                                  .data[index]
-                                                              ['name']),
-                                                          Text(snapshot
-                                                                  .data[index]
-                                                              ['content']),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          )
-                                                        ],
-                                                      ),
+                                                      Comment(snapshot.data[index]),
+                                                      EditIcon(snapshot.data[index],projectCRUD),
                                                       IconButton(
                                                           onPressed: () {
                                                             showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) {
+                                                                context: context,
+                                                                builder: (context) {
                                                                   return AlertDialog(
-                                                                      title: Text(
-                                                                          '대댓글 달기'),
-                                                                      content:
-                                                                          TextField(
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          newComment =
-                                                                              value;
-                                                                        },
-                                                                        controller:
-                                                                            _textFieldController2,
-                                                                        decoration:
-                                                                            InputDecoration(hintText: "대댓글 달기"),
-                                                                      ),
-                                                                      actions: [
-                                                                        IconButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              projectCRUD.addTeamReply(newComment, snapshot.data[index].toString());
-                                                                              Navigator.pop(context);
-                                                                              setState(() {});
-                                                                            },
-                                                                            icon:
-                                                                                Icon(Icons.done))
-                                                                      ]);
-                                                                });
-                                                          },
-                                                          icon: Icon(Icons
-                                                              .comment_bank)),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) {
-                                                                  return AlertDialog(
-                                                                      title: Text(
-                                                                          '댓글 수정'),
-                                                                      content:
-                                                                          TextField(
-                                                                        onChanged:
-                                                                            (value) {
+                                                                      title: Text('댓글 수정'),
+                                                                      content: TextField(
+                                                                        onChanged: (value) {
                                                                           changedText =
                                                                               value;
                                                                         },
                                                                         controller:
-                                                                            _textFieldController,
+                                                                        _textFieldController,
                                                                         decoration:
-                                                                            InputDecoration(hintText: "댓글 수정"),
+                                                                        InputDecoration(
+                                                                            hintText:
+                                                                            "댓글 수정"),
                                                                       ),
                                                                       actions: [
                                                                         IconButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              if (changedText.length > 0) {
-                                                                                projectCRUD.updateTeamComment(changedText, snapshot.data[index].toString());
-                                                                                Navigator.pop(context);
-                                                                                setState(() {});
+                                                                            onPressed: () {
+                                                                              if (changedText
+                                                                                  .length >
+                                                                                  0) {
+                                                                                if (snapshot
+                                                                                    .data[index]
+                                                                                    .containsKey(
+                                                                                    'comment_id')) {
+                                                                                  projectCRUD.updateTeamReply(snapshot
+                                                                                      .data[index]
+                                                                                      .toString(),changedText);
+                                                                                  Navigator
+                                                                                      .pop(
+                                                                                      context);
+                                                                                  setState(
+                                                                                          () {});
+                                                                                } else {
+                                                                                  projectCRUD
+                                                                                      .updateTeamComment(
+                                                                                      changedText,
+                                                                                      snapshot
+                                                                                          .data[index]
+                                                                                          .toString());
+                                                                                  Navigator
+                                                                                      .pop(
+                                                                                      context);
+                                                                                  setState(
+                                                                                          () {});
+                                                                                }
                                                                               }
                                                                             },
-                                                                            icon:
-                                                                                Icon(Icons.done))
+                                                                            icon: Icon(
+                                                                                Icons.done))
                                                                       ]);
                                                                 });
                                                           },
-                                                          icon:
-                                                              Icon(Icons.edit)),
+                                                          icon: Icon(Icons.edit)),
                                                       IconButton(
                                                           onPressed: () {
-                                                            projectCRUD
-                                                                .deleteTeamComment(
-                                                                    snapshot
-                                                                        .data[
-                                                                            index]
-                                                                        .toString());
-                                                            setState(() {});
+                                                            if (snapshot.data[index].containsKey('comment_id')){
+                                                              projectCRUD.deleteTeamReply(snapshot.data[index].toString());
+
+                                                            }else{
+                                                              projectCRUD
+                                                                  .deleteTeamComment(
+                                                                  snapshot.data[index]
+                                                                      .toString());
+                                                              setState(() {});
+                                                            }
                                                           },
-                                                          icon: Icon(
-                                                              Icons.delete))
+                                                          icon: Icon(Icons.delete))
                                                     ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 50,
-                                                    child: FutureBuilder(
-                                                        future: projectCRUD
-                                                            .getTeamReply(
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .toString()),
-                                                        builder: (context,
-                                                            snapshot2) {
-                                                          if (snapshot2
-                                                              .hasData) {
-                                                            return ListView
-                                                                .builder(
-                                                                    itemCount:
-                                                                        snapshot2
-                                                                            .data
-                                                                            .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index2) {
-                                                                      TextEditingController
-                                                                          _textFieldController3 =
-                                                                          TextEditingController(
-                                                                              text: snapshot2.data[index2]['content']);
-                                                                      return Column(
-                                                                        children: [
-                                                                          Row(
-                                                                            children: [
-                                                                              Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Text("    " + snapshot2.data[index2]['name']),
-                                                                                  Text("    " + snapshot2.data[index2]['content']),
-                                                                                  SizedBox(
-                                                                                    height: 10,
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                              IconButton(
-                                                                                  onPressed: () {
-                                                                                    showDialog(
-                                                                                        context: context,
-                                                                                        builder: (context) {
-                                                                                          return AlertDialog(
-                                                                                              title: Text('대댓글 수정'),
-                                                                                              content: TextField(
-                                                                                                onChanged: (value) {
-                                                                                                  changedText = value;
-                                                                                                },
-                                                                                                controller: _textFieldController3,
-                                                                                                decoration: InputDecoration(hintText: "대댓글 수정"),
-                                                                                              ),
-                                                                                              actions: [
-                                                                                                IconButton(
-                                                                                                    onPressed: () {
-                                                                                                      if (changedText.length > 0) {
-                                                                                                        projectCRUD.updateTeamReply(snapshot.data[index].toString(), snapshot2.data[index2].toString(), changedText);
-                                                                                                        Navigator.pop(context);
-                                                                                                        setState(() {});
-                                                                                                      }
-                                                                                                    },
-                                                                                                    icon: Icon(Icons.done))
-                                                                                              ]);
-                                                                                        });
-                                                                                  },
-                                                                                  icon: Icon(Icons.edit)),
-                                                                              IconButton(
-                                                                                  onPressed: () {
-                                                                                    projectCRUD.deleteTeamReply(snapshot.data[index].toString(), snapshot2.data[index2].toString());
-                                                                                    setState(() {});
-                                                                                  },
-                                                                                  icon: Icon(Icons.delete))
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      );
-                                                                    });
-                                                          }
-                                                          return Center(
-                                                              child:
-                                                                  CircularProgressIndicator());
-                                                        }),
                                                   ),
                                                 ],
                                               );
@@ -650,5 +537,95 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
       );
     });
     return chips;
+  }
+}
+
+class Comment extends StatelessWidget {
+  Map<String, dynamic> newcolumn = {};
+
+  Comment(this.newcolumn);
+
+  String additional = "";
+
+  @override
+  Widget build(BuildContext context) {
+    if (newcolumn.containsKey('comment_id')) {
+      additional = "    ";
+    }
+    return Column(
+      crossAxisAlignment:
+      CrossAxisAlignment.start,
+      children: [
+        Text(
+            additional + newcolumn['name']),
+        Text(additional + newcolumn['content']),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+}
+
+class EditIcon extends StatefulWidget {
+  Map<String, dynamic> newcolumn = {};
+  ProjectCRUD projectCRUD;
+  EditIcon(this.newcolumn,this.projectCRUD);
+  @override
+  State<EditIcon> createState() => _EditIconState();
+}
+
+class _EditIconState extends State<EditIcon> {
+  String newComment = "";
+  @override
+  TextEditingController _textFieldController2 =
+  TextEditingController();
+
+  Widget build(BuildContext context) {
+    if (!widget.newcolumn.containsKey('comment_id')) {
+      return IconButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: Text(
+                          '대댓글 달기'),
+                      content: TextField(
+                        onChanged: (value) {
+                          newComment =
+                              value;
+                        },
+                        controller:
+                        _textFieldController2,
+                        decoration:
+                        InputDecoration(
+                            hintText:
+                            "대댓글 달기"),
+                      ),
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+                              widget.projectCRUD
+                                  .addTeamReply(
+                                  newComment,
+                                  widget.newcolumn.toString());
+                              Navigator
+                                  .pop(
+                                  context);
+                              setState(
+                                      () {});
+                            },
+                            icon: Icon(
+                                Icons
+                                    .done))
+                      ]);
+                });
+          },
+          icon: Icon(
+              Icons.comment_bank));
+    } else {
+      return Text(" ");
+    }
   }
 }

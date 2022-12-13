@@ -4,6 +4,7 @@ import 'package:team/helper/DatabaseService.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
 import 'package:team/student/student_info/MyStudentInfo.dart';
 import 'package:team/student/student_info/OthersStudentInfo.dart';
+import 'package:team/helper/ProjectCRUD.dart';
 
 class Student_tile_with_btn extends StatefulWidget {
   final String name;
@@ -35,6 +36,27 @@ class _StudenttileWithBtnState extends State<Student_tile_with_btn> {
       fontSize: 18,
       color: Colors.black,
       fontWeight: FontWeight.bold);
+
+  String team_id = "";
+  String team_name = "";
+  String attend_id = "";
+  late ProjectCRUD projectCRUD = ProjectCRUD(widget.projectid);
+  void initState() {
+    gettingData();
+    super.initState();
+  }
+
+  gettingData() async {
+    await projectCRUD.getTeamname().then((value) {
+      team_name = value;
+    });
+    projectCRUD.getTeamIDHDM(team_name).then((value) {
+      team_id = value;
+    });
+    await projectCRUD.getAttendeeIDhdm(widget.id).then((value) {
+      attend_id = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +122,26 @@ class _StudenttileWithBtnState extends State<Student_tile_with_btn> {
                           ),
                           onPressed: () async {
                             try {
-                              // *TODO : 함수 호출 (초대)
+                              bool flag = false;
+                              await DatabaseService()
+                                  .responseteam(widget.projectid, attend_id,
+                                      team_id, team_name, true, widget.id)
+                                  .then((value) {
+                                flag = value!;
+                              });
+                              if (flag) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "팀원 신청을 수락했습니다. ",
+                                    style: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ));
+                              }
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -142,7 +183,26 @@ class _StudenttileWithBtnState extends State<Student_tile_with_btn> {
                           ),
                           onPressed: () async {
                             try {
-                              // *TODO : 함수 호출 (초대)
+                              bool flag = false;
+                              await DatabaseService()
+                                  .responseteam(widget.projectid, attend_id,
+                                      team_id, team_name, false, widget.id)
+                                  .then((value) {
+                                flag = value!;
+                              });
+                              if (flag) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "팀원 신청을 거절했습니다. ",
+                                    style: TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ));
+                              }
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(

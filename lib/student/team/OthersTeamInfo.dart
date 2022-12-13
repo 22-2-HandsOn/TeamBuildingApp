@@ -41,7 +41,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
     projectCRUD.getstu_id().then((value) {
       stu_id = value;
     });
-    projectCRUD.getTeamID().then((value) {
+    projectCRUD.getTeamIDHDM(widget.teamName).then((value) {
       team_id = value;
     });
   }
@@ -137,50 +137,55 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                                 fontFamily: "GmarketSansTTF",
                                                 fontSize: 13,
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        : Container(
-                                            width: 10,
-                                            height: 10,
-                                            padding: const EdgeInsets.all(2.0),
-                                            child:
-                                                const CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
+                                                strokeWidth: 2,
+                                              ),
                                             ),
-                                          ),
-                                    onPressed: !isNowLoading
-                                        ? () async {
-                                            try {
-                                              // *TODO : 함수 호출 (초대)
-                                              bool flag = false;
-                                              await DatabaseService()
-                                                  .requsestuToteam(
-                                                      widget.projectId,
-                                                      team_id,
-                                                      stu_id)
-                                                  .then((value) {
-                                                flag = value!;
-                                              });
-                                              if (flag) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                    "요청을 성공적으로 보냈습니다.",
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          "GmarketSansTTF",
-                                                      fontSize: 14,
+                                      onPressed: !isNowLoading
+                                          ? () async {
+                                              try {
+                                                bool flag = false;
+                                                await DatabaseService()
+                                                    .requsestuToteam(
+                                                        widget.projectId,
+                                                        team_id,
+                                                        stu_id)
+                                                    .then((value) {
+                                                  flag = value!;
+                                                });
+                                                if (flag) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                      "요청을 성공적으로 보냈습니다.",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            "GmarketSansTTF",
+                                                        fontSize: 14,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.lightBlueAccent,
-                                                ));
-                                              } else {
+                                                    backgroundColor:
+                                                        Colors.lightBlueAccent,
+                                                  ));
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                      "이미 요청했습니다.",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            "GmarketSansTTF",
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.lightBlueAccent,
+                                                  ));
+                                                }
+                                              } catch (e) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
                                                   content: Text(
-                                                    "이미 요청했습니다.",
+                                                    "팀원 신청을 실패하였습니다. ",
                                                     style: TextStyle(
                                                       fontFamily:
                                                           "GmarketSansTTF",
@@ -191,26 +196,12 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                                       Colors.lightBlueAccent,
                                                 ));
                                               }
-                                            } catch (e) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                  "팀 참여 신청을 실패하였습니다. ",
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        "GmarketSansTTF",
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.lightBlueAccent,
-                                              ));
+                                              setState(() {
+                                                isNowLoading = false;
+                                              });
                                             }
-                                            setState(() {
-                                              isNowLoading = false;
-                                            });
-                                          }
-                                        : null),
+                                          : null,
+                                    ))
                               ]),
                           Padding(
                             padding: const EdgeInsets.only(top: 7, bottom: 12),
@@ -244,23 +235,11 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['introduction'].toString() == "" ||
-                                    snapshot.data['introduction'].toString() ==
-                                        "null"
-                                ? "아직 팀 소개를 작성하지 않았습니다. "
-                                : snapshot.data['introduction'].toString(),
-                            style: snapshot.data['introduction'].toString() ==
-                                        "" ||
-                                    snapshot.data['introduction'].toString() ==
-                                        "null"
-                                ? TextStyle(
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 14,
-                                    color: Colors.black87)
-                                : TextStyle(
-                                    color: Colors.black87,
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 16),
+                            snapshot.data['introduction'].toString(),
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16),
                           ),
 
                           Padding(
@@ -279,28 +258,11 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                             ),
                           ),
                           Text(
-                            snapshot.data['finding_member_info'].toString() ==
-                                        "" ||
-                                    snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "null"
-                                ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
-                                : snapshot.data['finding_member_info']
-                                    .toString(),
-                            style: snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "" ||
-                                    snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "null"
-                                ? TextStyle(
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 14,
-                                    color: Colors.black87)
-                                : TextStyle(
-                                    color: Colors.black87,
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 16),
+                            snapshot.data['finding_member_info'].toString(),
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 16),
                           ),
                           // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                           Padding(
