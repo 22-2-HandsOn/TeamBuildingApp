@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import './MyTeamInfo.dart';
+import '../../widget/hashtagInput.dart';
 
 class AddNewTeam extends StatelessWidget {
   String projectID;
@@ -57,12 +58,25 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
     });
   }
 
+  List<dynamic> hashtags = [];
+
   // _navigateAndDisplaySelection(BuildContext context) async {
   //   final result = await Navigator.push(
   //     context,
   //     MaterialPageRoute(builder: (context) => MyTeamInfoPage(projectID)),
   //   );
   // }
+
+  void _setHashtags(List<String> tags) {
+    int length = tags.length;
+    setState(() {
+      hashtags = [];
+
+      tags.forEach((element) {
+        hashtags.add(element);
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -89,7 +103,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
-                  labelText: "팀 이름 ",
+                  labelText: " 팀 이름 ",
                   labelStyle: const TextStyle(
                     fontFamily: "GmarketSansTTF",
                     fontSize: 16,
@@ -99,6 +113,24 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                   teamName = value as String;
                 });
               },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(width: 10, height: 1, color: Colors.grey),
+                  Text(
+                    "  팀장 선택  ",
+                    style: const TextStyle(
+                        fontFamily: "GmarketSansTTF",
+                        fontSize: 11,
+                        color: Colors.black54),
+                    textAlign: TextAlign.left,
+                  ),
+                  Container(width: 280, height: 1, color: Colors.grey),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             TextFormField(
@@ -112,7 +144,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelText: "팀 소개",
+                labelText: " 팀 소개  ",
                 labelStyle: const TextStyle(
                   fontFamily: "GmarketSansTTF",
                   fontSize: 16,
@@ -126,7 +158,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelText: "원하는 팀원",
+                labelText: " 원하는 팀원 ",
                 labelStyle: const TextStyle(
                   fontFamily: "GmarketSansTTF",
                   fontSize: 16,
@@ -140,8 +172,27 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                 });
               },
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(width: 10, height: 1, color: Colors.grey),
+                  Text(
+                    " 해시태그 ",
+                    style: const TextStyle(
+                        fontFamily: "GmarketSansTTF",
+                        fontSize: 11,
+                        color: Colors.black54),
+                    textAlign: TextAlign.left,
+                  ),
+                  Container(width: 280, height: 1, color: Colors.grey),
+                ],
+              ),
+            ),
+            Hashtags(hashtags: [], setter: _setHashtags),
             const SizedBox(
-              height: 40,
+              height: 25,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
