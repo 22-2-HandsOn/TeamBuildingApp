@@ -104,6 +104,24 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                         });
                       },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text(
+                            "  팀장 선택  ",
+                            style: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 11,
+                                color: Colors.black54),
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(width: 280, height: 1, color: Colors.grey),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     TextFormField(
                       minLines: 6,

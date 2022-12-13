@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'AddNewTeam.dart';
 import 'ChangeTeamInfo.dart';
+import '../../Project/widget/student_tile_small.dart';
 
 class OthersTeamInfoPage extends StatefulWidget {
   String projectId = "";
@@ -26,6 +27,10 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
   bool isNowLoading = false;
   String team_id = "";
   String stu_id = "";
+
+  List<dynamic> stuIds = [];
+  List<dynamic> mems = [];
+  String leaderId = "";
 
   void initState() {
     gettingData();
@@ -71,17 +76,19 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  Future.delayed(Duration.zero, () {
-                    setState(() {
-                      isNull = false;
-                    });
-                  });
+                  isNull = false;
+
+                  mems = snapshot.data['members'];
+                  leaderId = snapshot.data["leader_id"] == null
+                      ? ""
+                      : snapshot.data["leader_id"];
+
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: ListView(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.only(bottom: 7),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -106,7 +113,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text("      "),
+                                SizedBox(width: 15),
                                 ActionChip(
                                     backgroundColor: Colors.lightBlueAccent,
                                     shape: RoundedRectangleBorder(
@@ -206,7 +213,23 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                         : null),
                               ]),
                           Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 15),
+                            padding: const EdgeInsets.only(top: 7, bottom: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                    width: 10, height: 1, color: Colors.grey),
+                                Text("  팀원 정보  ", style: textStyle),
+                                Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Container(
+                                        height: 1, color: Colors.grey)),
+                              ],
+                            ),
+                          ),
+                          members(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12, bottom: 15),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -239,6 +262,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                     fontFamily: "GmarketSansTTF",
                                     fontSize: 16),
                           ),
+
                           Padding(
                             padding: const EdgeInsets.only(top: 15, bottom: 15),
                             child: Row(
@@ -396,5 +420,33 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                         color: Colors.lightBlueAccent));
               }
             }));
+  }
+
+  members() {
+    return FutureBuilder(
+        future: projectCRUD.getMemsInfo(mems),
+        builder: (context, snapshot) {
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data == null ? 1 : snapshot.data.length,
+              itemBuilder: (context, index) {
+                if (snapshot.data == null) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: Colors.lightBlueAccent));
+                } else {
+                  return Student_tile_small(
+                      name: snapshot.data[index]['name'],
+                      info: snapshot.data[index]['introduction'],
+                      id: snapshot.data[index]['stu_id'],
+                      projectid: widget.projectId,
+                      projectname: widget.projectname,
+                      isMine:
+                          stu_id == snapshot.data[index]['stu_id'].toString(),
+                      isLeader: leaderId ==
+                          snapshot.data[index]['stu_id'].toString());
+                }
+              });
+        });
   }
 }

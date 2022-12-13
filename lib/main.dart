@@ -23,6 +23,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        // 폰트 크기 고정
+        builder: (context, child) {
+          return MediaQuery(
+            child: child!,
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 0.78),
+          );
+        },
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
