@@ -7,7 +7,6 @@ import 'ChangeStudentInfo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:team/Project/main/studentlist.dart';
 import 'package:team/Project/main/teamlist.dart';
-import 'package:team/Project/main/home.dart';
 import 'package:team/student/team/MyTeamInfo.dart';
 import 'package:form_validator/form_validator.dart';
 
