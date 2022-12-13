@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import './MyTeamInfo.dart';
 import '../../widget/hashtagInput.dart';
+import 'package:team/helper/DatabaseService.dart';
 
 class ChangeTeamInfo extends StatelessWidget {
   String projectID;
@@ -69,6 +70,16 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
         hashtags.add(element);
       });
     });
+  }
+
+  dbupdate(List<String> tags) async {
+    {
+      String teamid = "";
+      await ProjectCRUD(widget.projectID).getTeamID().then((value) {
+        teamid = value;
+      });
+      DatabaseService().addteamhashtags(widget.projectID, teamid, tags);
+    }
   }
 
   @override
@@ -184,10 +195,13 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                       ),
                     ),
                     Hashtags(
-                        hashtags: snapshot.data["hashtags"] != null
-                            ? snapshot.data["hashtags"]
-                            : [],
-                        setter: _setHashtags),
+                      hashtags: snapshot.data["hashtags"] != null
+                          ? snapshot.data["hashtags"]
+                          : [],
+                      setter: _setHashtags,
+                      projectid: widget.projectID,
+                      type: "team",
+                    ),
                     const SizedBox(
                       height: 25,
                     ),
@@ -208,7 +222,7 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                           await projectCRUD.setTeamIntro(introduction);
                           await projectCRUD
                               .setWantedMember(finding_member_info);
-
+                          dbupdate(List<String>.from(hashtags));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                               "팀 정보 수정이 완료되었습니다.",

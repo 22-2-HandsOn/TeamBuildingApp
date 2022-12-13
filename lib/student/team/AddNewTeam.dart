@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import './MyTeamInfo.dart';
 import '../../widget/hashtagInput.dart';
+import 'package:team/helper/DatabaseService.dart';
 
 class AddNewTeam extends StatelessWidget {
   String projectID;
@@ -67,11 +68,20 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
   //   );
   // }
 
+  dbupdate(List<String> tags) async {
+    {
+      String teamid = "";
+      await ProjectCRUD(widget.projectID).getTeamID().then((value) {
+        teamid = value;
+      });
+      DatabaseService().addteamhashtags(widget.projectID, teamid, tags);
+    }
+  }
+
   void _setHashtags(List<String> tags) {
     int length = tags.length;
     setState(() {
       hashtags = [];
-
       tags.forEach((element) {
         hashtags.add(element);
       });
@@ -190,7 +200,12 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                 ],
               ),
             ),
-            Hashtags(hashtags: [], setter: _setHashtags),
+            Hashtags(
+              hashtags: [],
+              setter: _setHashtags,
+              projectid: widget.projectID,
+              type: "team",
+            ),
             const SizedBox(
               height: 25,
             ),
@@ -211,6 +226,7 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
               ),
               onPressed: () async {
                 _formkey.currentState!.save();
+                dbupdate(List.from(hashtags));
 
                 try {
                   await projectCRUD.addTeam(
