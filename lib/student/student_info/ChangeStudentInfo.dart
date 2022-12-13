@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import 'package:form_validator/form_validator.dart';
+import '../../widget/hashtagInput.dart';
 
 class ChangeMyStudentInfo extends StatelessWidget {
   String projectID;
@@ -52,6 +53,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
   // final _contactChoices = ['이메일', '웹주소', '핸드폰'];
 
   List<dynamic> contacts = [];
+  List<dynamic> hashtags = [];
   void _setContacts(List<String> title, List<String> content) {
     int length = title.length;
     setState(() {
@@ -64,6 +66,17 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
         var temp = {"title": title[i], "content": content[i]};
         contacts.add(temp);
       }
+    });
+  }
+
+  void _setHashtags(List<String> tags) {
+    int length = tags.length;
+    setState(() {
+      hashtags = [];
+
+      tags.forEach((element) {
+        hashtags.add(element);
+      });
     });
   }
 
@@ -98,7 +111,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                             fontFamily: "GmarketSansTTF",
                             fontSize: 16,
                           )),
-                      minLines: 6,
+                      minLines: 3,
                       maxLines: null,
                       initialValue: snapshot.data['introduction'].toString(),
                       onSaved: (value) {
@@ -107,8 +120,31 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                         });
                       },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text(
+                            "  해시태그  ",
+                            style: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 11,
+                                color: Colors.black54),
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(width: 280, height: 1, color: Colors.grey),
+                        ],
+                      ),
+                    ),
+                    Hashtags(
+                        hashtags: snapshot.data["hashtags"] != null
+                            ? snapshot.data["hashtags"]
+                            : [],
+                        setter: _setHashtags),
                     const SizedBox(
-                      height: 20,
+                      height: 5,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
@@ -120,7 +156,7 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                           fontSize: 16,
                         ),
                       ),
-                      minLines: 6,
+                      minLines: 3,
                       maxLines: null,
                       initialValue:
                           snapshot.data['finding_team_info'].toString(),
@@ -153,9 +189,6 @@ class _StudentInfoFormState extends State<StudentInfoForm> {
                             ? snapshot.data["contact_infos"]
                             : [],
                         setter: _setContacts),
-                    const SizedBox(
-                      height: 40,
-                    ),
                     const SizedBox(
                       height: 25,
                     ),
@@ -289,7 +322,8 @@ class _contactInputState extends State<Contacts> {
               Flexible(
                   flex: 1,
                   child: IconButton(
-                    icon: Icon(Icons.remove, color: Colors.black38, size: 18),
+                    icon: Icon(Icons.remove,
+                        color: Colors.blue.shade400, size: 15),
                     onPressed: () {
                       setState(() {
                         title.removeAt(ind);

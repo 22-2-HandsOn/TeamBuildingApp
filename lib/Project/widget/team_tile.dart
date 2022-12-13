@@ -65,39 +65,39 @@ class _TeamtileState extends State<Teamtile> {
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    widget.teamName, //DB에서 가져옴r
-                    style: textStyle_title,
-                  ),
+                  Row(children: <Widget>[
+                    Text(
+                      widget.teamName, //DB에서 가져옴
+                      style: textStyle_title,
+                    ),
+                    SizedBox(width: 15),
+                    Chip(
+                      avatar: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          child: Icon(Icons.people,
+                              color: Colors.black87, size: 15)),
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        side: BorderSide(
+                          width: 1,
+                          color: Colors.black26,
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                          fontFamily: "GmarketSansTTF",
+                          fontSize: 14,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold),
+                      visualDensity:
+                          VisualDensity(horizontal: 0, vertical: -3.5),
+                      label: Text(widget.memNum.toString()),
+                    )
+                  ]),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(height: 2),
-                      Chip(
-                        avatar: CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            child: Icon(Icons.people,
-                                color: Colors.black87, size: 15)),
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(
-                            width: 1,
-                            color: Colors.black26,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 14,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold),
-                        visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -3.5),
-                        label: Container(
-                            width: 20,
-                            alignment: Alignment(0.0, 0.0),
-                            child: Text(widget.memNum.toString() + "명")),
-                      ),
                       SizedBox(
                         height: 2,
                       ),

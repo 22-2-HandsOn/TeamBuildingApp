@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:team/helper/ProjectCRUD.dart';
 import './MyTeamInfo.dart';
+import '../../widget/hashtagInput.dart';
 
 class ChangeTeamInfo extends StatelessWidget {
   String projectID;
@@ -50,12 +51,25 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
   _TeamInfoFormState(this.projectID);
   late final ProjectCRUD projectCRUD = ProjectCRUD(projectID);
 
+  List<dynamic> hashtags = [];
+
   // _navigateAndDisplaySelection(BuildContext context) async {
   //   final result = await Navigator.push(
   //     context,
   //     MaterialPageRoute(builder: (context) => MyTeamInfoPage(projectID)),
   //   );
   // }
+
+  void _setHashtags(List<String> tags) {
+    int length = tags.length;
+    setState(() {
+      hashtags = [];
+
+      tags.forEach((element) {
+        hashtags.add(element);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +147,31 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                         });
                       },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 10, height: 1, color: Colors.grey),
+                          Text(
+                            "  해시태그  ",
+                            style: const TextStyle(
+                                fontFamily: "GmarketSansTTF",
+                                fontSize: 11,
+                                color: Colors.black54),
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(width: 280, height: 1, color: Colors.grey),
+                        ],
+                      ),
+                    ),
+                    Hashtags(
+                        hashtags: snapshot.data["hashtags"] != null
+                            ? snapshot.data["hashtags"]
+                            : [],
+                        setter: _setHashtags),
                     const SizedBox(
-                      height: 40,
+                      height: 25,
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(

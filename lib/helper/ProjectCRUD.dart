@@ -3,6 +3,7 @@ import 'package:team/helper/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:team/widget/hashtagInput.dart';
 
 class ProjectCRUD {
   String projectID;
@@ -20,6 +21,14 @@ class ProjectCRUD {
       .collection("projects")
       .doc(projectID)
       .collection("teams");
+  late final attendeesHashtagsCollection = FirebaseFirestore.instance
+      .collection("projects")
+      .doc(projectID)
+      .collection("attendees_hashtags");
+  late final teamsHashtagsCollection = FirebaseFirestore.instance
+      .collection("projects")
+      .doc(projectID)
+      .collection("teams_hashtags");
 
   Future getstu_id() async {
     final snapshot = await studentCollection.get();
@@ -114,7 +123,7 @@ class ProjectCRUD {
                     .doc(doc.id)
                     .collection('comments')
                     .doc(doc2.id)
-                    .collection('replys')
+                    .collection('reply')
                     .doc(doc3.id)
                     .update({'content': content});
               }
@@ -283,8 +292,6 @@ class ProjectCRUD {
   Future updateTeamReply(
       String comment_data, String reply_data, String content) async {
     var stu_id = await getstu_id();
-    var attendee = await getAttendeeInfo() as Map<String, dynamic>;
-    var attendeeId = await getAttendeeID();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
       var mapp = doc.data() as Map<String, dynamic>;
@@ -309,7 +316,7 @@ class ProjectCRUD {
                       .doc(doc.id)
                       .collection('comments')
                       .doc(doc2.id)
-                      .collection('replys')
+                      .collection('reply')
                       .doc(doc3.id)
                       .update({'content': content});
                 }
@@ -349,7 +356,7 @@ class ProjectCRUD {
                       .doc(doc.id)
                       .collection('comments')
                       .doc(doc2.id)
-                      .collection('replys')
+                      .collection('reply')
                       .doc(doc3.id)
                       .delete();
                 }
@@ -435,7 +442,6 @@ class ProjectCRUD {
       var dataElement = mapp['members'];
       for (int i = 0; i < dataElement.length; i++) {
         if (dataElement[i].toString() == stu_id) {
-          print(doc.id);
           return doc.id;
         }
       }
@@ -718,7 +724,7 @@ class ProjectCRUD {
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
       if (dataElement['stu_id'].toString() == stu_id) {
-        print(contacts);
+        //print(contacts);
         attendeesCollection.doc(doc.id).update({'contact_infos': contacts});
       }
     }

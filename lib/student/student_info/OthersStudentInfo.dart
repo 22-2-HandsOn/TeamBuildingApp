@@ -158,9 +158,6 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                     ? () async {
                                         try {
                                           bool flag = false;
-                                          print(attend_id);
-                                          print(team_id);
-                                          print(team_name);
                                           await DatabaseService()
                                               .requseteamTostu(widget.projectId,
                                                   attend_id, team_id, team_name)

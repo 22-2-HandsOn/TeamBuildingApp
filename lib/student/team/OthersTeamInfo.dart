@@ -143,7 +143,6 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                       onPressed: !isNowLoading
                                           ? () async {
                                               try {
-                                                // *TODO : 함수 호출 (초대)
                                                 bool flag = false;
                                                 await DatabaseService()
                                                     .requsestuToteam(

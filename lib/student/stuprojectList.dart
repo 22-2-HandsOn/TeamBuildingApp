@@ -67,7 +67,7 @@ class _StuProjectListPagestate extends State<StuProjectListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         centerTitle: true,
         leading: IconButton(
             icon: Icon(

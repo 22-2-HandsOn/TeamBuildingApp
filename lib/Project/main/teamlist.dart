@@ -208,9 +208,9 @@ class _TeamListstate extends State<TeamListPage> {
       choices.add(
         ChoiceChip(
           selectedColor: Colors.lightBlueAccent,
-          disabledColor: Colors.grey,
-          label: Text(element),
-          visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+          disabledColor: Colors.grey.shade300,
+          label: Text("# " + element),
+          visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
           labelStyle: _tagChoices.contains(element)
               ? TextStyle(
                   fontFamily: "GmarketSansTTF",
