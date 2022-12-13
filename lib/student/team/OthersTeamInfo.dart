@@ -370,6 +370,12 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                   controller: _controller,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    labelStyle: const TextStyle(
+                                      fontFamily: "GmarketSansTTF",
+                                      fontSize: 16,
+                                    ),
                                     labelText: '새 댓글',
                                   ),
                                   onChanged: (value) {

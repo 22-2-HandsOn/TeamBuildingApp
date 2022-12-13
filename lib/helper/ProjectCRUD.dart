@@ -742,14 +742,15 @@ class ProjectCRUD {
   }
 
   Future addTeam(String teamname, String introduction,
-      String finding_member_info, List members) async {
+      String finding_member_info, List members, List hashtags) async {
     final teamDoc = await teamsCollection.doc().set({
       'name': teamname,
       'introduction': introduction,
       'finding_member_info': finding_member_info,
       'members': members,
       'isFinished': false,
-      'hashtags': [],
+      'hashtags': hashtags,
+      "leader_id": ""
     });
   }
 

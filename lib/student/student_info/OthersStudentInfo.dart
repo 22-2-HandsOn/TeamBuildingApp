@@ -326,7 +326,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                               style: TextStyle(
                                                   color: Colors.black87,
                                                   fontFamily: "GmarketSansTTF",
-                                                  fontSize: 16,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             SizedBox(height: 5),
@@ -335,7 +335,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                                 style: TextStyle(
                                                   color: Colors.black87,
                                                   fontFamily: "GmarketSansTTF",
-                                                  fontSize: 14,
+                                                  fontSize: 16,
                                                 )),
                                           ],
                                         ),

@@ -68,15 +68,15 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
   //   );
   // }
 
-  dbupdate(List<String> tags) async {
-    {
-      String teamid = "";
-      await ProjectCRUD(widget.projectID).getTeamID().then((value) {
-        teamid = value;
-      });
-      DatabaseService().addteamhashtags(widget.projectID, teamid, tags);
-    }
-  }
+  // dbupdate(List<String> tags) async {
+  //   {
+  //     String teamid = "";
+  //     await ProjectCRUD(widget.projectID).getTeamID().then((value) {
+  //       teamid = value;
+  //     });
+  //     DatabaseService().addhashtags(widget.projectID, teamid, tags);
+  //   }
+  // }
 
   void _setHashtags(List<String> tags) {
     int length = tags.length;
@@ -124,24 +124,24 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
                 });
               },
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: 10, height: 1, color: Colors.grey),
-                  Text(
-                    "  팀장 선택  ",
-                    style: const TextStyle(
-                        fontFamily: "GmarketSansTTF",
-                        fontSize: 11,
-                        color: Colors.black54),
-                    textAlign: TextAlign.left,
-                  ),
-                  Container(width: 280, height: 1, color: Colors.grey),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 15, bottom: 8),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Container(width: 10, height: 1, color: Colors.grey),
+            //       Text(
+            //         "  팀장 선택  ",
+            //         style: const TextStyle(
+            //             fontFamily: "GmarketSansTTF",
+            //             fontSize: 11,
+            //             color: Colors.black54),
+            //         textAlign: TextAlign.left,
+            //       ),
+            //       Container(width: 280, height: 1, color: Colors.grey),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 20),
             TextFormField(
               minLines: 6,
@@ -226,11 +226,12 @@ class _AddNewTeamFormState extends State<AddNewTeamForm> {
               ),
               onPressed: () async {
                 _formkey.currentState!.save();
-                dbupdate(List.from(hashtags));
+                // dbupdate(List.from(hashtags));
 
                 try {
-                  await projectCRUD.addTeam(
-                      teamName, introduction, finding_member_info, members);
+                  DatabaseService().addhashtags(widget.projectID, "", hashtags);
+                  await projectCRUD.addTeam(teamName, introduction,
+                      finding_member_info, members, hashtags);
 
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(

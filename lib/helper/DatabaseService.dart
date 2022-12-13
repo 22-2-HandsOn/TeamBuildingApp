@@ -113,6 +113,17 @@ class DatabaseService {
     }
   }
 
+  addhashtags(String projectid, String teamuid, List<dynamic> tags) async {
+    bool flag = true;
+    if (true) {
+      await teamCollection
+          .doc(projectid)
+          .collection("teams_hashtags")
+          .doc("Tags")
+          .update({"hashtags": FieldValue.arrayUnion(tags)});
+    }
+  }
+
   addteamhashtags(String projectid, String teamuid, List<String> tags) async {
     bool flag = true;
     if (true) {
@@ -235,7 +246,7 @@ class DatabaseService {
         List<String>.from(data?['후보팀'] == null ? [] : data?['후보팀']);
     if (!teamlist.contains(teamuid + "_" + teamname)) {
       await attendeesCollection.update({
-        "후보팀": FieldValue.arrayUnion(["${teamuid}_$teamname"])
+        "후보팀": FieldValue.arrayUnion(["${teamuid}_${teamname}"])
       });
       return true;
     }

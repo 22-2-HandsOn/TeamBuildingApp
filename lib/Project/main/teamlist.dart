@@ -167,9 +167,10 @@ class _TeamListstate extends State<TeamListPage> {
                     //controller: unitcontroller,
                   )
                 : noteamWidget()
-            : const Center(
-                child:
-                    CircularProgressIndicator(color: Colors.lightBlueAccent));
+            : noteamWidget();
+        // : const Center(
+        //     child:
+        //         CircularProgressIndicator(color: Colors.lightBlueAccent));
       },
     );
   }

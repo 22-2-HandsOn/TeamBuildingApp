@@ -128,27 +128,27 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
-                  if (renderOnce == false) {
-                    renderOnce = true;
-                    Future.delayed(Duration.zero, () {
+                  // if (renderOnce == false) {
+                  //   renderOnce = true;
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
+                      isNull = false;
+
                       setState(() {
-                        isNull = false;
+                        candidateNum = snapshot.data['후보학생'] == null
+                            ? 0
+                            : snapshot.data['후보학생'].length;
 
-                        setState(() {
-                          candidateNum = snapshot.data['후보학생'] == null
-                              ? 0
-                              : snapshot.data['후보학생'].length;
+                        if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
 
-                          if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
-
-                          mems = snapshot.data['members'];
-                          leaderId = snapshot.data["leader_id"] == null
-                              ? ""
-                              : snapshot.data["leader_id"];
-                        });
+                        mems = snapshot.data['members'];
+                        leaderId = snapshot.data["leader_id"] == null
+                            ? ""
+                            : snapshot.data["leader_id"];
                       });
                     });
-                  }
+                  });
+                  // }
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -515,6 +515,36 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                 return const Center(
                     child: CircularProgressIndicator(
                         color: Colors.lightBlueAccent));
+
+                //         return Center(
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       const Text(
+                //         "소속된 팀이 없습니다.",
+                //         textAlign: TextAlign.center,
+                //         style: TextStyle(
+                //             fontFamily: "GmarketSansTTF",
+                //             fontSize: 18,
+                //             fontWeight: FontWeight.bold),
+                //       ),
+                //       TextButton(
+                //           child: const Text(
+                //             '+  새 팀 생성',
+                //             style: TextStyle(
+                //                 fontFamily: "GmarketSansTTF", fontSize: 16),
+                //           ),
+                //           onPressed: () {
+                //             Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                     builder: (context) =>
+                //                         AddNewTeam(widget.projectId)));
+                //           })
+                //     ],
+                //   ),
+                // );
               }
             }));
   }

@@ -115,24 +115,24 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                         });
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(width: 10, height: 1, color: Colors.grey),
-                          Text(
-                            "  팀장 선택  ",
-                            style: const TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 11,
-                                color: Colors.black54),
-                            textAlign: TextAlign.left,
-                          ),
-                          Container(width: 280, height: 1, color: Colors.grey),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 15, bottom: 8),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Container(width: 10, height: 1, color: Colors.grey),
+                    //       Text(
+                    //         "  팀장 선택  ",
+                    //         style: const TextStyle(
+                    //             fontFamily: "GmarketSansTTF",
+                    //             fontSize: 11,
+                    //             color: Colors.black54),
+                    //         textAlign: TextAlign.left,
+                    //       ),
+                    //       Container(width: 280, height: 1, color: Colors.grey),
+                    //     ],
+                    //   ),
+                    // ),
                     const SizedBox(height: 20),
                     TextFormField(
                       minLines: 6,
@@ -222,7 +222,7 @@ class _TeamInfoFormState extends State<TeamInfoForm> {
                           await projectCRUD.setTeamIntro(introduction);
                           await projectCRUD
                               .setWantedMember(finding_member_info);
-                          dbupdate(List<String>.from(hashtags));
+                          // dbupdate(List<String>.from(hashtags));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                               "팀 정보 수정이 완료되었습니다.",
