@@ -39,12 +39,12 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
   }
 
   gettingData() {
-    projectCRUD.getstu_id().then((value) {
-      stu_id = value;
-    });
-    projectCRUD.getTeamID().then((value) {
-      team_id = value;
-    });
+    // projectCRUD.getstu_id().then((value) {
+    //   stu_id = value;
+    // });
+    // projectCRUD.getTeamID().then((value) {
+    //   team_id = value;
+    // });
   }
 
   @override
@@ -86,19 +86,19 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                     });
                   }
 
-                  if (!widget.renderOnce) {
-                    widget.renderOnce = true;
-                    Future.delayed(Duration.zero, () {
-                      setState(() {
-                        mems = snapshot.data['members'];
-                        leaderId = snapshot.data["leader_id"] == null
-                            ? ""
-                            : snapshot.data["leader_id"];
+                  // if (!widget.renderOnce) {
+                  //   widget.renderOnce = true;
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
+                      mems = snapshot.data['members'];
+                      leaderId = snapshot.data["leader_id"] == null
+                          ? ""
+                          : snapshot.data["leader_id"];
 
-                        print(mems);
-                      });
+                      print(mems);
                     });
-                  }
+                  });
+                  // }
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -132,7 +132,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                 ),
                                 SizedBox(width: 15),
                                 ActionChip(
-                                  backgroundColor: Colors.lightBlueAccent,
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     // side: BorderSide(
@@ -278,7 +278,17 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                     fontFamily: "GmarketSansTTF",
                                     fontSize: 16),
                           ),
-
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.only(bottom: 7),
+                            child: Wrap(
+                              direction: Axis.horizontal, // 정렬 방향
+                              alignment: WrapAlignment.start,
+                              spacing: 6, // 상하(좌우) 공간
+                              children: _buildChipList(snapshot.data[
+                                  'hashtags']), //타입 1: food, 2: place, 3: pref
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 15, bottom: 15),
                             child: Row(
@@ -319,78 +329,78 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                     fontSize: 16),
                           ),
                           // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  댓글  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            child: FutureBuilder(
-                                future: projectCRUD.getTeamComment(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  snapshot.data[index]['name']),
-                                              Text(snapshot.data[index]
-                                                  ['content']),
-                                              SizedBox(
-                                                height: 10,
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  } else {
-                                    return Center(child: Text("No Comment"));
-                                  }
-                                }),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: TextField(
-                                  controller: _controller,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: '새 댓글',
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      newComment = value as String;
-                                    });
-                                  },
-                                ),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    if (newComment.length > 0) {
-                                      projectCRUD.addTeamComment(
-                                          newComment, false);
-                                    }
-                                    newComment = "";
-                                    _controller.clear();
-                                  },
-                                  icon: Icon(Icons.send))
-                            ],
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 15, bottom: 15),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       Container(
+                          //           width: 10, height: 1, color: Colors.grey),
+                          //       Text("  댓글  ", style: textStyle),
+                          //       Flexible(
+                          //           fit: FlexFit.loose,
+                          //           child: Container(
+                          //               height: 1, color: Colors.grey)),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 150,
+                          //   child: FutureBuilder(
+                          //       future: projectCRUD.getTeamComment(),
+                          //       builder: (context, snapshot) {
+                          //         if (snapshot.hasData) {
+                          //           return ListView.builder(
+                          //               itemCount: snapshot.data.length,
+                          //               itemBuilder: (context, index) {
+                          //                 return Column(
+                          //                   crossAxisAlignment:
+                          //                       CrossAxisAlignment.start,
+                          //                   children: [
+                          //                     Text(
+                          //                         snapshot.data[index]['name']),
+                          //                     Text(snapshot.data[index]
+                          //                         ['content']),
+                          //                     SizedBox(
+                          //                       height: 10,
+                          //                     )
+                          //                   ],
+                          //                 );
+                          //               });
+                          //         } else {
+                          //           return Center(child: Text("No Comment"));
+                          //         }
+                          //       }),
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Flexible(
+                          //       child: TextField(
+                          //         controller: _controller,
+                          //         decoration: InputDecoration(
+                          //           border: OutlineInputBorder(),
+                          //           labelText: '새 댓글',
+                          //         ),
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             newComment = value as String;
+                          //           });
+                          //         },
+                          //       ),
+                          //     ),
+                          //     IconButton(
+                          //         onPressed: () {
+                          //           if (newComment.length > 0) {
+                          //             projectCRUD.addTeamComment(
+                          //                 newComment, false);
+                          //           }
+                          //           newComment = "";
+                          //           _controller.clear();
+                          //         },
+                          //         icon: Icon(Icons.send))
+                          //   ],
+                          // ),
                         ],
                       ));
                 } else {
@@ -442,6 +452,7 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
     return FutureBuilder(
         future: projectCRUD.getMemsInfo(mems),
         builder: (context, snapshot) {
+          print(snapshot.data);
           return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data == null ? 1 : snapshot.data.length,
@@ -464,5 +475,23 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                 }
               });
         });
+  }
+
+  _buildChipList(List<dynamic> hashtags) {
+    List<Widget> chips = [];
+    hashtags.forEach((element) {
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text("# " + element),
+          visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
+          labelStyle: TextStyle(
+              fontFamily: "GmarketSansTTF",
+              color: Colors.black87,
+              fontSize: 12),
+        ),
+      );
+    });
+    return chips;
   }
 }

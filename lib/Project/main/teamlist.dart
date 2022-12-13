@@ -48,11 +48,11 @@ class _TeamListstate extends State<TeamListPage> {
 
       tagupdate();
     });
-    projectCRUD.getstu_id().then((id) {
-      setState(() {
-        stuId = id;
-      });
-    });
+    // projectCRUD.getstu_id().then((id) {
+    //   setState(() {
+    //     stuId = id;
+    //   });
+    // });
   }
 
   tagupdate() {
@@ -126,50 +126,46 @@ class _TeamListstate extends State<TeamListPage> {
         // print("???");
         // print(snapshot.data.docs.length);
         return snapshot.hasData && !snapshot.hasError
-            ? snapshot.data.docs.length != 0
-                ? ListView.builder(
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, index) {
-                      //**해당 부분에 tag 관련!**
-                      final List<dynamic> taglist =
-                          snapshot.data.docs[index]['hashtags'];
-                      bool tagcheck = false;
-                      if (_tagChoices.isEmpty) tagcheck = true;
-                      _tagChoices.forEach((element) {
-                        if (taglist.contains(element)) {
-                          tagcheck = true;
-                        }
-                      });
+            ? ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  //**해당 부분에 tag 관련!**
+                  final List<dynamic> taglist =
+                      snapshot.data.docs[index]['hashtags'];
+                  bool tagcheck = false;
+                  if (_tagChoices.isEmpty) tagcheck = true;
+                  _tagChoices.forEach((element) {
+                    if (taglist.contains(element)) {
+                      tagcheck = true;
+                    }
+                  });
 
-                      if (tagcheck) {
-                        return Teamtile(
-                            teamName: snapshot.data.docs[index]['name'],
-                            teaminfo: snapshot.data.docs[index]
-                                ['finding_member_info'],
-                            projectid: widget.projectId,
-                            projectname: widget.projectname,
-                            isfinished:
-                                snapshot.data.docs[index]['isFinished'] != null
-                                    ? snapshot.data.docs[index]['isFinished']
-                                    : false,
-                            memNum: snapshot.data.docs[index]['members'] != null
-                                ? snapshot.data.docs[index]['members'].length
-                                : 0,
-                            isMyTeam:
-                                snapshot.data.docs[index]['members'] != null &&
-                                    snapshot.data.docs[index]['members']
-                                        .contains(stuId));
-                        // false); // test
-                      } else {
-                        return Container();
-                      }
-                    },
-                    //controller: unitcontroller,
-                  )
-                : noteamWidget()
-            : const Center(
-                child:
-                    CircularProgressIndicator(color: Colors.lightBlueAccent));
+                  if (tagcheck) {
+                    return Teamtile(
+                        teamName: snapshot.data.docs[index]['name'],
+                        teaminfo: snapshot.data.docs[index]
+                            ['finding_member_info'],
+                        projectid: widget.projectId,
+                        projectname: widget.projectname,
+                        isfinished:
+                            snapshot.data.docs[index]['isFinished'] != null
+                                ? snapshot.data.docs[index]['isFinished']
+                                : false,
+                        memNum: snapshot.data.docs[index]['members'] != null
+                            ? snapshot.data.docs[index]['members'].length
+                            : 0,
+                        isMyTeam: snapshot.data.docs[index]['members'] !=
+                                null &&
+                            snapshot.data.docs[index]['members']
+                                .contains(stuId));
+                    // false); // test
+                  } else {
+                    return Container();
+                  }
+                },
+                //controller: unitcontroller,
+              )
+            : noteamWidget();
       },
     );
   }
@@ -188,17 +184,17 @@ class _TeamListstate extends State<TeamListPage> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
-          TextButton(
-              child: const Text(
-                '+  새 팀 생성',
-                style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddNewTeam(widget.projectId)));
-              })
+          //   TextButton(
+          //       child: const Text(
+          //         '+  새 팀 생성',
+          //         style: TextStyle(fontFamily: "GmarketSansTTF", fontSize: 16),
+          //       ),
+          //       onPressed: () {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => AddNewTeam(widget.projectId)));
+          //       })
         ],
       ),
     );

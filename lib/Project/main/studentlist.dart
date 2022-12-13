@@ -46,11 +46,11 @@ class _Stuliststate extends State<StulistPage> {
 
       tagupdate();
     });
-    projectCRUD.getstu_id().then((id) {
-      setState(() {
-        stuId = id;
-      });
-    });
+    // projectCRUD.getstu_id().then((id) {
+    //   setState(() {
+    //     stuId = id;
+    //   });
+    // });
   }
 
   tagupdate() {

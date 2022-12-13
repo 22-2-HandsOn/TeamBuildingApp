@@ -43,27 +43,27 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
   String team_name = "";
   String attend_id = "";
   void initState() {
-    gettingData();
+    // gettingData();
     super.initState();
   }
 
-  gettingData() async {
-    await projectCRUD.getTeamname().then((value) {
-      team_name = value;
-    });
-    projectCRUD.getTeamIDHDM(team_name).then((value) {
-      team_id = value;
-    });
-    projectCRUD.getAttendeeIDhdm(widget.stuId).then((value) {
-      attend_id = value;
-    });
-  }
+  // gettingData() async {
+  //   await projectCRUD.getTeamname().then((value) {
+  //     team_name = value;
+  //   });
+  //   projectCRUD.getTeamIDHDM(team_name).then((value) {
+  //     team_id = value;
+  //   });
+  //   projectCRUD.getAttendeeIDhdm(widget.stuId).then((value) {
+  //     attend_id = value;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        gettingData();
+        // gettingData();
       });
       return Scaffold(
         backgroundColor: Colors.white,
@@ -124,78 +124,68 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text("      "),
-                          SizedBox(
-                              width: 55,
-                              height: 26,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40),
-                                    ),
-                                    backgroundColor: Colors.lightBlueAccent,
-                                    elevation: 0,
-                                    disabledBackgroundColor:
-                                        Colors.lightBlueAccent.shade100),
-                                child: !isNowLoading
-                                    ? Text(
-                                        "초대",
-                                        style: TextStyle(
-                                            fontFamily: "GmarketSansTTF",
-                                            fontSize: 13,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    : Container(
-                                        width: 10,
-                                        height: 10,
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: const CircularProgressIndicator(
+                          ActionChip(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                // side: BorderSide(
+                                //   width: 1,
+                                //   color: Colors.black26,
+                                // ),
+                              ),
+                              labelStyle: TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 12,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold),
+                              visualDensity:
+                                  VisualDensity(horizontal: -1, vertical: -3.5),
+                              label: !isNowLoading
+                                  ? Text(
+                                      "초대",
+                                      style: TextStyle(
+                                          fontFamily: "GmarketSansTTF",
+                                          fontSize: 13,
                                           color: Colors.white,
-                                          strokeWidth: 2,
-                                        ),
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Container(
+                                      width: 10,
+                                      height: 10,
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
                                       ),
-                                onPressed: !isNowLoading
-                                    ? () async {
-                                        try {
-                                          bool flag = false;
-                                          await DatabaseService()
-                                              .requseteamTostu(widget.projectId,
-                                                  attend_id, team_id, team_name)
-                                              .then((value) {
-                                            flag = value!;
-                                          });
-                                          if (flag) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                "요청을 성공적으로 보냈습니다.",
-                                                style: TextStyle(
-                                                  fontFamily: "GmarketSansTTF",
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              backgroundColor:
-                                                  Colors.lightBlueAccent,
-                                            ));
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                "이미 요청했습니다.",
-                                                style: TextStyle(
-                                                  fontFamily: "GmarketSansTTF",
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              backgroundColor:
-                                                  Colors.lightBlueAccent,
-                                            ));
-                                          }
-                                        } catch (e) {
+                                    ),
+                              onPressed: !isNowLoading
+                                  ? () async {
+                                      try {
+                                        bool flag = false;
+                                        await DatabaseService()
+                                            .requseteamTostu(widget.projectId,
+                                                attend_id, team_id, team_name)
+                                            .then((value) {
+                                          flag = value!;
+                                        });
+                                        if (flag) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
-                                              "초대를 실패하였습니다. ",
+                                              "요청을 성공적으로 보냈습니다.",
+                                              style: TextStyle(
+                                                fontFamily: "GmarketSansTTF",
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightBlueAccent,
+                                          ));
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                              "이미 요청했습니다.",
                                               style: TextStyle(
                                                 fontFamily: "GmarketSansTTF",
                                                 fontSize: 14,
@@ -205,15 +195,28 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                                                 Colors.lightBlueAccent,
                                           ));
                                         }
-                                        setState(() {
-                                          isNowLoading = false;
-                                        });
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                            "초대를 실패하였습니다. ",
+                                            style: TextStyle(
+                                              fontFamily: "GmarketSansTTF",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              Colors.lightBlueAccent,
+                                        ));
                                       }
-                                    : null,
-                              ))
+                                      setState(() {
+                                        isNowLoading = false;
+                                      });
+                                    }
+                                  : null),
                         ]),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 15),
+                      padding: const EdgeInsets.only(top: 10, bottom: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -223,6 +226,17 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                               fit: FlexFit.loose,
                               child: Container(height: 1, color: Colors.grey)),
                         ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(bottom: 7),
+                      child: Wrap(
+                        direction: Axis.horizontal, // 정렬 방향
+                        alignment: WrapAlignment.start,
+                        spacing: 6, // 상하(좌우) 공간
+                        children: _buildChipList(snapshot
+                            .data['hashtags']), //타입 1: food, 2: place, 3: pref
                       ),
                     ),
                     Text(
@@ -255,14 +269,14 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                       ),
                     ),
                     Text(
-                      snapshot.data['finding_team_info'].toString() != "" ||
-                              snapshot.data['finding_team_info'].toString() !=
+                      snapshot.data['finding_team_info'].toString() == "" ||
+                              snapshot.data['finding_team_info'].toString() ==
                                   "null"
                           ? "아직 원하는 팀 정보를 작성하지 않았습니다. "
                           : snapshot.data['finding_team_info'].toString(),
-                      style: snapshot.data['finding_team_info'].toString() !=
+                      style: snapshot.data['finding_team_info'].toString() ==
                                   "" ||
-                              snapshot.data['finding_team_info'].toString() !=
+                              snapshot.data['finding_team_info'].toString() ==
                                   "null"
                           ? TextStyle(
                               fontFamily: "GmarketSansTTF",
@@ -274,7 +288,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                               fontSize: 16),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      padding: const EdgeInsets.only(top: 15, bottom: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -287,172 +301,172 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                       ),
                     ),
                     Contact(snapshot),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(width: 10, height: 1, color: Colors.grey),
-                          Text("  댓글  ", style: textStyle),
-                          Flexible(
-                              fit: FlexFit.loose,
-                              child: Container(height: 1, color: Colors.grey)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 150,
-                      child: FutureBuilder(
-                          future: projectCRUD.getAttendeeComment(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    TextEditingController _textFieldController =
-                                        TextEditingController(
-                                            text: snapshot.data[index]
-                                                ['content']);
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              snapshot.data[index]['name'],
-                                              style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontFamily: "GmarketSansTTF",
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                                snapshot.data[index]['content'],
-                                                style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontFamily: "GmarketSansTTF",
-                                                  fontSize: 14,
-                                                )),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                            title: Text('댓글 수정',
-                                                                style:
-                                                                    textStyle),
-                                                            content: TextField(
-                                                              onChanged:
-                                                                  (value) {
-                                                                changedText =
-                                                                    value;
-                                                              },
-                                                              controller:
-                                                                  _textFieldController,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                border:
-                                                                    OutlineInputBorder(),
-                                                                floatingLabelBehavior:
-                                                                    FloatingLabelBehavior
-                                                                        .always,
-                                                                labelStyle:
-                                                                    const TextStyle(
-                                                                  fontFamily:
-                                                                      "GmarketSansTTF",
-                                                                  fontSize: 16,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            actions: [
-                                                              IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    projectCRUD.updateAttendeeComment(
-                                                                        changedText,
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .toString());
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                    setState(
-                                                                        () {});
-                                                                  },
-                                                                  icon: Icon(
-                                                                      Icons
-                                                                          .done,
-                                                                      size: 18))
-                                                            ]);
-                                                      });
-                                                },
-                                                icon:
-                                                    Icon(Icons.edit, size: 18)),
-                                            IconButton(
-                                                onPressed: () {
-                                                  projectCRUD
-                                                      .deleteAttendeeComment(
-                                                          snapshot.data[index]
-                                                              .toString());
-                                                  setState(() {});
-                                                },
-                                                icon: Icon(Icons.delete,
-                                                    size: 18))
-                                          ],
-                                        )
-                                      ],
-                                    );
-                                  });
-                            }
-                            return Center(
-                                child: Text("No Comment", style: textStyle));
-                            ;
-                          }),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: TextField(
-                            controller: _controller,
-                            decoration: InputDecoration(
-                              labelText: '새 댓글',
-                              border: OutlineInputBorder(),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              labelStyle: const TextStyle(
-                                fontFamily: "GmarketSansTTF",
-                                fontSize: 16,
-                              ),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                newComment = value as String;
-                              });
-                            },
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              if (newComment.length > 0) {
-                                projectCRUD.addAttendeeComment(
-                                    newComment, false);
-                              }
-                              newComment = "";
-                              _controller.clear();
-                              setState(() {});
-                            },
-                            icon: Icon(Icons.send, size: 20))
-                      ],
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Container(width: 10, height: 1, color: Colors.grey),
+                    //       Text("  댓글  ", style: textStyle),
+                    //       Flexible(
+                    //           fit: FlexFit.loose,
+                    //           child: Container(height: 1, color: Colors.grey)),
+                    //     ],
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 150,
+                    //   child: FutureBuilder(
+                    //       future: projectCRUD.getAttendeeComment(),
+                    //       builder: (context, snapshot) {
+                    //         if (snapshot.hasData) {
+                    //           return ListView.builder(
+                    //               itemCount: snapshot.data.length,
+                    //               itemBuilder: (context, index) {
+                    //                 TextEditingController _textFieldController =
+                    //                     TextEditingController(
+                    //                         text: snapshot.data[index]
+                    //                             ['content']);
+                    //                 return Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: [
+                    //                     Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.start,
+                    //                       children: [
+                    //                         Text(
+                    //                           snapshot.data[index]['name'],
+                    //                           style: TextStyle(
+                    //                               color: Colors.black87,
+                    //                               fontFamily: "GmarketSansTTF",
+                    //                               fontSize: 16,
+                    //                               fontWeight: FontWeight.bold),
+                    //                         ),
+                    //                         SizedBox(height: 5),
+                    //                         Text(
+                    //                             snapshot.data[index]['content'],
+                    //                             style: TextStyle(
+                    //                               color: Colors.black87,
+                    //                               fontFamily: "GmarketSansTTF",
+                    //                               fontSize: 14,
+                    //                             )),
+                    //                       ],
+                    //                     ),
+                    //                     Row(
+                    //                       children: [
+                    //                         IconButton(
+                    //                             onPressed: () {
+                    //                               showDialog(
+                    //                                   context: context,
+                    //                                   builder: (context) {
+                    //                                     return AlertDialog(
+                    //                                         title: Text('댓글 수정',
+                    //                                             style:
+                    //                                                 textStyle),
+                    //                                         content: TextField(
+                    //                                           onChanged:
+                    //                                               (value) {
+                    //                                             changedText =
+                    //                                                 value;
+                    //                                           },
+                    //                                           controller:
+                    //                                               _textFieldController,
+                    //                                           decoration:
+                    //                                               InputDecoration(
+                    //                                             border:
+                    //                                                 OutlineInputBorder(),
+                    //                                             floatingLabelBehavior:
+                    //                                                 FloatingLabelBehavior
+                    //                                                     .always,
+                    //                                             labelStyle:
+                    //                                                 const TextStyle(
+                    //                                               fontFamily:
+                    //                                                   "GmarketSansTTF",
+                    //                                               fontSize: 16,
+                    //                                             ),
+                    //                                           ),
+                    //                                         ),
+                    //                                         actions: [
+                    //                                           IconButton(
+                    //                                               onPressed:
+                    //                                                   () {
+                    //                                                 projectCRUD.updateAttendeeComment(
+                    //                                                     changedText,
+                    //                                                     snapshot
+                    //                                                         .data[index]
+                    //                                                         .toString());
+                    //                                                 Navigator.pop(
+                    //                                                     context);
+                    //                                                 setState(
+                    //                                                     () {});
+                    //                                               },
+                    //                                               icon: Icon(
+                    //                                                   Icons
+                    //                                                       .done,
+                    //                                                   size: 18))
+                    //                                         ]);
+                    //                                   });
+                    //                             },
+                    //                             icon:
+                    //                                 Icon(Icons.edit, size: 18)),
+                    //                         IconButton(
+                    //                             onPressed: () {
+                    //                               projectCRUD
+                    //                                   .deleteAttendeeComment(
+                    //                                       snapshot.data[index]
+                    //                                           .toString());
+                    //                               setState(() {});
+                    //                             },
+                    //                             icon: Icon(Icons.delete,
+                    //                                 size: 18))
+                    //                       ],
+                    //                     )
+                    //                   ],
+                    //                 );
+                    //               });
+                    //         }
+                    //         return Center(
+                    //             child: Text("No Comment", style: textStyle));
+                    //         ;
+                    //       }),
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Flexible(
+                    //       child: TextField(
+                    //         controller: _controller,
+                    //         decoration: InputDecoration(
+                    //           labelText: '새 댓글',
+                    //           border: OutlineInputBorder(),
+                    //           floatingLabelBehavior:
+                    //               FloatingLabelBehavior.always,
+                    //           labelStyle: const TextStyle(
+                    //             fontFamily: "GmarketSansTTF",
+                    //             fontSize: 16,
+                    //           ),
+                    //         ),
+                    //         onChanged: (value) {
+                    //           setState(() {
+                    //             newComment = value as String;
+                    //           });
+                    //         },
+                    //       ),
+                    //     ),
+                    //     IconButton(
+                    //         onPressed: () {
+                    //           if (newComment.length > 0) {
+                    //             projectCRUD.addAttendeeComment(
+                    //                 newComment, false);
+                    //           }
+                    //           newComment = "";
+                    //           _controller.clear();
+                    //           setState(() {});
+                    //         },
+                    //         icon: Icon(Icons.send, size: 20))
+                    //   ],
+                    // ),
                   ],
                 ),
               );
@@ -466,12 +480,31 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
       );
     });
   }
+
+  _buildChipList(List<dynamic> hashtags) {
+    List<Widget> chips = [];
+    hashtags.forEach((element) {
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text("# " + element),
+          visualDensity: VisualDensity(horizontal: -1, vertical: -3.5),
+          labelStyle: TextStyle(
+              fontFamily: "GmarketSansTTF",
+              color: Colors.black87,
+              fontSize: 12),
+        ),
+      );
+    });
+    return chips;
+  }
 }
 
 class Contact extends StatelessWidget {
   var snapshot;
   Contact(this.snapshot);
   Widget build(BuildContext context) {
+    print(snapshot.data['contact_infos']);
     if (snapshot.data['contact_infos'] != null) {
       return ListView.builder(
           shrinkWrap: true,
