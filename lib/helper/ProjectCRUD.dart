@@ -47,6 +47,19 @@ class ProjectCRUD {
     }
   }
 
+  Future getMemsInfo(List<dynamic> memIds) async {
+    // print(memIds);
+    List<dynamic> result = [];
+    final snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.data() as Map<String, dynamic>;
+      if (memIds.contains(dataElement['stu_id'])) {
+        result.add(dataElement);
+      }
+    }
+    return result;
+  }
+
   Future addAttendeeReply(String content, String comment_data) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();

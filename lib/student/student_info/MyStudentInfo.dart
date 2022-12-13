@@ -39,7 +39,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
-  bool isNull = true;
+  bool isNull = false;
   int candidateNum = 0;
   List<String> docIds = [];
   List<String> teamnames = [];
@@ -99,7 +99,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         fontWeight: FontWeight.bold),
                     visualDensity:
                         VisualDensity(horizontal: -1, vertical: -3.5),
-                    label: Text(candidateNum.toString()),
+                    label: Text("+ " + candidateNum.toString()),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -127,8 +127,18 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            candidateNum =
-                snapshot.data['후보팀'] == null ? 0 : snapshot.data['후보팀'].length;
+            //  Future.delayed(Duration.zero, () {
+            //    setState(() {
+            //      isNull = false;
+            //    });
+            //  });
+            Future.delayed(Duration.zero, () {
+              setState(() {
+                candidateNum = snapshot.data['후보팀'] == null
+                    ? 0
+                    : snapshot.data['후보팀'].length;
+              });
+            });
 
             if (candidateNum != 0) {
               docIds = [];

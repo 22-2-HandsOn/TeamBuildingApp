@@ -65,8 +65,10 @@ class _StudenttileState extends State<Student_tile> {
           elevation: 0,
           child: ListTile(
             title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Icon(Icons.person),
+                  SizedBox(width: 10),
                   Text(
                     textAlign: TextAlign.left,
                     "[" + secretId + "] " + widget.name, //DB에서 가져옴
