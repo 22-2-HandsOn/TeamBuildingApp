@@ -19,7 +19,7 @@ class MyTeamInfoPage extends StatefulWidget {
 
 class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -64,47 +64,47 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
             backgroundColor: Colors.white,
             actions: !isNull
                 ? [
-                    ActionChip(
-                        avatar: CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            child: Icon(Icons.people,
-                                color: Colors.black87, size: 15)),
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(
-                            width: 1,
-                            color: Colors.black26,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                            fontFamily: "GmarketSansTTF",
-                            fontSize: 12,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold),
-                        visualDensity:
-                            VisualDensity(horizontal: -1, vertical: -3.5),
-                        label: Text(candidateNum.toString()),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Candidate(
-                                      projectId: widget.projectId,
-                                      projectname: widget.projectname,
-                                      stuIds: stuIds)));
-                        }),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeTeamInfo(widget.projectId)));
-                        },
-                        color: Colors.black87,
-                        icon: const Icon(Icons.edit_note, size: 22)),
-                  ]
+              ActionChip(
+                  avatar: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: Icon(Icons.people,
+                          color: Colors.black87, size: 15)),
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: BorderSide(
+                      width: 1,
+                      color: Colors.black26,
+                    ),
+                  ),
+                  labelStyle: TextStyle(
+                      fontFamily: "GmarketSansTTF",
+                      fontSize: 12,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold),
+                  visualDensity:
+                  VisualDensity(horizontal: -1, vertical: -3.5),
+                  label: Text(candidateNum.toString()),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Candidate(
+                                projectId: widget.projectId,
+                                projectname: widget.projectname,
+                                stuIds: stuIds)));
+                  }),
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeTeamInfo(widget.projectId)));
+                  },
+                  color: Colors.black87,
+                  icon: const Icon(Icons.edit_note, size: 22)),
+            ]
                 : []),
         body: FutureBuilder(
             future: projectCRUD.getTeamInfo(),
@@ -112,6 +112,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
                 if (snapshot.data['isNull'] == null) {
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
                       isNull = false;
 
                       candidateNum = snapshot.data['후보학생'] == null
@@ -119,6 +121,8 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                           : snapshot.data['후보학생'].length;
 
                       if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
+                    });
+                  });
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: SmartRefresher(
@@ -153,7 +157,7 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 15, bottom: 7),
+                                const EdgeInsets.only(top: 15, bottom: 7),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -177,35 +181,35 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                   alignment: WrapAlignment.start,
                                   spacing: 6, // 상하(좌우) 공간
                                   children: _buildChipList(snapshot.data[
-                                      'hashtags']), //타입 1: food, 2: place, 3: pref
+                                  'hashtags']), //타입 1: food, 2: place, 3: pref
                                 ),
                               ),
                               Text(
                                 snapshot.data['introduction'].toString() ==
-                                            "" ||
-                                        snapshot.data['introduction']
-                                                .toString() ==
-                                            "null"
+                                    "" ||
+                                    snapshot.data['introduction']
+                                        .toString() ==
+                                        "null"
                                     ? "아직 팀 소개를 작성하지 않았습니다. "
                                     : snapshot.data['introduction'].toString(),
                                 style:
-                                    snapshot.data['introduction'].toString() ==
-                                                "" ||
-                                            snapshot.data['introduction']
-                                                    .toString() ==
-                                                "null"
-                                        ? TextStyle(
-                                            fontFamily: "GmarketSansTTF",
-                                            fontSize: 14,
-                                            color: Colors.black87)
-                                        : TextStyle(
-                                            color: Colors.black87,
-                                            fontFamily: "GmarketSansTTF",
-                                            fontSize: 16),
+                                snapshot.data['introduction'].toString() ==
+                                    "" ||
+                                    snapshot.data['introduction']
+                                        .toString() ==
+                                        "null"
+                                    ? TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
+                                    : TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                const EdgeInsets.only(top: 15, bottom: 15),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -223,33 +227,33 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                               ),
                               Text(
                                 snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "" ||
-                                        snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "null"
+                                    .toString() ==
+                                    "" ||
+                                    snapshot.data['finding_member_info']
+                                        .toString() ==
+                                        "null"
                                     ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
                                     : snapshot.data['finding_member_info']
-                                        .toString(),
+                                    .toString(),
                                 style: snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "" ||
-                                        snapshot.data['finding_member_info']
-                                                .toString() ==
-                                            "null"
+                                    .toString() ==
+                                    "" ||
+                                    snapshot.data['finding_member_info']
+                                        .toString() ==
+                                        "null"
                                     ? TextStyle(
-                                        fontFamily: "GmarketSansTTF",
-                                        fontSize: 14,
-                                        color: Colors.black87)
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 14,
+                                    color: Colors.black87)
                                     : TextStyle(
-                                        color: Colors.black87,
-                                        fontFamily: "GmarketSansTTF",
-                                        fontSize: 16),
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16),
                               ),
                               // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                const EdgeInsets.only(top: 15, bottom: 15),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -276,13 +280,13 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                                             itemCount: snapshot.data.length,
                                             itemBuilder: (context, index) {
                                               TextEditingController
-                                                  _textFieldController =
-                                                  TextEditingController(
-                                                      text: snapshot.data[index]
-                                                          ['content']);
+                                              _textFieldController =
+                                              TextEditingController(
+                                                  text: snapshot.data[index]
+                                                  ['content']);
                                               TextEditingController
-                                                  _textFieldController2 =
-                                                  TextEditingController();
+                                              _textFieldController2 =
+                                              TextEditingController();
                                               return Column(
                                                 children: [
                                                   Row(
