@@ -132,8 +132,13 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
             //      isNull = false;
             //    });
             //  });
-            candidateNum =
-                snapshot.data['후보팀'] == null ? 0 : snapshot.data['후보팀'].length;
+            Future.delayed(Duration.zero, () {
+              setState(() {
+                candidateNum = snapshot.data['후보팀'] == null
+                    ? 0
+                    : snapshot.data['후보팀'].length;
+              });
+            });
 
             if (candidateNum != 0) {
               docIds = [];

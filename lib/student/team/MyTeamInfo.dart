@@ -132,16 +132,20 @@ class _MyTeamInfoPageState extends State<MyTeamInfoPage> {
                   //   });
                   // });
 
-                  candidateNum = snapshot.data['후보학생'] == null
-                      ? 0
-                      : snapshot.data['후보학생'].length;
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
+                      candidateNum = snapshot.data['후보학생'] == null
+                          ? 0
+                          : snapshot.data['후보학생'].length;
 
-                  if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
+                      if (candidateNum != 0) stuIds = snapshot.data['후보학생'];
 
-                  mems = snapshot.data['members'];
-                  leaderId = snapshot.data["leader_id"] == null
-                      ? ""
-                      : snapshot.data["leader_id"];
+                      mems = snapshot.data['members'];
+                      leaderId = snapshot.data["leader_id"] == null
+                          ? ""
+                          : snapshot.data["leader_id"];
+                    });
+                  });
 
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
