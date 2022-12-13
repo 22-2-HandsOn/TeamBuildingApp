@@ -73,6 +73,7 @@ class ProjectCRUD {
                   .doc(doc2.id)
                   .collection('reply')
                   .add({
+                'comment_id': doc2.id,
                 'author_doc_id': doc.id,
                 'name': dataElement['name'],
                 'content': content,
@@ -86,6 +87,7 @@ class ProjectCRUD {
                   .collection('reply')
                   .doc()
                   .set({
+                'comment_id': doc2.id,
                 'author_doc_id': doc.id,
                 'name': dataElement['name'],
                 'content': content,
@@ -99,7 +101,7 @@ class ProjectCRUD {
   }
 
   Future updateAttendeeReply(
-      String comment_data, String reply_data, String content) async {
+      String comment_data,String content) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
@@ -109,7 +111,6 @@ class ProjectCRUD {
             await attendeesCollection.doc(doc.id).collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data) {
             final QuerySnapshot snapshot3 = await attendeesCollection
                 .doc(doc.id)
                 .collection('comments')
@@ -118,7 +119,7 @@ class ProjectCRUD {
                 .get();
             for (var doc3 in snapshot3.docs) {
               var dataElement3 = doc3.data().toString();
-              if (dataElement3 == reply_data) {
+              if (dataElement3 == comment_data) {
                 attendeesCollection
                     .doc(doc.id)
                     .collection('comments')
@@ -127,14 +128,13 @@ class ProjectCRUD {
                     .doc(doc3.id)
                     .update({'content': content});
               }
-            }
           }
         }
       }
     }
   }
 
-  Future deleteAttendeeReply(String comment_data, String reply_data) async {
+  Future deleteAttendeeReply(String comment_data) async {
     var stu_id = await getstu_id();
     var timeZoneOffset = DateTime.now().timeZoneOffset.inMilliseconds;
     final QuerySnapshot snapshot = await attendeesCollection.get();
@@ -145,7 +145,6 @@ class ProjectCRUD {
             await attendeesCollection.doc(doc.id).collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           var dataElement2 = doc2.data().toString();
-          if (dataElement2 == comment_data) {
             final QuerySnapshot snapshot3 = await attendeesCollection
                 .doc(doc.id)
                 .collection('comments')
@@ -154,7 +153,7 @@ class ProjectCRUD {
                 .get();
             for (var doc3 in snapshot3.docs) {
               var dataElement3 = doc3.data().toString();
-              if (dataElement3 == reply_data) {
+              if (dataElement3 == comment_data) {
                 attendeesCollection
                     .doc(doc.id)
                     .collection('comments')
@@ -162,7 +161,6 @@ class ProjectCRUD {
                     .collection('reply')
                     .doc(doc3.id)
                     .delete();
-              }
             }
           }
         }
@@ -230,6 +228,7 @@ class ProjectCRUD {
                     .doc(doc2.id)
                     .collection('reply')
                     .add({
+                  'comment_id' : doc2.id,
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -243,6 +242,7 @@ class ProjectCRUD {
                     .collection('reply')
                     .doc()
                     .set({
+                  'comment_id' : doc2.id,
                   'author_doc_id': attendeeId,
                   'name': attendee["name"],
                   'content': content,
@@ -290,7 +290,7 @@ class ProjectCRUD {
   }
 
   Future updateTeamReply(
-      String comment_data, String reply_data, String content) async {
+      String comment_data,String content) async {
     var stu_id = await getstu_id();
     final QuerySnapshot snapshot = await teamsCollection.get();
     for (var doc in snapshot.docs) {
@@ -302,7 +302,6 @@ class ProjectCRUD {
               await teamsCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-            if (dataElement2 == comment_data) {
               final QuerySnapshot snapshot3 = await teamsCollection
                   .doc(doc.id)
                   .collection('comments')
@@ -311,7 +310,7 @@ class ProjectCRUD {
                   .get();
               for (var doc3 in snapshot3.docs) {
                 var dataElement3 = doc3.data().toString();
-                if (dataElement3 == reply_data) {
+                if (dataElement3 == comment_data) {
                   teamsCollection
                       .doc(doc.id)
                       .collection('comments')
@@ -319,7 +318,6 @@ class ProjectCRUD {
                       .collection('reply')
                       .doc(doc3.id)
                       .update({'content': content});
-                }
               }
             }
           }
@@ -328,7 +326,7 @@ class ProjectCRUD {
     }
   }
 
-  Future deleteTeamReply(String comment_data, String reply_data) async {
+  Future deleteTeamReply(String comment_data) async {
     var stu_id = await getstu_id();
     var attendee = await getAttendeeInfo() as Map<String, dynamic>;
     var attendeeId = await getAttendeeID();
@@ -342,7 +340,6 @@ class ProjectCRUD {
               await teamsCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             var dataElement2 = doc2.data().toString();
-            if (dataElement2 == comment_data) {
               final QuerySnapshot snapshot3 = await teamsCollection
                   .doc(doc.id)
                   .collection('comments')
@@ -351,7 +348,7 @@ class ProjectCRUD {
                   .get();
               for (var doc3 in snapshot3.docs) {
                 var dataElement3 = doc3.data().toString();
-                if (dataElement3 == reply_data) {
+                if (dataElement3 == comment_data) {
                   teamsCollection
                       .doc(doc.id)
                       .collection('comments')
@@ -359,7 +356,6 @@ class ProjectCRUD {
                       .collection('reply')
                       .doc(doc3.id)
                       .delete();
-                }
               }
             }
           }
@@ -626,6 +622,7 @@ class ProjectCRUD {
   Future getAttendeeComment() async {
     var stu_id = await getstu_id();
     List data = [];
+    int index = 0;
     final QuerySnapshot snapshot = await attendeesCollection.get();
     for (var doc in snapshot.docs) {
       var dataElement = doc.data() as Map<String, dynamic>;
@@ -634,6 +631,15 @@ class ProjectCRUD {
             await attendeesCollection.doc(doc.id).collection('comments').get();
         for (var doc2 in snapshot2.docs) {
           data.add(doc2.data());
+          QuerySnapshot snapshot3 = await attendeesCollection
+              .doc(doc.id)
+              .collection('comments')
+              .doc(doc2.id)
+              .collection('reply')
+              .get();
+          for (var doc3 in snapshot3.docs) {
+            data.add(doc3.data());
+          }
         }
       }
     }
@@ -653,6 +659,15 @@ class ProjectCRUD {
               await teamsCollection.doc(doc.id).collection('comments').get();
           for (var doc2 in snapshot2.docs) {
             data.add(doc2.data());
+            QuerySnapshot snapshot3 = await teamsCollection
+                .doc(doc.id)
+                .collection('comments')
+                .doc(doc2.id)
+                .collection('reply')
+                .get();
+            for (var doc3 in snapshot3.docs) {
+              data.add(doc3.data());
+            }
           }
         }
       }
