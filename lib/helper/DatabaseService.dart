@@ -54,7 +54,7 @@ class DatabaseService {
     return false;
   }
 
-  Future<bool>? checkALLteamtag(String projectid, String tags) async {
+  Future<bool>? checkALLteamtag(String projectid, List<String> tags) async {
     late final attendeesCollection = FirebaseFirestore.instance
         .collection("projects")
         .doc(projectid)
@@ -64,7 +64,7 @@ class DatabaseService {
     for (var doc in snapshot.docs) {
       var dataElement = doc.get("hashtags");
       for (var data in dataElement) {
-        if (data == tags) {
+        if (tags.contains(data)) {
           return true;
         }
       }
@@ -95,7 +95,8 @@ class DatabaseService {
     return false;
   }
 
-  removeteamhashtags(String projectid, String teamuid, String tags) async {
+  removeteamhashtags(
+      String projectid, String teamuid, List<String> tags) async {
     bool flag = false;
 
     await checkALLteamtag(projectid, tags)?.then((value) {
@@ -112,7 +113,7 @@ class DatabaseService {
     }
   }
 
-  addteamhashtags(String projectid, String teamuid, String tags) async {
+  addteamhashtags(String projectid, String teamuid, List<String> tags) async {
     bool flag = true;
 
     await checkALLteamtag(projectid, tags)?.then((value) {
@@ -123,9 +124,7 @@ class DatabaseService {
           .doc(projectid)
           .collection("attendees_hashtags")
           .doc("Tags")
-          .update({
-        "hashtags": FieldValue.arrayUnion([tags])
-      });
+          .update({"hashtags": tags});
     }
   }
 
