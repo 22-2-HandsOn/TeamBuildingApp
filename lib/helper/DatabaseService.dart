@@ -36,6 +36,131 @@ class DatabaseService {
     });
   }
 
+  Future<bool>? checkALLAttendeetag(String projectid, String tags) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("attendees");
+
+    final QuerySnapshot snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get("hashtags");
+      for (var data in dataElement) {
+        if (data == tags) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Future<bool>? checkALLteamtag(String projectid, String tags) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("teams");
+
+    final QuerySnapshot snapshot = await attendeesCollection.get();
+    for (var doc in snapshot.docs) {
+      var dataElement = doc.get("hashtags");
+      for (var data in dataElement) {
+        if (data == tags) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Future<bool>? checkwthisteamhashtags(
+      String projectid, String tid, String tags) async {
+    late final attendeesCollection = FirebaseFirestore.instance
+        .collection("projects")
+        .doc(projectid)
+        .collection("teams")
+        .doc(tid);
+
+    DocumentSnapshot<Map<String, dynamic>>? teamsnapshot;
+    await attendeesCollection.get().then((value) {
+      teamsnapshot = value;
+    });
+
+    final data = teamsnapshot!.data();
+    final stulist =
+        List<String>.from(data?['hashtags'] == null ? [] : data?['hashtags']);
+
+    if (!stulist.contains(tags)) {
+      return true;
+    }
+    return false;
+  }
+
+  removeteamhashtags(String projectid, String teamuid, String tags) async {
+    bool flag = false;
+
+    await checkALLteamtag(projectid, tags)?.then((value) {
+      flag = value;
+    });
+    if (flag) {
+      await teamCollection
+          .doc(projectid)
+          .collection("attendees_hashtags")
+          .doc("Tags")
+          .update({
+        "hashtags": FieldValue.arrayRemove([tags])
+      });
+    }
+  }
+
+  addteamhashtags(String projectid, String teamuid, String tags) async {
+    bool flag = true;
+
+    await checkALLteamtag(projectid, tags)?.then((value) {
+      flag = value;
+    });
+    if (!flag) {
+      await teamCollection
+          .doc(projectid)
+          .collection("attendees_hashtags")
+          .doc("Tags")
+          .update({
+        "hashtags": FieldValue.arrayUnion([tags])
+      });
+    }
+  }
+
+  removestuhashtags(String projectid, String tags) async {
+    bool flag = false;
+    await checkALLAttendeetag(projectid, tags)?.then((value) {
+      flag = value;
+    });
+    if (flag) {
+      await teamCollection
+          .doc(projectid)
+          .collection("teams_hashtags")
+          .doc("Tags")
+          .update({
+        "hashtags": FieldValue.arrayRemove([tags])
+      });
+    }
+  }
+
+  addstuhashtags(String projectid, String tags) async {
+    bool flag = true;
+    await checkALLAttendeetag(projectid, tags)?.then((value) {
+      flag = value;
+    });
+    if (!flag) {
+      await teamCollection
+          .doc(projectid)
+          .collection("teams_hashtags")
+          .doc("Tags")
+          .update({
+        "hashtags": FieldValue.arrayUnion([tags])
+      });
+    }
+  }
+
   // getting user data
   Future gettingstuData(String email) async {
     QuerySnapshot snapshot =

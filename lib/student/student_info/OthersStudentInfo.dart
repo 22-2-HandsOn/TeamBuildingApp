@@ -52,7 +52,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
     await projectCRUD.getTeamname().then((value) {
       team_name = value;
     });
-    projectCRUD.getTeamID(team_name).then((value) {
+    projectCRUD.getTeamIDHDM(team_name).then((value) {
       team_id = value;
     });
     projectCRUD.getAttendeeIDhdm(widget.stuId).then((value) {
