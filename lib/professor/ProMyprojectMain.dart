@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:team/Project/main/teamlist.dart';
 import 'package:team/Project/main/studentlist.dart';
-import 'package:team/Project/main/home.dart';
 
 class ProMyProjectMain extends StatefulWidget {
   String projectId = "";
@@ -21,8 +20,6 @@ class _ProMyProjectMainState extends State<ProMyProjectMain> {
 
   @override
   void initState() {
-    pageList.add(
-        Home(projectid: widget.projectId, projectname: widget.projectName));
     pageList.add(TeamListPage(
         projectId: widget.projectId, projectname: widget.projectName));
     pageList.add(StulistPage(
@@ -39,11 +36,6 @@ class _ProMyProjectMainState extends State<ProMyProjectMain> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            activeIcon: Icon(Icons.home, size: 30),
-            label: "홈",
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.text_snippet),
             activeIcon: Icon(Icons.text_snippet, size: 30),
