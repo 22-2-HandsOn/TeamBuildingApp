@@ -40,10 +40,14 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
 
   gettingData() {
     projectCRUD.getstu_id().then((value) {
-      stu_id = value;
+      setState(() {
+        stu_id = value;
+      });
     });
-    projectCRUD.getTeamID().then((value) {
-      team_id = value;
+    projectCRUD.getTeamIDHDM(widget.teamName).then((value) {
+      setState(() {
+        team_id = value;
+      });
     });
   }
 
@@ -76,142 +80,123 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // print(snapshot.data["isNull"]);
-                if (snapshot.data['isNull'] == null) {
-                  if (widget.renderOnce == false) {
-                    widget.renderOnce = true;
-                    Future.delayed(Duration.zero, () {
-                      setState(() {
-                        isNull = false;
-                      });
+                // if (snapshot.data['isNull'] == null) {
+                //   if (widget.renderOnce == false) {
+                //     widget.renderOnce = true;
+                //     Future.delayed(Duration.zero, () {
+                //       setState(() {
+                //         isNull = false;
+                //       });
+                //     });
+                //   }
+
+                if (!widget.renderOnce) {
+                  widget.renderOnce = true;
+                  Future.delayed(Duration.zero, () {
+                    setState(() {
+                      mems = snapshot.data['members'];
+                      leaderId = snapshot.data["leader_id"] == null
+                          ? ""
+                          : snapshot.data["leader_id"];
+
+                      print(mems);
                     });
-                  }
+                  });
+                }
 
-                  if (!widget.renderOnce) {
-                    widget.renderOnce = true;
-                    Future.delayed(Duration.zero, () {
-                      setState(() {
-                        mems = snapshot.data['members'];
-                        leaderId = snapshot.data["leader_id"] == null
-                            ? ""
-                            : snapshot.data["leader_id"];
-
-                        print(mems);
-                      });
-                    });
-                  }
-
-                  return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ListView(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 7),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  팀 이름  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
+                return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  팀 이름  ", style: textStyle),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child:
+                                      Container(height: 1, color: Colors.grey)),
+                            ],
                           ),
-                          Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  snapshot.data['name'].toString(),
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontFamily: "GmarketSansTTF",
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                snapshot.data['name'].toString(),
+                                style: TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(width: 15),
+                              ActionChip(
+                                backgroundColor: Colors.lightBlueAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  // side: BorderSide(
+                                  //   width: 1,
+                                  //   color: Colors.black26,
+                                  // ),
                                 ),
-                                SizedBox(width: 15),
-                                ActionChip(
-                                  backgroundColor: Colors.lightBlueAccent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    // side: BorderSide(
-                                    //   width: 1,
-                                    //   color: Colors.black26,
-                                    // ),
-                                  ),
-                                  labelStyle: TextStyle(
-                                      fontFamily: "GmarketSansTTF",
-                                      fontSize: 12,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                  visualDensity: VisualDensity(
-                                      horizontal: -1, vertical: -3.5),
-                                  label: !isNowLoading
-                                      ? Text(
-                                          "참여 신청",
-                                          style: TextStyle(
-                                              fontFamily: "GmarketSansTTF",
-                                              fontSize: 13,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      : Container(
-                                          width: 10,
-                                          height: 10,
-                                          padding: const EdgeInsets.all(2.0),
-                                          child:
-                                              const CircularProgressIndicator(
+                                labelStyle: TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                                visualDensity: VisualDensity(
+                                    horizontal: -1, vertical: -3.5),
+                                label: !isNowLoading
+                                    ? Text(
+                                        "참여 신청",
+                                        style: TextStyle(
+                                            fontFamily: "GmarketSansTTF",
+                                            fontSize: 13,
                                             color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : Container(
+                                        width: 10,
+                                        height: 10,
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
                                         ),
-                                  onPressed: !isNowLoading
-                                      ? () async {
-                                          try {
-                                            bool flag = false;
-                                            await DatabaseService()
-                                                .requsestuToteam(
-                                                    widget.projectId,
-                                                    team_id,
-                                                    stu_id)
-                                                .then((value) {
-                                              flag = value!;
-                                            });
-                                            if (flag) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                  "요청을 성공적으로 보냈습니다.",
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        "GmarketSansTTF",
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.lightBlueAccent,
-                                              ));
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                  "이미 요청했습니다.",
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        "GmarketSansTTF",
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.lightBlueAccent,
-                                              ));
-                                            }
-                                          } catch (e) {
+                                      ),
+                                onPressed: !isNowLoading
+                                    ? () async {
+                                        try {
+                                          bool flag = false;
+                                          await DatabaseService()
+                                              .requsestuToteam(widget.projectId,
+                                                  team_id, stu_id)
+                                              .then((value) {
+                                            flag = value!;
+                                          });
+                                          if (flag) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
                                               content: Text(
-                                                "팀원 신청을 실패하였습니다. ",
+                                                "요청을 성공적으로 보냈습니다.",
+                                                style: TextStyle(
+                                                  fontFamily: "GmarketSansTTF",
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              backgroundColor:
+                                                  Colors.lightBlueAccent,
+                                            ));
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                "이미 요청했습니다.",
                                                 style: TextStyle(
                                                   fontFamily: "GmarketSansTTF",
                                                   fontSize: 14,
@@ -221,227 +206,241 @@ class _OthersTeamInfoPageState extends State<OthersTeamInfoPage> {
                                                   Colors.lightBlueAccent,
                                             ));
                                           }
-                                          setState(() {
-                                            isNowLoading = false;
-                                          });
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                              "팀원 신청을 실패하였습니다. ",
+                                              style: TextStyle(
+                                                fontFamily: "GmarketSansTTF",
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightBlueAccent,
+                                          ));
                                         }
-                                      : null,
-                                )
-                              ]),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 7, bottom: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  팀원 정보  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          members(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  팀 소개  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            snapshot.data['introduction'].toString() == "" ||
-                                    snapshot.data['introduction'].toString() ==
-                                        "null"
-                                ? "아직 팀 소개를 작성하지 않았습니다. "
-                                : snapshot.data['introduction'].toString(),
-                            style: snapshot.data['introduction'].toString() ==
-                                        "" ||
-                                    snapshot.data['introduction'].toString() ==
-                                        "null"
-                                ? TextStyle(
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 14,
-                                    color: Colors.black87)
-                                : TextStyle(
-                                    color: Colors.black87,
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 16),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  원하는 팀원  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            snapshot.data['finding_member_info'].toString() ==
-                                        "" ||
-                                    snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "null"
-                                ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
-                                : snapshot.data['finding_member_info']
-                                    .toString(),
-                            style: snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "" ||
-                                    snapshot.data['finding_member_info']
-                                            .toString() ==
-                                        "null"
-                                ? TextStyle(
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 14,
-                                    color: Colors.black87)
-                                : TextStyle(
-                                    color: Colors.black87,
-                                    fontFamily: "GmarketSansTTF",
-                                    fontSize: 16),
-                          ),
-                          // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 10, height: 1, color: Colors.grey),
-                                Text("  댓글  ", style: textStyle),
-                                Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Container(
-                                        height: 1, color: Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 150,
-                            child: FutureBuilder(
-                                future: projectCRUD.getTeamComment(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  snapshot.data[index]['name']),
-                                              Text(snapshot.data[index]
-                                                  ['content']),
-                                              SizedBox(
-                                                height: 10,
-                                              )
-                                            ],
-                                          );
+                                        setState(() {
+                                          isNowLoading = false;
                                         });
-                                  } else {
-                                    return Center(child: Text("No Comment"));
-                                  }
-                                }),
-                          ),
-                          Row(
+                                      }
+                                    : null,
+                              )
+                            ]),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 7, bottom: 12),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  팀원 정보  ", style: textStyle),
                               Flexible(
-                                child: TextField(
-                                  controller: _controller,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    labelStyle: const TextStyle(
-                                      fontFamily: "GmarketSansTTF",
-                                      fontSize: 16,
-                                    ),
-                                    labelText: '새 댓글',
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      newComment = value as String;
-                                    });
-                                  },
-                                ),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    if (newComment.length > 0) {
-                                      projectCRUD.addTeamComment(
-                                          newComment, false);
-                                    }
-                                    newComment = "";
-                                    _controller.clear();
-                                  },
-                                  icon: Icon(Icons.send))
+                                  fit: FlexFit.loose,
+                                  child:
+                                      Container(height: 1, color: Colors.grey)),
                             ],
                           ),
-                        ],
-                      ));
-                } else {
-                  // Future.delayed(Duration.zero, () {
-                  //   setState(() {
-                  //     isNull = true;
-                  //   });
-                  // });
-
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "소속된 팀이 없습니다.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: "GmarketSansTTF",
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
                         ),
-                        TextButton(
-                            child: const Text(
-                              '+  새 팀 생성',
-                              style: TextStyle(
-                                  fontFamily: "GmarketSansTTF", fontSize: 16),
+                        members(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12, bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  팀 소개  ", style: textStyle),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child:
+                                      Container(height: 1, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          snapshot.data['introduction'].toString() == "" ||
+                                  snapshot.data['introduction'].toString() ==
+                                      "null"
+                              ? "아직 팀 소개를 작성하지 않았습니다. "
+                              : snapshot.data['introduction'].toString(),
+                          style: snapshot.data['introduction'].toString() ==
+                                      "" ||
+                                  snapshot.data['introduction'].toString() ==
+                                      "null"
+                              ? TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 14,
+                                  color: Colors.black87)
+                              : TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 16),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  원하는 팀원  ", style: textStyle),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child:
+                                      Container(height: 1, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          snapshot.data['finding_member_info'].toString() ==
+                                      "" ||
+                                  snapshot.data['finding_member_info']
+                                          .toString() ==
+                                      "null"
+                              ? "아직 원하는 팀원 정보를 작성하지 않았습니다. "
+                              : snapshot.data['finding_member_info'].toString(),
+                          style: snapshot.data['finding_member_info']
+                                          .toString() ==
+                                      "" ||
+                                  snapshot.data['finding_member_info']
+                                          .toString() ==
+                                      "null"
+                              ? TextStyle(
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 14,
+                                  color: Colors.black87)
+                              : TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: "GmarketSansTTF",
+                                  fontSize: 16),
+                        ),
+                        // *TODO : 해쉬태그는 나중에 원하는 팀원 text 위에 다른 해쉬태그 디자인 참고해서 넣을 것
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 10, height: 1, color: Colors.grey),
+                              Text("  댓글  ", style: textStyle),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child:
+                                      Container(height: 1, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 150,
+                          child: FutureBuilder(
+                              future: projectCRUD.getTeamComment(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(snapshot.data[index]['name']),
+                                            Text(snapshot.data[index]
+                                                ['content']),
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        );
+                                      });
+                                } else {
+                                  return Center(child: Text("No Comment"));
+                                }
+                              }),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                controller: _controller,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelStyle: const TextStyle(
+                                    fontFamily: "GmarketSansTTF",
+                                    fontSize: 16,
+                                  ),
+                                  labelText: '새 댓글',
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    newComment = value as String;
+                                  });
+                                },
+                              ),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AddNewTeam(widget.projectId)));
-                            })
+                            IconButton(
+                                onPressed: () {
+                                  if (newComment.length > 0) {
+                                    projectCRUD.addTeamComment(
+                                        newComment, false);
+                                  }
+                                  newComment = "";
+                                  _controller.clear();
+                                },
+                                icon: Icon(Icons.send))
+                          ],
+                        ),
                       ],
-                    ),
-                  );
-                }
+                    ));
               } else {
-                return const Center(
-                    child: CircularProgressIndicator(
-                        color: Colors.lightBlueAccent));
+                // Future.delayed(Duration.zero, () {
+                //   setState(() {
+                //     isNull = true;
+                //   });
+                // });
+
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "소속된 팀이 없습니다.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: "GmarketSansTTF",
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextButton(
+                          child: const Text(
+                            '+  새 팀 생성',
+                            style: TextStyle(
+                                fontFamily: "GmarketSansTTF", fontSize: 16),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddNewTeam(widget.projectId)));
+                          })
+                    ],
+                  ),
+                );
               }
-            }));
+            }
+            //  else {
+            //   return const Center(
+            //       child: CircularProgressIndicator(
+            //           color: Colors.lightBlueAccent));
+            // }
+            // }
+            ));
   }
 
   members() {

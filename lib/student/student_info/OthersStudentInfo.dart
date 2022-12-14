@@ -303,7 +303,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                     SizedBox(
                       height: 150,
                       child: FutureBuilder(
-                          future: projectCRUD.getAttendeeComment(),
+                          future: projectCRUD.getAttendeeComment(widget.stuId),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ListView.builder(
@@ -444,7 +444,7 @@ class _OthersStudentInfoPageState extends State<OthersStudentInfoPage> {
                             onPressed: () {
                               if (newComment.length > 0) {
                                 projectCRUD.addAttendeeComment(
-                                    newComment, false);
+                                    newComment, false, widget.stuId);
                               }
                               newComment = "";
                               _controller.clear();

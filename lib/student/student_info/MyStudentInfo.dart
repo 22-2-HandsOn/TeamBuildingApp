@@ -39,7 +39,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
   final textStyle = const TextStyle(
       fontFamily: "GmarketSansTTF", fontSize: 12, color: Colors.black54);
 
-  bool renderOnce = false;
+  // bool renderOnce = false;
   bool isNull = false;
   int candidateNum = 0;
   List<String> docIds = [];
@@ -128,18 +128,18 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
         future: projectCRUD.getAttendeeInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (renderOnce == false) {
-              renderOnce = true;
-              Future.delayed(Duration.zero, () {
-                setState(() {
-                  isNull = false;
+            // if (renderOnce == false) {
+            //   renderOnce = true;
+            Future.delayed(Duration.zero, () {
+              setState(() {
+                isNull = false;
 
-                  candidateNum = snapshot.data['후보팀'] == null
-                      ? 0
-                      : snapshot.data['후보팀'].length;
-                });
+                candidateNum = snapshot.data['후보팀'] == null
+                    ? 0
+                    : snapshot.data['후보팀'].length;
               });
-            }
+            });
+            // }
 
             if (candidateNum != 0) {
               docIds = [];
@@ -291,7 +291,7 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                     SizedBox(
                       height: 150,
                       child: FutureBuilder(
-                          future: projectCRUD.getAttendeeComment(),
+                          future: projectCRUD.getMyAttendeeComment(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ListView.builder(
@@ -437,10 +437,13 @@ class _MyStudentInfoPageState extends State<MyStudentInfoPage> {
                         ),
                         IconButton(
                             onPressed: () {
-                              if (newComment.length > 0) {
-                                projectCRUD.addAttendeeComment(
-                                    newComment, false);
-                              }
+                              projectCRUD.getstu_id().then((value) {
+                                if (newComment.length > 0) {
+                                  projectCRUD.addAttendeeComment(
+                                      newComment, false, value);
+                                }
+                              });
+
                               newComment = "";
                               _controller.clear();
                               setState(() {});
