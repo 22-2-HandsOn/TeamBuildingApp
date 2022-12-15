@@ -69,7 +69,7 @@ class _CandidateState extends State<Candidate> {
                 }),
             backgroundColor: Colors.white,
             title: Text(
-              "신청자 목록 (${stuidlist.length})",
+              "신청자 목록",
               style: TextStyle(
                   color: Colors.black87,
                   fontFamily: "GmarketSansTTF",

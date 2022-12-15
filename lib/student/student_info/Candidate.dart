@@ -44,9 +44,9 @@ class _Candidatestate extends State<Candidate> {
       stuId = value;
     });
 
-    await ProjectCRUD(projectid).getAttendeeIDhdm(stuId).then((value) {
-      attendid = value;
-    });
+    // await ProjectCRUD(projectid).getAttendeeIDhdm(stuId).then((value) {
+    //   attendid = value;
+    // });
     await DatabaseService()
         .getattendcandidatelist(widget.projectId, attendid)
         .then((value) {
@@ -78,7 +78,7 @@ class _Candidatestate extends State<Candidate> {
               }),
           backgroundColor: Colors.white,
           title: Text(
-            "초대받은 팀 목록 (${teamsid.length})",
+            "초대받은 팀 목록",
             style: TextStyle(
                 color: Colors.black87,
                 fontFamily: "GmarketSansTTF",
@@ -98,7 +98,7 @@ class _Candidatestate extends State<Candidate> {
         // print("???");
         // print(snapshot.data.docs.length);
         return snapshot.hasData && !snapshot.hasError
-            ? snapshot.data.docs.length != 0
+            ? teamsid.length != 0
                 ? ListView.builder(
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
